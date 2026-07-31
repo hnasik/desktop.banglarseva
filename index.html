@@ -1,0 +1,222 @@
+﻿﻿<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0b1d2a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <title>বাংলার সেবা</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @font-face {
+      font-family: 'Noto Sans Bengali';
+      src: url('fonts/NotoSansBengali-Regular.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+    :root {
+      --bg-dark: #0f1020;
+      --text-light: #ffffff;
+      --muted-light: rgba(255,255,255,0.85);
+      --glass: rgba(255,255,255,0.05);
+    }
+    :root.light {
+      --bg-dark: #f3f6ff;
+      --text-light: #0b1220;
+      --muted-light: rgba(11,18,32,0.8);
+      --glass: rgba(0,0,0,0.04);
+    }
+    body {
+      margin: 0;
+      font-family: 'Noto Sans Bengali', sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-light);
+      transition: background 0.3s, color 0.3s;
+    }
+    .app { max-width: 960px; margin: 0 auto; padding: 14px; }
+    .topbar { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; margin-bottom:10px; }
+    .title { display:flex; align-items:center; gap:10px; }
+    .logo { width:44px; height:44px; border-radius:12px; background:var(--glass); display:flex; align-items:center; justify-content:center; }
+    h1 { margin:0; font-size:18px; }
+    p.subtitle { margin:0; font-size:12px; opacity:0.8; }
+    .theme-toggle { background:var(--glass); border:none; padding:8px 10px; border-radius:8px; color:var(--text-light); cursor:pointer; display:flex; align-items:center; gap:5px; }
+    .searchbar { margin:12px 0; }
+    .searchbar input { width:100%; padding:10px; border-radius:8px; border:none; background:var(--glass); color:var(--text-light); }
+    .recent h2 { font-size:13px; margin:0 0 6px; opacity:0.85; }
+    .recent-row { display:flex; gap:8px; overflow-x:auto; }
+    .chip { padding:6px 10px; background:var(--glass); border-radius:999px; font-size:12px; white-space:nowrap; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:14px; margin-top:10px; }
+    .card { text-decoration:none; color:inherit; padding:16px; border-radius:16px; text-align:center; transition:transform 0.2s; }
+    .card:hover { transform: translateY(-4px); }
+    .iconwrap { width:60px; height:60px; border-radius:12px; background:rgba(255,255,255,0.1); margin:0 auto 10px; display:flex; justify-content:center; align-items:center; }
+    .card h3 { font-size:14px; margin:0; }
+    .card p { font-size:11px; opacity:0.8; margin-top:6px; }
+  </style>
+</head>
+<body>
+
+<div class="app">
+  <div class="topbar">
+    <div class="title">
+      <div class="logo"><i class="fa-solid fa-globe"></i></div>
+      <div>
+        <h1>বাংলার সেবা</h1>
+        <p class="subtitle">দ্রুত লিংক</p>
+      </div>
+    </div>
+    <button class="theme-toggle" id="themeBtn"><i class="fa-regular fa-sun" id="themeIcon"></i> <span id="themeText">থিম</span></button>
+  </div>
+
+  <div class="searchbar">
+    <input type="text" id="searchInput" placeholder="Search by English or Bengali name...">
+  </div>
+
+  <div class="recent" id="recentWrap">
+    <h2>সাম্প্রতিক</h2>
+    <div class="recent-row" id="recentRow"><span style="font-size:12px;opacity:0.7;">সাম্প্রতিক সেবা এখানে প্রদর্শিত হবে</span></div>
+  </div>
+
+  <div class="grid" id="serviceGrid"></div>
+</div>
+
+<script>
+  // Theme toggle
+  const themeBtn = document.getElementById('themeBtn');
+  const themeIcon = document.getElementById('themeIcon');
+  const themeText = document.getElementById('themeText');
+
+  function applyTheme(mode){
+    if(mode === 'light'){
+      document.documentElement.classList.add('light');
+      themeIcon.className = 'fa-regular fa-moon';
+      themeText.textContent = 'লাইট';
+    } else {
+      document.documentElement.classList.remove('light');
+      themeIcon.className = 'fa-regular fa-sun';
+      themeText.textContent = 'ডার্ক';
+    }
+    localStorage.setItem('wb_theme', mode);
+  }
+
+  const savedTheme = localStorage.getItem('wb_theme') || 'dark';
+  applyTheme(savedTheme);
+  themeBtn.addEventListener('click', () => {
+    const current = document.documentElement.classList.contains('light') ? 'light' : 'dark';
+    applyTheme(current === 'light' ? 'dark' : 'light');
+  });
+
+  const colors = [
+    "linear-gradient(135deg, #ff9a9e, #fad0c4)",
+    "linear-gradient(135deg, #a18cd1, #fbc2eb)",
+    "linear-gradient(135deg, #f6d365, #fda085)",
+    "linear-gradient(135deg, #84fab0, #8fd3f4)",
+    "linear-gradient(135deg, #fccb90, #d57eeb)",
+    "linear-gradient(135deg, #e0c3fc, #8ec5fc)",
+    "linear-gradient(135deg, #f093fb, #f5576c)",
+    "linear-gradient(135deg, #4facfe, #00f2fe)",
+    "linear-gradient(135deg, #43e97b, #38f9d7)",
+    "linear-gradient(135deg, #ffecd2, #fcb69f)"
+  ];
+  function randomColor(){ return colors[Math.floor(Math.random()*colors.length)]; }
+
+  const services = [
+    {name:"অন্নপূর্ণা ভাণ্ডার প্রকল্প", url:"https://socialregistry.wb.gov.in/", icon:"fa-hand-holding-heart", tags:"laxmi bhondar"},
+    {name:"কন্যাশ্রী", url:"https://www.wbkanyashree.gov.in/kp_track_status.php", icon:"fa-graduation-cap", tags:"kanyashree"},
+    {name:"রেশন কার্ড", url:"https://wbpds.wb.gov.in/rcmsnew/Citizen/CheckApplicationStatus", icon:"fa-id-card", tags:"ration card"},
+    {name:"ঐক্যশ্রী", url:"https://wbmdfcscholarship.in/server/choose_server?dect_re=/main/track_appli1", icon:"fa-book", tags:"aikyashree scholarship"},
+    {name:"ড্রাইভিং লাইসেন্স", url:"https://parivahan.gov.in/rcdlstatus/?pur_cd=101", icon:"fa-car", tags:"driving license"},
+    {name:"কৃষক বন্ধু", url:"https://krishakbandhu.wb.gov.in/farmer_search", icon:"fa-wheat-awn", tags:"krishak bandhu"},
+    {name:"যুবশ্রী", url:"https://employmentbankwb.gov.in/check_annx3.php", icon:"fa-briefcase", tags:"yuvashree"},
+    {name:"ভোটার কার্ড", url:"https://voters.eci.gov.in/", icon:"fa-person-booth", tags:"voter"},
+    {name:"স্বাস্থ্যসাথী", url:"https://data.swasthyasathi.gov.in/SSDataSearchLogin.aspx", icon:"fa-hospital-user", tags:"swasthya sathi"},
+    {name:"পিএনআর স্ট্যাটাস", url:"https://www.railyatri.in/pnr-status", icon:"fa-train", tags:"pnr status"},
+    {name:"প্যান কার্ড", url:"https://tin.tin.proteantech.in/pantan/StatusTrack.html", icon:"fa-file-invoice", tags:"pan card"},
+    {name:"পাসপোর্ট", url:"https://www.passportindia.gov.in/psp/trackApplicationService", icon:"fa-passport", tags:"passport"},
+
+    // 🆕 New categories
+    {name:"জন্ম ও মৃত্যু সম্পর্কিত তথ্য", url:"https://janma-mrityutathya.wb.gov.in/", icon:"fa-baby", tags:"birth death info"},
+    {
+    name: "পঞ্চায়েত বিভাগ",
+    url: "https://wbpms.in/citizen/",
+    icon: "fa-building-columns",
+    tags: "panchayat panchayet panchayat department পঞ্চায়েত"
+},
+    
+    {name:"বাংলা আবাস যোজনা", url:"https://cmo.wb.gov.in/landing/landing-dashboard", icon:"fa-house", tags:"bangla abas yojona"},
+    {name:"পিএম কিষান যোজনা স্ট্যাটাস", url:"https://pmkisan.gov.in/BeneficiaryStatus_New.aspx", icon:"fa-leaf", tags:"pm kisan yojona status"}
+  ];
+
+  const grid = document.getElementById('serviceGrid');
+  const recentRow = document.getElementById('recentRow');
+  let lastFilter = "";
+
+  function normalize(str){return (str||"").toLowerCase().trim();}
+
+  function renderRecent(order){
+    recentRow.innerHTML = "";
+    const items = order.map(n => services.find(s => s.name===n)).filter(Boolean).slice(0,8);
+    if(items.length===0){
+      recentRow.innerHTML = '<span style="font-size:12px;opacity:0.7;">সাম্প্রতিক সেবা এখানে প্রদর্শিত হবে</span>';
+      return;
+    }
+    items.forEach(s=>{
+      const chip=document.createElement('a');
+      chip.className='chip';
+      chip.textContent=s.name;
+      chip.href=s.url; chip.target='_blank';
+      chip.addEventListener('click',()=>storeRecent(s.name));
+      recentRow.appendChild(chip);
+    });
+  }
+
+  function storeRecent(name){
+    let order = JSON.parse(localStorage.getItem('serviceOrder'))||[];
+    order = order.filter(x=>x!==name);
+    order.unshift(name);
+    localStorage.setItem('serviceOrder',JSON.stringify(order));
+    renderServices(lastFilter);
+  }
+
+  function renderServices(filter=""){
+    lastFilter=filter;
+    grid.innerHTML="";
+    const f=normalize(filter);
+    let order = JSON.parse(localStorage.getItem('serviceOrder'))||[];
+    let sorted=[...services].sort((a,b)=>{
+      let ai=order.indexOf(a.name), bi=order.indexOf(b.name);
+      if(ai===-1&&bi===-1) return 0;
+      if(ai===-1) return 1;
+      if(bi===-1) return -1;
+      return ai-bi;
+    });
+    sorted.filter(s=>normalize(s.name).includes(f)||normalize(s.tags).includes(f))
+      .forEach(s=>{
+        const card=document.createElement('a');
+        card.className='card';
+        card.href=s.url; card.target='_blank';
+        card.style.background = randomColor();
+        card.innerHTML=`<div class="iconwrap"><i class="fa-solid ${s.icon}"></i></div><h3>${s.name}</h3><p>অবস্থা দেখুন</p>`;
+        card.addEventListener('click',()=>storeRecent(s.name));
+        grid.appendChild(card);
+      });
+    renderRecent(order);
+  }
+
+  document.getElementById('searchInput').addEventListener('input',e=>renderServices(e.target.value));
+
+  renderServices();
+</script>
+  <script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker
+      .register("./service-worker.js")
+      .then((reg) => console.log("Service Worker Registered"))
+      .catch((err) => console.log(err));
+  });
+}
+</script>
+
+</body>
+</html>
