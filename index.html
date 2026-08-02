@@ -8,62 +8,71 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
   <title>বাংলার সেবা</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-  <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
-
   <style>
-    @font-face {
-      font-family:'Noto Sans Bengali';
-      src:url('fonts/NotoSansBengali-Regular.ttf') format('truetype');
-      font-weight:normal;font-style:normal;
-    }
+    @font-face{font-family:'Noto Sans Bengali';src:url('fonts/NotoSansBengali-Regular.ttf') format('truetype');font-weight:normal;font-style:normal;}
+    *{box-sizing:border-box;margin:0;padding:0;}
     :root{
       --bg-dark:#0f1020;--bg-card:#161830;--text-light:#ffffff;
       --muted-light:rgba(255,255,255,.85);--glass:rgba(255,255,255,.05);
       --glass-border:rgba(255,255,255,.08);
-      --tab-active-bg:rgba(255,255,255,.12);--tab-inactive-bg:rgba(255,255,255,.04);
-      --tab-active-text:#ffffff;--tab-inactive-text:rgba(255,255,255,.5);
+      --tab-inactive-bg:rgba(255,255,255,.04);--tab-inactive-text:rgba(255,255,255,.5);
       --danger:#ef4444;--danger-bg:rgba(239,68,68,.12);
       --success:#22c55e;--success-bg:rgba(34,197,94,.12);
-      --blue:#3b82f6;--blue-bg:rgba(59,130,246,.12);
       --overlay-bg:rgba(0,0,0,.7);--admin-bg:#0d0f1e;
       --input-bg:rgba(255,255,255,.06);--input-border:rgba(255,255,255,.1);
+      --accent:#3b82f6;--accent-light:#60a5fa;--accent-dark:#1d4ed8;
+      --accent-bg:rgba(59,130,246,.12);--accent-bg-strong:rgba(59,130,246,.25);
     }
     :root.light{
       --bg-dark:#f3f6ff;--bg-card:#ffffff;--text-light:#0b1220;
       --muted-light:rgba(11,18,32,.8);--glass:rgba(0,0,0,.04);
       --glass-border:rgba(0,0,0,.06);
-      --tab-active-bg:rgba(59,130,246,.12);--tab-inactive-bg:rgba(0,0,0,.03);
-      --tab-active-text:#2563eb;--tab-inactive-text:rgba(0,0,0,.4);
+      --tab-inactive-bg:rgba(0,0,0,.03);--tab-inactive-text:rgba(0,0,0,.4);
       --danger-bg:rgba(239,68,68,.08);--success-bg:rgba(34,197,94,.08);
-      --blue-bg:rgba(59,130,246,.08);--overlay-bg:rgba(0,0,0,.4);
-      --admin-bg:#f0f4ff;--input-bg:rgba(0,0,0,.04);--input-border:rgba(0,0,0,.1);
+      --overlay-bg:rgba(0,0,0,.4);--admin-bg:#f0f4ff;
+      --input-bg:rgba(0,0,0,.04);--input-border:rgba(0,0,0,.1);
     }
-    *{box-sizing:border-box;margin:0;padding:0;}
-    body{font-family:'Noto Sans Bengali',sans-serif;background:var(--bg-dark);color:var(--text-light);transition:background .3s,color .3s;}
+    body{font-family:'Noto Sans Bengali',sans-serif;background:var(--bg-dark);color:var(--text-light);transition:background .4s,color .4s;}
     .app{max-width:960px;margin:0 auto;padding:14px;}
     .topbar{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;margin-bottom:10px;}
     .title{display:flex;align-items:center;gap:10px;}
-    .logo{width:44px;height:44px;border-radius:12px;background:var(--glass);display:flex;align-items:center;justify-content:center;}
+    .logo{width:44px;height:44px;border-radius:12px;background:var(--accent-bg);display:flex;align-items:center;justify-content:center;color:var(--accent);transition:all .3s;}
     h1{margin:0;font-size:18px;}
     p.subtitle{margin:0;font-size:12px;opacity:.8;}
-    .topbar-right{display:flex;align-items:center;gap:8px;}
-    .theme-toggle,.admin-btn{background:var(--glass);border:none;padding:8px 10px;border-radius:8px;color:var(--text-light);cursor:pointer;display:flex;align-items:center;gap:5px;font-size:13px;font-family:inherit;transition:all .2s;}
-    .admin-btn{background:var(--blue-bg);color:var(--blue);}
+    .topbar-right{display:flex;align-items:center;gap:6px;}
+    .icon-btn{background:var(--glass);border:none;padding:8px 10px;border-radius:8px;color:var(--text-light);cursor:pointer;display:flex;align-items:center;gap:5px;font-size:13px;font-family:inherit;transition:all .2s;}
+    .icon-btn:hover{background:var(--accent-bg);color:var(--accent);}
+    .admin-btn{background:var(--accent-bg);color:var(--accent);transition:all .3s;}
     .admin-btn.logged-in{background:var(--success-bg);color:var(--success);}
+
+    .color-btn-wrap{position:relative;}
+    .color-popover{position:absolute;top:calc(100% + 8px);right:0;z-index:900;background:var(--admin-bg);border:1px solid var(--glass-border);border-radius:14px;padding:14px;min-width:240px;box-shadow:0 12px 40px rgba(0,0,0,.3);display:none;animation:popIn .2s ease;}
+    .color-popover.open{display:block;}
+    @keyframes popIn{from{opacity:0;transform:translateY(-6px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+    .color-popover-title{font-size:12px;font-weight:700;opacity:.6;margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+    .color-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+    .color-swatch{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 4px;border-radius:10px;cursor:pointer;border:2px solid transparent;transition:all .2s;background:var(--glass);}
+    .color-swatch:hover{border-color:var(--accent-bg-strong);transform:scale(1.05);}
+    .color-swatch.active{border-color:var(--accent);background:var(--accent-bg);}
+    .color-dot{width:28px;height:28px;border-radius:50%;transition:transform .2s;}
+    .color-swatch:hover .color-dot{transform:scale(1.15);}
+    .color-swatch.active .color-dot{box-shadow:0 0 0 3px var(--accent-bg-strong);}
+    .color-swatch-name{font-size:9px;opacity:.6;text-align:center;white-space:nowrap;}
+    .color-swatch.active .color-swatch-name{opacity:1;font-weight:600;}
+
     .searchbar{margin:12px 0;}
-    .searchbar input{width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--glass-border);background:var(--glass);color:var(--text-light);font-size:14px;outline:none;font-family:inherit;}
+    .searchbar input{width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--glass-border);background:var(--glass);color:var(--text-light);font-size:14px;outline:none;font-family:inherit;transition:border-color .2s;}
     .searchbar input::placeholder{opacity:.5;}
-    .searchbar input:focus{border-color:rgba(59,130,246,.4);}
+    .searchbar input:focus{border-color:var(--accent);}
 
     .cat-tabs{display:flex;gap:8px;margin:14px 0 6px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px;}
     .cat-tabs::-webkit-scrollbar{display:none;}
     .cat-tab{flex-shrink:0;padding:8px 18px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;border:1.5px solid transparent;background:var(--tab-inactive-bg);color:var(--tab-inactive-text);transition:all .25s;display:flex;align-items:center;gap:6px;user-select:none;font-family:inherit;}
-    .cat-tab:hover{background:var(--tab-active-bg);color:var(--tab-active-text);}
-    .cat-tab.active{background:var(--tab-active-bg);color:var(--tab-active-text);border-color:var(--tab-active-text);}
+    .cat-tab:hover{background:var(--accent-bg);color:var(--accent);}
+    .cat-tab.active{background:var(--accent-bg);color:var(--accent);border-color:var(--accent);}
     .cat-tab.active .cat-icon{transform:scale(1.15);}
     .cat-icon{font-size:14px;transition:transform .25s;}
     .cat-count{font-size:10px;background:var(--glass);padding:1px 6px;border-radius:99px;opacity:.7;}
@@ -71,7 +80,8 @@
     .recent h2{font-size:13px;margin:0 0 6px;opacity:.85;}
     .recent-row{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px;}
     .recent-row::-webkit-scrollbar{display:none;}
-    .chip{padding:6px 10px;background:var(--glass);border-radius:999px;font-size:12px;white-space:nowrap;text-decoration:none;color:var(--text-light);}
+    .chip{padding:6px 10px;background:var(--glass);border-radius:999px;font-size:12px;white-space:nowrap;text-decoration:none;color:var(--text-light);transition:background .2s;}
+    .chip:hover{background:var(--accent-bg);}
     .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:14px;margin-top:10px;}
     .card{text-decoration:none;color:inherit;padding:16px;border-radius:16px;text-align:center;transition:transform .2s,box-shadow .2s;}
     .card:hover{transform:translateY(-4px);box-shadow:0 6px 20px rgba(0,0,0,.15);}
@@ -80,87 +90,77 @@
     .card p{font-size:11px;opacity:.8;margin-top:6px;}
     .empty-state{grid-column:1/-1;text-align:center;padding:40px 20px;opacity:.5;font-size:14px;}
 
-    /* ══════════ LOGIN MODAL ══════════ */
-    .login-overlay{
-      position:fixed;inset:0;background:var(--overlay-bg);z-index:2000;
-      display:none;align-items:center;justify-content:center;
-      animation:fadeIn .25s ease;
+    /* ══════════ NEWS IN SHORTS ══════════ */
+    .news-section{margin-bottom:16px;}
+    .news-header{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
+    .news-header h2{font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px;}
+    .news-header h2 i{color:var(--accent);}
+    .news-badge{font-size:10px;background:var(--accent);color:#fff;padding:2px 8px;border-radius:99px;font-weight:600;}
+    .news-list{display:flex;flex-direction:column;gap:10px;}
+    .news-card{
+      display:flex;gap:12px;padding:14px;border-radius:14px;
+      background:var(--glass);border:1px solid var(--glass-border);
+      border-left:3px solid var(--accent);transition:all .2s;
+      position:relative;overflow:hidden;
     }
+    .news-card:hover{border-left-color:var(--accent-light);background:var(--accent-bg);}
+    .news-card-icon{
+      width:40px;height:40px;border-radius:10px;flex-shrink:0;
+      background:var(--accent-bg);display:flex;align-items:center;justify-content:center;
+      color:var(--accent);font-size:16px;
+    }
+    .news-card-body{flex:1;min-width:0;}
+    .news-card-title{font-size:14px;font-weight:700;margin-bottom:4px;line-height:1.3;}
+    .news-card-text{font-size:13px;line-height:1.5;opacity:.75;}
+    .news-card-meta{display:flex;align-items:center;gap:8px;margin-top:8px;font-size:11px;opacity:.5;}
+    .news-new-tag{font-size:9px;background:var(--danger);color:#fff;padding:1px 6px;border-radius:99px;font-weight:700;animation:pulse 2s infinite;}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+    .news-empty{text-align:center;padding:20px;opacity:.4;font-size:13px;}
+
+    /* ══════════ LOGIN MODAL ══════════ */
+    .login-overlay{position:fixed;inset:0;background:var(--overlay-bg);z-index:2000;display:none;align-items:center;justify-content:center;animation:fadeIn .25s ease;}
     .login-overlay.open{display:flex;}
     @keyframes fadeIn{from{opacity:0}to{opacity:1}}
     @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
     @keyframes scaleIn{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
-
-    .login-box{
-      background:var(--admin-bg);border-radius:20px;padding:32px 28px;
-      max-width:380px;width:90%;animation:scaleIn .3s cubic-bezier(.16,1,.3,1);
-      border:1px solid var(--glass-border);
-    }
+    .login-box{background:var(--admin-bg);border-radius:20px;padding:32px 28px;max-width:380px;width:90%;animation:scaleIn .3s cubic-bezier(.16,1,.3,1);border:1px solid var(--glass-border);}
     .login-header{text-align:center;margin-bottom:24px;}
-    .login-icon{
-      width:60px;height:60px;border-radius:50%;background:var(--blue-bg);
-      display:flex;align-items:center;justify-content:center;margin:0 auto 14px;
-      font-size:24px;color:var(--blue);
-    }
+    .login-icon{width:60px;height:60px;border-radius:50%;background:var(--accent-bg);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:24px;color:var(--accent);transition:all .3s;}
     .login-header h2{font-size:18px;margin-bottom:4px;}
     .login-header p{font-size:12px;opacity:.5;}
     .login-form .form-group{margin-bottom:14px;}
     .login-form .form-group label{display:block;font-size:12px;font-weight:600;margin-bottom:5px;opacity:.8;}
-    .login-form .form-group input{
-      width:100%;padding:11px 14px;border-radius:10px;
-      border:1px solid var(--input-border);background:var(--input-bg);
-      color:var(--text-light);font-size:14px;font-family:inherit;outline:none;
-    }
-    .login-form .form-group input:focus{border-color:var(--blue);}
-    .login-error{
-      font-size:12px;color:var(--danger);margin-bottom:10px;
-      min-height:16px;transition:all .2s;
-    }
+    .login-form .form-group input{width:100%;padding:11px 14px;border-radius:10px;border:1px solid var(--input-border);background:var(--input-bg);color:var(--text-light);font-size:14px;font-family:inherit;outline:none;}
+    .login-form .form-group input:focus{border-color:var(--accent);}
+    .login-error{font-size:12px;color:var(--danger);margin-bottom:10px;min-height:16px;}
     .login-actions{display:flex;gap:10px;}
     .login-actions .btn{flex:1;justify-content:center;}
-    .login-close{
-      position:absolute;top:16px;right:16px;background:var(--glass);
-      border:none;width:32px;height:32px;border-radius:50%;color:var(--text-light);
-      cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;
-    }
 
     /* ══════════ ADMIN PANEL ══════════ */
-    .admin-overlay{
-      position:fixed;inset:0;background:var(--overlay-bg);z-index:1500;
-      display:none;align-items:flex-end;justify-content:center;
-      animation:fadeIn .25s ease;
-    }
+    .admin-overlay{position:fixed;inset:0;background:var(--overlay-bg);z-index:1500;display:none;align-items:flex-end;justify-content:center;animation:fadeIn .25s ease;}
     .admin-overlay.open{display:flex;}
-    .admin-panel{
-      width:100%;max-width:640px;max-height:92vh;
-      background:var(--admin-bg);border-radius:20px 20px 0 0;
-      display:flex;flex-direction:column;
-      animation:slideUp .35s cubic-bezier(.16,1,.3,1);overflow:hidden;
-    }
-    .admin-header{
-      display:flex;justify-content:space-between;align-items:center;
-      padding:16px 20px 12px;border-bottom:1px solid var(--glass-border);flex-shrink:0;
-      flex-wrap:wrap;gap:8px;
-    }
+    .admin-panel{width:100%;max-width:640px;max-height:92vh;background:var(--admin-bg);border-radius:20px 20px 0 0;display:flex;flex-direction:column;animation:slideUp .35s cubic-bezier(.16,1,.3,1);overflow:hidden;}
+    .admin-header{display:flex;justify-content:space-between;align-items:center;padding:16px 20px 12px;border-bottom:1px solid var(--glass-border);flex-shrink:0;flex-wrap:wrap;gap:8px;}
     .admin-header-left{display:flex;align-items:center;gap:10px;}
-    .admin-header-left h2{font-size:16px;display:flex;align-items:center;gap:8px;}
+    .admin-header-left h2{font-size:16px;display:flex;align-items:center;gap:8px;color:var(--accent);}
     .admin-email{font-size:11px;opacity:.5;display:flex;align-items:center;gap:4px;}
     .admin-header-right{display:flex;align-items:center;gap:6px;}
     .admin-close{background:var(--glass);border:none;width:34px;height:34px;border-radius:50%;color:var(--text-light);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;}
-    .btn-logout{background:var(--danger-bg);border:none;padding:6px 12px;border-radius:8px;color:var(--danger);cursor:pointer;font-size:12px;font-family:inherit;font-weight:600;display:flex;align-items:center;gap:5px;}
+    .btn-logout{background:var(--danger-bg);border:none;padding:6px 12px;border-radius:8px;color:var(--danger);cursor:pointer;font-size:12px;font-family:inherit;font-weight:600;display:flex;align-items:center;gap:5px;transition:all .2s;}
     .btn-logout:hover{background:var(--danger);color:#fff;}
     .admin-body{overflow-y:auto;flex:1;padding:16px 20px 30px;}
-
-    .admin-tabs{display:flex;gap:6px;margin-bottom:16px;}
-    .admin-tab{flex:1;padding:10px;border-radius:10px;border:none;background:var(--tab-inactive-bg);color:var(--tab-inactive-text);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px;}
-    .admin-tab.active{background:var(--blue-bg);color:var(--blue);}
+    .admin-tabs{display:flex;gap:5px;margin-bottom:16px;overflow-x:auto;scrollbar-width:none;}
+    .admin-tabs::-webkit-scrollbar{display:none;}
+    .admin-tab{flex-shrink:0;padding:9px 14px;border-radius:10px;border:none;background:var(--tab-inactive-bg);color:var(--tab-inactive-text);font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:5px;white-space:nowrap;}
+    .admin-tab.active{background:var(--accent-bg);color:var(--accent);}
     .admin-section{display:none;}
     .admin-section.active{display:block;}
 
     .form-group{margin-bottom:14px;}
     .form-group label{display:block;font-size:12px;font-weight:600;margin-bottom:5px;opacity:.8;}
-    .form-group input,.form-group select{width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--input-border);background:var(--input-bg);color:var(--text-light);font-size:14px;font-family:inherit;outline:none;}
-    .form-group input:focus,.form-group select:focus{border-color:var(--blue);}
+    .form-group input,.form-group select,.form-group textarea{width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--input-border);background:var(--input-bg);color:var(--text-light);font-size:14px;font-family:inherit;outline:none;}
+    .form-group textarea{resize:vertical;min-height:70px;line-height:1.5;}
+    .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--accent);}
     .form-group select{cursor:pointer;}
     .form-group select option{background:var(--admin-bg);color:var(--text-light);}
     .form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
@@ -168,7 +168,7 @@
     .icon-preview i{font-size:20px;}
 
     .btn{padding:10px 20px;border-radius:10px;border:none;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px;transition:all .2s;}
-    .btn-blue{background:var(--blue);color:#fff;}.btn-blue:hover{opacity:.9;}
+    .btn-accent{background:var(--accent);color:#fff;}.btn-accent:hover{opacity:.9;}
     .btn-danger{background:var(--danger-bg);color:var(--danger);}.btn-danger:hover{background:var(--danger);color:#fff;}
     .btn-success{background:var(--success-bg);color:var(--success);}.btn-success:hover{background:var(--success);color:#fff;}
     .btn-sm{padding:6px 12px;font-size:12px;border-radius:8px;}
@@ -180,7 +180,7 @@
     .manage-cat-title.utility{background:rgba(79,172,254,.12);color:#4facfe;}
     .manage-cat-title.update{background:rgba(67,233,123,.12);color:#43e97b;}
     .manage-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;background:var(--glass);margin-bottom:8px;border:1px solid var(--glass-border);transition:all .2s;}
-    .manage-item:hover{border-color:var(--blue);}
+    .manage-item:hover{border-color:var(--accent);}
     .manage-item-icon{width:38px;height:38px;border-radius:10px;background:var(--glass);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
     .manage-item-info{flex:1;min-width:0;}
     .manage-item-name{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
@@ -194,220 +194,229 @@
     .sync-dot.online{background:var(--success);}
     .sync-dot.offline{background:var(--danger);}
 
-    /* Toast */
+    /* Admin Theme */
+    .admin-theme-section{margin-bottom:20px;}
+    .admin-theme-section h3{font-size:13px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+    .admin-theme-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+    .admin-theme-swatch{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 4px;border-radius:10px;cursor:pointer;border:2px solid transparent;transition:all .2s;background:var(--glass);}
+    .admin-theme-swatch:hover{border-color:var(--accent-bg-strong);}
+    .admin-theme-swatch.active{border-color:var(--accent);background:var(--accent-bg);}
+    .admin-theme-swatch .color-dot{width:24px;height:24px;border-radius:50%;}
+    .admin-theme-swatch-name{font-size:9px;opacity:.6;}
+    .admin-theme-swatch.active .admin-theme-swatch-name{opacity:1;font-weight:600;}
+    .admin-theme-note{font-size:11px;opacity:.5;margin-top:8px;text-align:center;}
+
+    /* Admin News */
+    .news-manage-item{
+      padding:12px;border-radius:12px;background:var(--glass);margin-bottom:10px;
+      border:1px solid var(--glass-border);border-left:3px solid var(--accent);
+    }
+    .news-manage-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;}
+    .news-manage-title{font-size:13px;font-weight:700;}
+    .news-manage-text{font-size:12px;opacity:.6;margin-top:4px;line-height:1.4;}
+    .news-manage-date{font-size:11px;opacity:.4;margin-top:6px;}
+    .news-manage-actions{display:flex;gap:6px;flex-shrink:0;}
+    .news-edit-hint{font-size:11px;opacity:.4;margin-top:8px;font-style:italic;}
+
     .toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(80px);padding:10px 20px;border-radius:10px;font-size:13px;font-weight:600;z-index:3000;opacity:0;transition:all .35s cubic-bezier(.16,1,.3,1);pointer-events:none;white-space:nowrap;font-family:inherit;}
     .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
     .toast.success{background:var(--success);color:#fff;}
     .toast.error{background:var(--danger);color:#fff;}
-    .toast.info{background:var(--blue);color:#fff;}
+    .toast.info{background:var(--accent);color:#fff;}
 
-    /* Confirm Dialog */
     .confirm-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:2500;display:none;align-items:center;justify-content:center;}
     .confirm-overlay.open{display:flex;}
     .confirm-box{background:var(--admin-bg);border-radius:16px;padding:24px;max-width:340px;width:90%;text-align:center;}
     .confirm-box p{font-size:14px;margin-bottom:18px;line-height:1.5;}
     .confirm-box .confirm-actions{display:flex;gap:10px;justify-content:center;}
 
-    /* Loading spinner */
     .spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;}
     @keyframes spin{to{transform:rotate(360deg)}}
   </style>
 </head>
 <body>
 
-<!-- ══════════ MAIN APP ══════════ -->
 <div class="app">
   <div class="topbar">
     <div class="title">
       <div class="logo"><i class="fa-solid fa-globe"></i></div>
-      <div>
-        <h1>বাংলার সেবা</h1>
-        <p class="subtitle">দ্রুত লিংক</p>
-      </div>
+      <div><h1>বাংলার সেবা</h1><p class="subtitle">দ্রুত লিংক</p></div>
     </div>
     <div class="topbar-right">
-      <button class="admin-btn" id="adminOpenBtn"><i class="fa-solid fa-shield-halved"></i> <span id="adminBtnText">Admin</span></button>
-      <button class="theme-toggle" id="themeBtn"><i class="fa-regular fa-sun" id="themeIcon"></i> <span id="themeText">থিম</span></button>
+      <button class="icon-btn admin-btn" id="adminOpenBtn"><i class="fa-solid fa-shield-halved"></i> <span id="adminBtnText">Admin</span></button>
+      <div class="color-btn-wrap">
+        <button class="icon-btn" id="colorBtn"><i class="fa-solid fa-palette"></i></button>
+        <div class="color-popover" id="colorPopover">
+          <div class="color-popover-title"><i class="fa-solid fa-swatchbook"></i> Theme Color</div>
+          <div class="color-grid" id="colorGrid"></div>
+        </div>
+      </div>
+      <button class="icon-btn" id="themeBtn"><i class="fa-regular fa-sun" id="themeIcon"></i> <span id="themeText">থিম</span></button>
     </div>
   </div>
 
-  <div class="searchbar">
-    <input type="text" id="searchInput" placeholder="Search by English or Bengali name...">
-  </div>
+  <div class="searchbar"><input type="text" id="searchInput" placeholder="Search by English or Bengali name..."></div>
 
   <div class="cat-tabs" id="catTabs">
-    <button class="cat-tab active" data-cat="seva">
-      <i class="fa-solid fa-hand-holding-heart cat-icon"></i>
-      <span>সেবা</span>
-      <span class="cat-count" id="count-seva"></span>
-    </button>
-    <button class="cat-tab" data-cat="utility">
-      <i class="fa-solid fa-wrench cat-icon"></i>
-      <span>ইউটিলিটি</span>
-      <span class="cat-count" id="count-utility"></span>
-    </button>
-    <button class="cat-tab" data-cat="update">
-      <i class="fa-solid fa-rotate cat-icon"></i>
-      <span>আপডেট</span>
-      <span class="cat-count" id="count-update"></span>
-    </button>
+    <button class="cat-tab active" data-cat="seva"><i class="fa-solid fa-hand-holding-heart cat-icon"></i><span>সেবা</span><span class="cat-count" id="count-seva"></span></button>
+    <button class="cat-tab" data-cat="utility"><i class="fa-solid fa-wrench cat-icon"></i><span>ইউটিলিটি</span><span class="cat-count" id="count-utility"></span></button>
+    <button class="cat-tab" data-cat="update"><i class="fa-solid fa-rotate cat-icon"></i><span>আপডেট</span><span class="cat-count" id="count-update"></span></button>
   </div>
 
   <div class="recent" id="recentWrap">
     <h2>সাম্প্রতিক</h2>
-    <div class="recent-row" id="recentRow"><span style="font-size:12px;opacity:0.7;">সাম্প্রতিক সেবা এখানে প্রদর্শিত হবে</span></div>
+    <div class="recent-row" id="recentRow"><span style="font-size:12px;opacity:.7">সাম্প্রতিক সেবা এখানে প্রদর্শিত হবে</span></div>
+  </div>
+
+  <!-- News Section (only visible in Update tab) -->
+  <div class="news-section" id="newsSection" style="display:none">
+    <div class="news-header">
+      <h2><i class="fa-solid fa-bolt"></i> সংবাদ সংক্ষেপ</h2>
+      <span class="news-badge" id="newsBadge">0</span>
+    </div>
+    <div class="news-list" id="newsList"></div>
   </div>
 
   <div class="grid" id="serviceGrid"></div>
 </div>
 
-<!-- ══════════ LOGIN MODAL ══════════ -->
+<!-- LOGIN -->
 <div class="login-overlay" id="loginOverlay">
-  <div class="login-box" style="position:relative;">
+  <div class="login-box">
     <div class="login-header">
       <div class="login-icon"><i class="fa-solid fa-lock"></i></div>
-      <h2>Admin Login</h2>
-      <p>অনুমোদিত প্রশাসক শুধুমাত্র</p>
+      <h2>Admin Login</h2><p>অনুমোদিত প্রশাসক শুধুমাত্র</p>
     </div>
     <div class="login-form">
-      <div class="form-group">
-        <label><i class="fa-solid fa-envelope"></i> Email</label>
-        <input type="email" id="loginEmail" placeholder="admin@example.com" autocomplete="email">
-      </div>
-      <div class="form-group">
-        <label><i class="fa-solid fa-key"></i> Password</label>
-        <input type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password">
-      </div>
+      <div class="form-group"><label><i class="fa-solid fa-envelope"></i> Email</label><input type="email" id="loginEmail" placeholder="admin@example.com" autocomplete="email"></div>
+      <div class="form-group"><label><i class="fa-solid fa-key"></i> Password</label><input type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password"></div>
       <div class="login-error" id="loginError"></div>
       <div class="login-actions">
-        <button class="btn btn-full" style="background:var(--glass);color:var(--text-light);" id="loginCancelBtn">বাতিল</button>
-        <button class="btn btn-blue btn-full" id="loginSubmitBtn"><i class="fa-solid fa-right-to-bracket"></i> লগইন</button>
+        <button class="btn btn-full" style="background:var(--glass);color:var(--text-light)" id="loginCancelBtn">বাতিল</button>
+        <button class="btn btn-accent btn-full" id="loginSubmitBtn"><i class="fa-solid fa-right-to-bracket"></i> লগইন</button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ══════════ ADMIN PANEL ══════════ -->
+<!-- ADMIN PANEL -->
 <div class="admin-overlay" id="adminOverlay">
   <div class="admin-panel">
     <div class="admin-header">
-      <div class="admin-header-left">
-        <h2><i class="fa-solid fa-shield-halved"></i> Admin Panel</h2>
-        <span class="admin-email" id="adminEmail"></span>
-      </div>
-      <div class="admin-header-right">
-        <button class="btn-logout" id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
-        <button class="admin-close" id="adminCloseBtn"><i class="fa-solid fa-xmark"></i></button>
-      </div>
+      <div class="admin-header-left"><h2><i class="fa-solid fa-shield-halved"></i> Admin</h2><span class="admin-email" id="adminEmail"></span></div>
+      <div class="admin-header-right"><button class="btn-logout" id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i> Logout</button><button class="admin-close" id="adminCloseBtn"><i class="fa-solid fa-xmark"></i></button></div>
     </div>
     <div class="admin-body">
-
-      <div class="sync-status" id="syncStatus">
-        <span class="sync-dot" id="syncDot"></span>
-        <span id="syncText">Checking...</span>
-      </div>
-
+      <div class="sync-status" id="syncStatus"><span class="sync-dot" id="syncDot"></span><span id="syncText">Checking...</span></div>
       <div class="admin-tabs">
         <button class="admin-tab active" data-section="add"><i class="fa-solid fa-plus"></i> Add</button>
         <button class="admin-tab" data-section="manage"><i class="fa-solid fa-pen"></i> Manage</button>
-        <button class="admin-tab" data-section="settings"><i class="fa-solid fa-gear"></i> Settings</button>
+        <button class="admin-tab" data-section="news"><i class="fa-solid fa-bolt"></i> News</button>
+        <button class="admin-tab" data-section="theme"><i class="fa-solid fa-palette"></i> Theme</button>
+        <button class="admin-tab" data-section="settings"><i class="fa-solid fa-gear"></i> More</button>
       </div>
 
-      <!-- ADD SECTION -->
+      <!-- ADD SERVICE -->
       <div class="admin-section active" id="section-add">
-        <div class="form-group">
-          <label>সেবার নাম (Service Name) *</label>
-          <input type="text" id="addName" placeholder="e.g. কন্যাশ্রী">
-        </div>
-        <div class="form-group">
-          <label>URL *</label>
-          <input type="url" id="addUrl" placeholder="https://example.com">
-        </div>
+        <div class="form-group"><label>সেবার নাম *</label><input type="text" id="addName" placeholder="e.g. কন্যাশ্রী"></div>
+        <div class="form-group"><label>URL *</label><input type="url" id="addUrl" placeholder="https://example.com"></div>
         <div class="form-row">
-          <div class="form-group">
-            <label>Icon Class *</label>
-            <input type="text" id="addIcon" placeholder="fa-heart" value="fa-circle">
-            <div class="icon-preview"><i class="fa-solid fa-circle" id="iconPreview"></i> <span>FontAwesome 6</span></div>
-          </div>
-          <div class="form-group">
-            <label>Tags (English)</label>
-            <input type="text" id="addTags" placeholder="e.g. kanyashree scheme">
-          </div>
+          <div class="form-group"><label>Icon *</label><input type="text" id="addIcon" placeholder="fa-heart" value="fa-circle"><div class="icon-preview"><i class="fa-solid fa-circle" id="iconPreview"></i> <span>FA6</span></div></div>
+          <div class="form-group"><label>Tags</label><input type="text" id="addTags" placeholder="english tags"></div>
         </div>
-        <div class="form-group">
-          <label>Category *</label>
-          <select id="addCat">
-            <option value="seva">সেবা (Seva)</option>
-            <option value="utility">ইউটিলিটি (Utility)</option>
-            <option value="update">আপডেট (Update)</option>
-          </select>
-        </div>
-        <button class="btn btn-blue btn-full" id="addSubmitBtn"><i class="fa-solid fa-plus"></i> সেবা যোগ করুন</button>
+        <div class="form-group"><label>Category *</label><select id="addCat"><option value="seva">সেবা</option><option value="utility">ইউটিলিটি</option><option value="update">আপডেট</option></select></div>
+        <button class="btn btn-accent btn-full" id="addSubmitBtn"><i class="fa-solid fa-plus"></i> সেবা যোগ করুন</button>
       </div>
 
-      <!-- MANAGE SECTION -->
-      <div class="admin-section" id="section-manage">
-        <div id="manageList"></div>
+      <!-- MANAGE SERVICES -->
+      <div class="admin-section" id="section-manage"><div id="manageList"></div></div>
+
+      <!-- NEWS MANAGEMENT -->
+      <div class="admin-section" id="section-news">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+          <h3 style="font-size:14px;display:flex;align-items:center;gap:6px;"><i class="fa-solid fa-bolt" style="color:var(--accent)"></i> সংবাদ ব্যবস্থাপনা</h3>
+          <span style="font-size:11px;opacity:.5" id="newsCountLabel">0টি সংবাদ</span>
+        </div>
+        <div class="form-group"><label>শিরোনাম *</label><input type="text" id="newsTitle" placeholder="e.g. নতুন সেবা চালু"></div>
+        <div class="form-group"><label>বিবরণ (২-৩ বাক্য) *</label><textarea id="newsBody" placeholder="e.g. পশ্চিমবঙ্গ সরকার নতুন সেবা চালু করেছে। সকল নাগরিক অনলাইনে আবেদন করতে পারবেন।"></textarea></div>
+        <div class="form-row">
+          <div class="form-group"><label>তারিখ</label><input type="date" id="newsDate"></div>
+          <div class="form-group"><label>আইকন</label><input type="text" id="newsIcon" placeholder="fa-bullhorn" value="fa-bullhorn"><div class="icon-preview"><i class="fa-solid fa-bullhorn" id="newsIconPreview"></i></div></div>
+        </div>
+        <input type="hidden" id="newsEditId" value="">
+        <button class="btn btn-accent btn-full" id="newsSubmitBtn"><i class="fa-solid fa-plus"></i> সংবাদ যোগ করুন</button>
+        <button class="btn btn-full" style="background:var(--glass);color:var(--text-light);margin-top:8px;display:none" id="newsCancelEditBtn"><i class="fa-solid fa-xmark"></i> সম্পাদনা বাতিল</button>
+        <div id="newsManageList" style="margin-top:16px;"></div>
       </div>
 
-      <!-- SETTINGS SECTION -->
+      <!-- THEME -->
+      <div class="admin-section" id="section-theme">
+        <div class="admin-theme-section">
+          <h3><i class="fa-solid fa-swatchbook"></i> Global Theme Color</h3>
+          <p style="font-size:12px;opacity:.5;margin-bottom:12px">সকল ইউজারের জন্য ডিফল্ট থিম</p>
+          <div class="admin-theme-grid" id="adminThemeGrid"></div>
+          <p class="admin-theme-note">ইউজার নিজে কালার বদলালে তা ওভাররাইড করবে</p>
+        </div>
+        <div style="margin-top:20px"><button class="btn btn-accent btn-full" id="resetUserThemeBtn"><i class="fa-solid fa-rotate-left"></i> Reset Local to Global</button></div>
+      </div>
+
+      <!-- MORE SETTINGS -->
       <div class="admin-section" id="section-settings">
-        <div style="margin-bottom:16px;">
-          <button class="btn btn-success btn-full" id="pushDefaultsBtn"><i class="fa-solid fa-cloud-arrow-up"></i> Push Defaults to Cloud</button>
-          <p style="font-size:11px;opacity:.5;margin-top:6px;text-align:center;">Upload default services to Firestore (first-time setup)</p>
-        </div>
-        <div style="margin-bottom:16px;">
-          <button class="btn btn-danger btn-full" id="resetAllBtn"><i class="fa-solid fa-arrow-rotate-left"></i> Reset to Default Services</button>
-          <p style="font-size:11px;opacity:.5;margin-top:6px;text-align:center;">Reset local data to built-in defaults</p>
-        </div>
-        <div style="margin-bottom:16px;">
-          <button class="btn btn-full" style="background:var(--blue-bg);color:var(--blue);" id="exportBtn"><i class="fa-solid fa-download"></i> Export Services (JSON)</button>
-        </div>
-        <div>
-          <label style="font-size:12px;font-weight:600;opacity:.8;display:block;margin-bottom:6px;">Import Services (JSON)</label>
-          <input type="file" id="importFile" accept=".json" style="font-size:13px;">
-        </div>
+        <div style="margin-bottom:16px"><button class="btn btn-success btn-full" id="pushDefaultsBtn"><i class="fa-solid fa-cloud-arrow-up"></i> Push Defaults to Cloud</button></div>
+        <div style="margin-bottom:16px"><button class="btn btn-danger btn-full" id="resetAllBtn"><i class="fa-solid fa-arrow-rotate-left"></i> Reset Services</button></div>
+        <div style="margin-bottom:16px"><button class="btn btn-full" style="background:var(--accent-bg);color:var(--accent)" id="exportBtn"><i class="fa-solid fa-download"></i> Export JSON</button></div>
+        <div><label style="font-size:12px;font-weight:600;opacity:.8;display:block;margin-bottom:6px">Import JSON</label><input type="file" id="importFile" accept=".json" style="font-size:13px"></div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- Confirm Dialog -->
+<!-- Confirm -->
 <div class="confirm-overlay" id="confirmOverlay">
-  <div class="confirm-box">
-    <p id="confirmMsg">Are you sure?</p>
-    <div class="confirm-actions">
-      <button class="btn btn-sm" style="background:var(--glass);color:var(--text-light);" id="confirmNo">বাতিল</button>
-      <button class="btn btn-sm btn-danger" id="confirmYes">হ্যাঁ</button>
-    </div>
-  </div>
+  <div class="confirm-box"><p id="confirmMsg"></p><div class="confirm-actions"><button class="btn btn-sm" style="background:var(--glass);color:var(--text-light)" id="confirmNo">বাতিল</button><button class="btn btn-sm btn-danger" id="confirmYes">হ্যাঁ</button></div></div>
 </div>
-
-<!-- Toast -->
 <div class="toast" id="toast"></div>
 
 <script>
-// ══════════════════════════════════════════
-// FIREBASE INIT
-// ══════════════════════════════════════════
-const firebaseConfig = {
-  apiKey: "AIzaSyDoKSOvR6SYi7o6P-0LPhabpEy7hBIg4-Q",
-  authDomain: "banglarseva.firebaseapp.com",
-  projectId: "banglarseva",
-  storageBucket: "banglarseva.firebasestorage.app",
-  messagingSenderId: "721081603867",
-  appId: "1:721081603867:web:e109a027fda2e421dc65be",
-  measurementId: "G-1WDTGYHSZB"
-};
+// ═══════════════════════════════════════
+// THEME PRESETS
+// ═══════════════════════════════════════
+const THEME_PRESETS=[
+  {id:'ocean',name:'Ocean',emoji:'🌊',accent:'#3b82f6',accentLight:'#60a5fa',accentDark:'#1d4ed8',accentBg:'rgba(59,130,246,.12)',accentBgStrong:'rgba(59,130,246,.25)'},
+  {id:'emerald',name:'Emerald',emoji:'💎',accent:'#10b981',accentLight:'#34d399',accentDark:'#059669',accentBg:'rgba(16,185,129,.12)',accentBgStrong:'rgba(16,185,129,.25)'},
+  {id:'purple',name:'Purple',emoji:'👑',accent:'#8b5cf6',accentLight:'#a78bfa',accentDark:'#7c3aed',accentBg:'rgba(139,92,246,.12)',accentBgStrong:'rgba(139,92,246,.25)'},
+  {id:'crimson',name:'Crimson',emoji:'🔥',accent:'#ef4444',accentLight:'#f87171',accentDark:'#dc2626',accentBg:'rgba(239,68,68,.12)',accentBgStrong:'rgba(239,68,68,.25)'},
+  {id:'sunset',name:'Sunset',emoji:'🌅',accent:'#f97316',accentLight:'#fb923c',accentDark:'#ea580c',accentBg:'rgba(249,115,22,.12)',accentBgStrong:'rgba(249,115,22,.25)'},
+  {id:'rose',name:'Rose',emoji:'🌹',accent:'#ec4899',accentLight:'#f472b6',accentDark:'#db2777',accentBg:'rgba(236,72,153,.12)',accentBgStrong:'rgba(236,72,153,.25)'},
+  {id:'indigo',name:'Indigo',emoji:'🔮',accent:'#6366f1',accentLight:'#818cf8',accentDark:'#4f46e5',accentBg:'rgba(99,102,241,.12)',accentBgStrong:'rgba(99,102,241,.25)'},
+  {id:'teal',name:'Teal',emoji:'🌿',accent:'#14b8a6',accentLight:'#2dd4bf',accentDark:'#0d9488',accentBg:'rgba(20,184,166,.12)',accentBgStrong:'rgba(20,184,166,.25)'},
+];
+function applyThemeColor(id){
+  const p=THEME_PRESETS.find(t=>t.id===id);if(!p)return;
+  const r=document.documentElement.style;
+  r.setProperty('--accent',p.accent);r.setProperty('--accent-light',p.accentLight);
+  r.setProperty('--accent-dark',p.accentDark);r.setProperty('--accent-bg',p.accentBg);
+  r.setProperty('--accent-bg-strong',p.accentBgStrong);
+  localStorage.setItem('wb_themeColor',id);
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content',p.accentDark);
+  document.querySelectorAll('.color-swatch').forEach(s=>s.classList.toggle('active',s.dataset.id===id));
+  document.querySelectorAll('.admin-theme-swatch').forEach(s=>s.classList.toggle('active',s.dataset.id===id));
+}
+function buildColorGrid(cid,cls,onClick){
+  const g=document.getElementById(cid);g.innerHTML='';
+  THEME_PRESETS.forEach(p=>{const s=document.createElement('div');s.className=cls;s.dataset.id=p.id;s.innerHTML=`<div class="color-dot" style="background:${p.accent}"></div><div class="color-swatch-name">${p.emoji} ${p.name}</div>`;s.addEventListener('click',()=>onClick(p.id));g.appendChild(s)});
+}
 
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.firestore();
+// ═══════════════════════════════════════
+// FIREBASE
+// ═══════════════════════════════════════
+const firebaseConfig={apiKey:"AIzaSyDoKSOvR6SYi7o6P-0LPhabpEy7hBIg4-Q",authDomain:"banglarseva.firebaseapp.com",projectId:"banglarseva",storageBucket:"banglarseva.firebasestorage.app",messagingSenderId:"721081603867",appId:"1:721081603867:web:e109a027fda2e421dc65be",measurementId:"G-1WDTGYHSZB"};
+firebase.initializeApp(firebaseConfig);const auth=firebase.auth(),db=firebase.firestore();
 
-// ══════════════════════════════════════════
-// DEFAULT SERVICES (built-in)
-// ══════════════════════════════════════════
-const DEFAULT_SERVICES = [
+// ═══════════════════════════════════════
+// DEFAULT SERVICES
+// ═══════════════════════════════════════
+const DEFAULT_SERVICES=[
   {name:"অন্নপূর্ণা ভাণ্ডার প্রকল্প",url:"https://socialregistry.wb.gov.in/",icon:"fa-hand-holding-heart",tags:"laxmi bhondar",cat:"seva"},
   {name:"কন্যাশ্রী",url:"https://www.wbkanyashree.gov.in/kp_track_status.php",icon:"fa-graduation-cap",tags:"kanyashree",cat:"seva"},
   {name:"ঐক্যশ্রী",url:"https://wbmdfcscholarship.in/server/choose_server?dect_re=/main/track_appli1",icon:"fa-book",tags:"aikyashree scholarship",cat:"seva"},
@@ -415,628 +424,344 @@ const DEFAULT_SERVICES = [
   {name:"যুবশ্রী",url:"https://employmentbankwb.gov.in/check_annx3.php",icon:"fa-briefcase",tags:"yuvashree",cat:"seva"},
   {name:"স্বাস্থ্যসাথী",url:"https://data.swasthyasathi.gov.in/SSDataSearchLogin.aspx",icon:"fa-hospital-user",tags:"swasthya sathi",cat:"seva"},
   {name:"বাংলা আবাস যোজনা",url:"https://cmo.wb.gov.in/landing/landing-dashboard",icon:"fa-house",tags:"bangla abas yojona",cat:"seva"},
-
   {name:"রেশন কার্ড",url:"https://wbpds.wb.gov.in/rcmsnew/Citizen/CheckApplicationStatus",icon:"fa-id-card",tags:"ration card",cat:"utility"},
   {name:"ড্রাইভিং লাইসেন্স",url:"https://parivahan.gov.in/rcdlstatus/?pur_cd=101",icon:"fa-car",tags:"driving license",cat:"utility"},
   {name:"ভোটার কার্ড",url:"https://voters.eci.gov.in/",icon:"fa-person-booth",tags:"voter",cat:"utility"},
   {name:"প্যান কার্ড",url:"https://tin.tin.proteantech.in/pantan/StatusTrack.html",icon:"fa-file-invoice",tags:"pan card",cat:"utility"},
   {name:"পাসপোর্ট",url:"https://www.passportindia.gov.in/psp/trackApplicationService",icon:"fa-passport",tags:"passport",cat:"utility"},
   {name:"জন্ম ও মৃত্যু সম্পর্কিত তথ্য",url:"https://janma-mrityutathya.wb.gov.in/",icon:"fa-baby",tags:"birth death info",cat:"utility"},
-  {name:"পঞ্চায়েত বিভাগ",url:"https://wbpms.in/citizen/",icon:"fa-building-columns",tags:"panchayat panchayet পঞ্চায়েত",cat:"utility"},
-  {name:"Image Merge",url:"https://imageonline.co/merge-jpg.php",icon:"fa-images",tags:"merge jpg combine images photo joiner",cat:"utility"},
-  {name:"JPG to PDF",url:"https://www.ilovepdf.com/jpg_to_pdf",icon:"fa-file-pdf",tags:"jpg to pdf convert image ilovepdf",cat:"utility"},
-  {name:"myAadhaar Portal",url:"https://myaadhaar.uidai.gov.in/",icon:"fa-id-card",tags:"aadhaar uidai identity card download update",cat:"utility"},
-
+  {name:"পঞ্চায়েত বিভাগ",url:"https://wbpms.in/citizen/",icon:"fa-building-columns",tags:"panchayat পঞ্চায়েত",cat:"utility"},
+  {name:"Image Merge",url:"https://imageonline.co/merge-jpg.php",icon:"fa-images",tags:"merge jpg combine images",cat:"utility"},
+  {name:"JPG to PDF",url:"https://www.ilovepdf.com/jpg_to_pdf",icon:"fa-file-pdf",tags:"jpg to pdf convert ilovepdf",cat:"utility"},
+  {name:"myAadhaar Portal",url:"https://myaadhaar.uidai.gov.in/",icon:"fa-id-card",tags:"aadhaar uidai identity card",cat:"utility"},
   {name:"পিএনআর স্ট্যাটাস",url:"https://www.railyatri.in/pnr-status",icon:"fa-train",tags:"pnr status",cat:"update"},
   {name:"পিএম কিষান যোজনা স্ট্যাটাস",url:"https://pmkisan.gov.in/BeneficiaryStatus_New.aspx",icon:"fa-leaf",tags:"pm kisan yojona status",cat:"update"},
 ];
 
-// ══════════════════════════════════════════
+// ═══════════════════════════════════════
 // SERVICES STATE
-// ══════════════════════════════════════════
-let services = [];
-let firestoreReady = false;
+// ═══════════════════════════════════════
+let services=[],firestoreReady=false;
+function loadServicesLocal(){const s=localStorage.getItem('wb_services');if(s){try{services=JSON.parse(s)}catch(e){services=JSON.parse(JSON.stringify(DEFAULT_SERVICES))}}else services=JSON.parse(JSON.stringify(DEFAULT_SERVICES))}
+function saveServicesLocal(){localStorage.setItem('wb_services',JSON.stringify(services))}
+async function loadServicesFromFirestore(){try{const d=await db.collection('app').doc('services').get();if(d.exists&&d.data().items&&d.data().items.length>0){services=d.data().items;saveServicesLocal();return true}}catch(e){console.warn(e.message)}return false}
+async function saveServicesToFirestore(){try{await db.collection('app').doc('services').set({items:services,updatedAt:firebase.firestore.FieldValue.serverTimestamp()});saveServicesLocal();updateSyncStatus(true);return true}catch(e){console.error(e);saveServicesLocal();updateSyncStatus(false);return false}}
+let unsubSnap=null;
+function setupFirestoreListener(){if(unsubSnap)unsubSnap();unsubSnap=db.collection('app').doc('services').onSnapshot(d=>{if(d.exists&&d.data().items&&d.data().items.length>0){if(JSON.stringify(d.data().items)!==JSON.stringify(services)){services=d.data().items;saveServicesLocal();updateCounts();renderServices(lastFilter)}}firestoreReady=true;updateSyncStatus(true)},e=>{firestoreReady=false;updateSyncStatus(false)})}
+function updateSyncStatus(o){document.getElementById('syncDot').className='sync-dot '+(o?'online':'offline');document.getElementById('syncText').textContent=o?'ক্লাউড সিঙ্ক সক্রিয়':'অফলাইন — লোকাল ডেটা'}
 
-function loadServicesLocal(){
-  const saved = localStorage.getItem('wb_services');
-  if(saved){
-    try{ services = JSON.parse(saved); } catch(e){ services = JSON.parse(JSON.stringify(DEFAULT_SERVICES)); }
-  } else {
-    services = JSON.parse(JSON.stringify(DEFAULT_SERVICES));
-  }
-}
+// ═══════════════════════════════════════
+// NEWS STATE
+// ═══════════════════════════════════════
+let newsItems=[];
+function loadNewsLocal(){const s=localStorage.getItem('wb_news');if(s){try{newsItems=JSON.parse(s)}catch(e){newsItems=[]}}else newsItems=[]}
+function saveNewsLocal(){localStorage.setItem('wb_news',JSON.stringify(newsItems))}
+async function loadNewsFromFirestore(){try{const d=await db.collection('app').doc('news').get();if(d.exists&&d.data().items&&d.data().items.length>=0){newsItems=d.data().items;saveNewsLocal();return true}}catch(e){console.warn(e.message)}return false}
+async function saveNewsToFirestore(){try{await db.collection('app').doc('news').set({items:newsItems,updatedAt:firebase.firestore.FieldValue.serverTimestamp()});saveNewsLocal();return true}catch(e){console.error(e);saveNewsLocal();return false}}
+let unsubNews=null;
+function setupNewsListener(){if(unsubNews)unsubNews();unsubNews=db.collection('app').doc('news').onSnapshot(d=>{if(d.exists&&d.data().items){const n=d.data().items;if(JSON.stringify(n)!==JSON.stringify(newsItems)){newsItems=n;saveNewsLocal();renderNews()}}},e=>console.warn('News listener:',e.message))}
 
-function saveServicesLocal(){
-  localStorage.setItem('wb_services', JSON.stringify(services));
-}
+// ═══════════════════════════════════════
+// GLOBAL THEME
+// ═══════════════════════════════════════
+let globalThemeColor='ocean';
+async function loadGlobalTheme(){try{const d=await db.collection('app').doc('settings').get();if(d.exists&&d.data().themeColor)globalThemeColor=d.data().themeColor}catch(e){}const l=localStorage.getItem('wb_themeColor');applyThemeColor(l||globalThemeColor)}
+async function saveGlobalTheme(id){try{await db.collection('app').doc('settings').set({themeColor:id,updatedAt:firebase.firestore.FieldValue.serverTimestamp()},{merge:true});globalThemeColor=id;return true}catch(e){return false}}
+function setupThemeListener(){db.collection('app').doc('settings').onSnapshot(d=>{if(d.exists&&d.data().themeColor){const g=d.data().themeColor;if(g!==globalThemeColor){globalThemeColor=g;if(!localStorage.getItem('wb_themeColor'))applyThemeColor(g)}}})}
 
-async function loadServicesFromFirestore(){
-  try{
-    const doc = await db.collection('app').doc('services').get();
-    if(doc.exists && doc.data().items && doc.data().items.length > 0){
-      services = doc.data().items;
-      saveServicesLocal();
-      return true;
-    }
-  } catch(e){
-    console.warn('Firestore load failed:', e.message);
-  }
-  return false;
-}
-
-async function saveServicesToFirestore(){
-  try{
-    await db.collection('app').doc('services').set({
-      items: services,
-      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-    });
-    saveServicesLocal();
-    updateSyncStatus(true);
-    return true;
-  } catch(e){
-    console.error('Firestore save error:', e);
-    saveServicesLocal();
-    updateSyncStatus(false);
-    return false;
-  }
-}
-
-// Real-time listener for service updates
-let unsubscribeSnapshot = null;
-function setupFirestoreListener(){
-  if(unsubscribeSnapshot) unsubscribeSnapshot();
-  unsubscribeSnapshot = db.collection('app').doc('services').onSnapshot(doc => {
-    if(doc.exists && doc.data().items && doc.data().items.length > 0){
-      const newItems = doc.data().items;
-      // Only update if different (avoid unnecessary re-renders)
-      if(JSON.stringify(newItems) !== JSON.stringify(services)){
-        services = newItems;
-        saveServicesLocal();
-        updateCounts();
-        renderServices(lastFilter);
-      }
-    }
-    firestoreReady = true;
-    updateSyncStatus(true);
-  }, error => {
-    console.warn('Snapshot listener error:', error.message);
-    firestoreReady = false;
-    updateSyncStatus(false);
-  });
-}
-
-function updateSyncStatus(online){
-  const dot = document.getElementById('syncDot');
-  const text = document.getElementById('syncText');
-  if(online){
-    dot.className = 'sync-dot online';
-    text.textContent = 'ক্লাউড সিঙ্ক সক্রিয়';
-  } else {
-    dot.className = 'sync-dot offline';
-    text.textContent = 'অফলাইন — লোকাল ডেটা ব্যবহৃত';
-  }
-}
-
-// ══════════════════════════════════════════
-// THEME
-// ══════════════════════════════════════════
-const themeBtn=document.getElementById('themeBtn');
-const themeIcon=document.getElementById('themeIcon');
-const themeText=document.getElementById('themeText');
-function applyTheme(mode){
-  if(mode==='light'){
-    document.documentElement.classList.add('light');
-    themeIcon.className='fa-regular fa-moon';themeText.textContent='লাইট';
-  }else{
-    document.documentElement.classList.remove('light');
-    themeIcon.className='fa-regular fa-sun';themeText.textContent='ডার্ক';
-  }
-  localStorage.setItem('wb_theme',mode);
-}
+// ═══════════════════════════════════════
+// DARK/LIGHT
+// ═══════════════════════════════════════
+function applyTheme(m){if(m==='light'){document.documentElement.classList.add('light');document.getElementById('themeIcon').className='fa-regular fa-moon';document.getElementById('themeText').textContent='লাইট'}else{document.documentElement.classList.remove('light');document.getElementById('themeIcon').className='fa-regular fa-sun';document.getElementById('themeText').textContent='ডার্ক'}localStorage.setItem('wb_theme',m)}
 applyTheme(localStorage.getItem('wb_theme')||'dark');
-themeBtn.addEventListener('click',()=>{
-  const c=document.documentElement.classList.contains('light')?'light':'dark';
-  applyTheme(c==='light'?'dark':'light');
-});
+document.getElementById('themeBtn').addEventListener('click',()=>applyTheme(document.documentElement.classList.contains('light')?'dark':'light'));
 
-// ══════════════════════════════════════════
-// COLORS
-// ══════════════════════════════════════════
-const colors=[
-  "linear-gradient(135deg,#ff9a9e,#fad0c4)",
-  "linear-gradient(135deg,#a18cd1,#fbc2eb)",
-  "linear-gradient(135deg,#f6d365,#fda085)",
-  "linear-gradient(135deg,#84fab0,#8fd3f4)",
-  "linear-gradient(135deg,#fccb90,#d57eeb)",
-  "linear-gradient(135deg,#e0c3fc,#8ec5fc)",
-  "linear-gradient(135deg,#f093fb,#f5576c)",
-  "linear-gradient(135deg,#4facfe,#00f2fe)",
-  "linear-gradient(135deg,#43e97b,#38f9d7)",
-  "linear-gradient(135deg,#ffecd2,#fcb69f)"
-];
-function randomColor(){return colors[Math.floor(Math.random()*colors.length)];}
+// ═══════════════════════════════════════
+// CARD COLORS
+// ═══════════════════════════════════════
+const colors=["linear-gradient(135deg,#ff9a9e,#fad0c4)","linear-gradient(135deg,#a18cd1,#fbc2eb)","linear-gradient(135deg,#f6d365,#fda085)","linear-gradient(135deg,#84fab0,#8fd3f4)","linear-gradient(135deg,#fccb90,#d57eeb)","linear-gradient(135deg,#e0c3fc,#8ec5fc)","linear-gradient(135deg,#f093fb,#f5576c)","linear-gradient(135deg,#4facfe,#00f2fe)","linear-gradient(135deg,#43e97b,#38f9d7)","linear-gradient(135deg,#ffecd2,#fcb69f)"];
+function randomColor(){return colors[Math.floor(Math.random()*colors.length)]}
 
-// ══════════════════════════════════════════
-// MAIN APP — Tabs, Grid, Recent
-// ══════════════════════════════════════════
-let activeCat='seva';
-const catTabs=document.getElementById('catTabs');
-const grid=document.getElementById('serviceGrid');
-const recentRow=document.getElementById('recentRow');
-let lastFilter="";
+// ═══════════════════════════════════════
+// MAIN APP
+// ═══════════════════════════════════════
+let activeCat='seva',lastFilter="";
+function normalize(s){return(s||"").toLowerCase().trim()}
+function updateCounts(){const c={seva:0,utility:0,update:0};services.forEach(s=>c[s.cat]++);document.getElementById('count-seva').textContent=c.seva;document.getElementById('count-utility').textContent=c.utility;document.getElementById('count-update').textContent=c.update}
 
-function normalize(s){return(s||"").toLowerCase().trim();}
-
-function updateCounts(){
-  const c={seva:0,utility:0,update:0};
-  services.forEach(s=>c[s.cat]++);
-  document.getElementById('count-seva').textContent=c.seva;
-  document.getElementById('count-utility').textContent=c.utility;
-  document.getElementById('count-update').textContent=c.update;
-}
-
-catTabs.addEventListener('click',e=>{
-  const tab=e.target.closest('.cat-tab');
-  if(!tab)return;
-  catTabs.querySelectorAll('.cat-tab').forEach(t=>t.classList.remove('active'));
-  tab.classList.add('active');
-  activeCat=tab.dataset.cat;
-  renderServices(lastFilter);
-});
+document.getElementById('catTabs').addEventListener('click',e=>{const t=e.target.closest('.cat-tab');if(!t)return;document.querySelectorAll('.cat-tab').forEach(x=>x.classList.remove('active'));t.classList.add('active');activeCat=t.dataset.cat;renderServices(lastFilter)});
 
 function renderRecent(order){
-  recentRow.innerHTML="";
+  const rr=document.getElementById('recentRow');rr.innerHTML="";
   const items=order.map(n=>services.find(s=>s.name===n)).filter(Boolean).slice(0,8);
-  if(!items.length){
-    recentRow.innerHTML='<span style="font-size:12px;opacity:0.7;">সাম্প্রতিক সেবা এখানে প্রদর্শিত হবে</span>';
-    return;
-  }
-  items.forEach(s=>{
-    const chip=document.createElement('a');chip.className='chip';
-    chip.textContent=s.name;chip.href=s.url;chip.target='_blank';
-    chip.addEventListener('click',()=>storeRecent(s.name));
-    recentRow.appendChild(chip);
-  });
+  if(!items.length){rr.innerHTML='<span style="font-size:12px;opacity:.7">সাম্প্রতিক সেবা এখানে প্রদর্শিত হবে</span>';return}
+  items.forEach(s=>{const c=document.createElement('a');c.className='chip';c.textContent=s.name;c.href=s.url;c.target='_blank';c.addEventListener('click',()=>storeRecent(s.name));rr.appendChild(c)});
 }
-
-function storeRecent(name){
-  let order=JSON.parse(localStorage.getItem('serviceOrder'))||[];
-  order=order.filter(x=>x!==name);order.unshift(name);
-  localStorage.setItem('serviceOrder',JSON.stringify(order));
-  renderServices(lastFilter);
-}
+function storeRecent(name){let o=JSON.parse(localStorage.getItem('serviceOrder'))||[];o=o.filter(x=>x!==name);o.unshift(name);localStorage.setItem('serviceOrder',JSON.stringify(o));renderServices(lastFilter)}
 
 function renderServices(filter=""){
-  lastFilter=filter;grid.innerHTML="";
-  const f=normalize(filter);
+  lastFilter=filter;const grid=document.getElementById('serviceGrid');grid.innerHTML="";const f=normalize(filter);
   let order=JSON.parse(localStorage.getItem('serviceOrder'))||[];
-  let sorted=[...services].sort((a,b)=>{
-    let ai=order.indexOf(a.name),bi=order.indexOf(b.name);
-    if(ai===-1&&bi===-1)return 0;if(ai===-1)return 1;if(bi===-1)return -1;return ai-bi;
-  });
+  let sorted=[...services].sort((a,b)=>{let ai=order.indexOf(a.name),bi=order.indexOf(b.name);if(ai===-1&&bi===-1)return 0;if(ai===-1)return 1;if(bi===-1)return -1;return ai-bi});
   const filtered=sorted.filter(s=>s.cat===activeCat&&(normalize(s.name).includes(f)||normalize(s.tags).includes(f)));
-  if(!filtered.length){
-    grid.innerHTML='<div class="empty-state"><i class="fa-solid fa-folder-open" style="font-size:28px;margin-bottom:8px;display:block;"></i>এই বিভাগে কোনো সেবা পাওয়া যায়নি</div>';
-    renderRecent(order);return;
-  }
-  filtered.forEach(s=>{
-    const card=document.createElement('a');card.className='card';
-    card.href=s.url;card.target='_blank';card.style.background=randomColor();
-    card.innerHTML=`<div class="iconwrap"><i class="fa-solid ${s.icon}"></i></div><h3>${s.name}</h3><p>অবস্থা দেখুন</p>`;
-    card.addEventListener('click',()=>storeRecent(s.name));
-    grid.appendChild(card);
-  });
+  // Show/hide news section
+  document.getElementById('newsSection').style.display=activeCat==='update'?'block':'none';
+  if(activeCat==='update')renderNews();
+  if(!filtered.length){grid.innerHTML='<div class="empty-state"><i class="fa-solid fa-folder-open" style="font-size:28px;margin-bottom:8px;display:block"></i>এই বিভাগে কোনো সেবা পাওয়া যায়নি</div>';renderRecent(order);return}
+  filtered.forEach(s=>{const c=document.createElement('a');c.className='card';c.href=s.url;c.target='_blank';c.style.background=randomColor();c.innerHTML=`<div class="iconwrap"><i class="fa-solid ${s.icon}"></i></div><h3>${s.name}</h3><p>অবস্থা দেখুন</p>`;c.addEventListener('click',()=>storeRecent(s.name));grid.appendChild(c)});
   renderRecent(order);
 }
-
 document.getElementById('searchInput').addEventListener('input',e=>renderServices(e.target.value));
 
-// ══════════════════════════════════════════
-// TOAST
-// ══════════════════════════════════════════
-const toastEl=document.getElementById('toast');
-let toastTimer;
-function showToast(msg,type='success'){
-  clearTimeout(toastTimer);
-  toastEl.textContent=msg;toastEl.className='toast '+type;
-  requestAnimationFrame(()=>toastEl.classList.add('show'));
-  toastTimer=setTimeout(()=>toastEl.classList.remove('show'),2500);
+// ═══════════════════════════════════════
+// RENDER NEWS (Public)
+// ═══════════════════════════════════════
+function renderNews(){
+  const list=document.getElementById('newsList'),badge=document.getElementById('newsBadge');
+  badge.textContent=newsItems.length;
+  if(!newsItems.length){list.innerHTML='<div class="news-empty"><i class="fa-solid fa-newspaper" style="font-size:20px;margin-bottom:6px;display:block"></i>এখনো কোনো সংবাদ নেই</div>';return}
+  list.innerHTML="";
+  const now=new Date();
+  newsItems.forEach(n=>{
+    const card=document.createElement('div');card.className='news-card';
+    const isNew=n.date&&((now-new Date(n.date))/(1000*60*60*24))<7;
+    const dateStr=n.date?new Date(n.date).toLocaleDateString('bn-IN',{year:'numeric',month:'short',day:'numeric'}):'';
+    card.innerHTML=`
+      <div class="news-card-icon"><i class="fa-solid ${n.icon||'fa-bullhorn'}"></i></div>
+      <div class="news-card-body">
+        <div class="news-card-title">${n.title}</div>
+        <div class="news-card-text">${n.body}</div>
+        <div class="news-card-meta">
+          ${dateStr?`<span><i class="fa-regular fa-calendar"></i> ${dateStr}</span>`:''}
+          ${isNew?'<span class="news-new-tag">নতুন</span>':''}
+        </div>
+      </div>`;
+    list.appendChild(card);
+  });
 }
 
-// ══════════════════════════════════════════
-// CONFIRM DIALOG
-// ══════════════════════════════════════════
-const confirmOverlay=document.getElementById('confirmOverlay');
-const confirmMsg=document.getElementById('confirmMsg');
+// ═══════════════════════════════════════
+// TOAST & CONFIRM
+// ═══════════════════════════════════════
+const toastEl=document.getElementById('toast');let toastTimer;
+function showToast(msg,type='success'){clearTimeout(toastTimer);toastEl.textContent=msg;toastEl.className='toast '+type;requestAnimationFrame(()=>toastEl.classList.add('show'));toastTimer=setTimeout(()=>toastEl.classList.remove('show'),2500)}
 let confirmCallback=null;
-function showConfirm(msg,cb){
-  confirmMsg.textContent=msg;confirmCallback=cb;
-  confirmOverlay.classList.add('open');
-}
-document.getElementById('confirmYes').addEventListener('click',()=>{confirmOverlay.classList.remove('open');if(confirmCallback)confirmCallback();confirmCallback=null;});
-document.getElementById('confirmNo').addEventListener('click',()=>{confirmOverlay.classList.remove('open');confirmCallback=null;});
+function showConfirm(msg,cb){document.getElementById('confirmMsg').textContent=msg;confirmCallback=cb;document.getElementById('confirmOverlay').classList.add('open')}
+document.getElementById('confirmYes').addEventListener('click',()=>{document.getElementById('confirmOverlay').classList.remove('open');if(confirmCallback)confirmCallback();confirmCallback=null});
+document.getElementById('confirmNo').addEventListener('click',()=>{document.getElementById('confirmOverlay').classList.remove('open');confirmCallback=null});
 
-// ══════════════════════════════════════════
-// FIREBASE AUTH
-// ══════════════════════════════════════════
-let currentUser = null;
+// ═══════════════════════════════════════
+// COLOR PICKER
+// ═══════════════════════════════════════
+buildColorGrid('colorGrid','color-swatch',id=>{applyThemeColor(id);localStorage.setItem('wb_themeColor',id);showToast('🎨 '+THEME_PRESETS.find(p=>p.id===id).name+' থিম','info')});
+document.getElementById('colorBtn').addEventListener('click',e=>{e.stopPropagation();document.getElementById('colorPopover').classList.toggle('open')});
+document.addEventListener('click',e=>{if(!document.getElementById('colorBtn').contains(e.target)&&!document.getElementById('colorPopover').contains(e.target))document.getElementById('colorPopover').classList.remove('open')});
 
-const adminBtn = document.getElementById('adminOpenBtn');
-const adminBtnText = document.getElementById('adminBtnText');
-const loginOverlay = document.getElementById('loginOverlay');
-const adminOverlay = document.getElementById('adminOverlay');
+// ═══════════════════════════════════════
+// AUTH
+// ═══════════════════════════════════════
+let currentUser=null;
+const adminBtn=document.getElementById('adminOpenBtn'),loginOverlay=document.getElementById('loginOverlay'),adminOverlay=document.getElementById('adminOverlay');
+auth.onAuthStateChanged(user=>{currentUser=user;if(user){adminBtn.classList.add('logged-in');document.getElementById('adminBtnText').textContent='Admin ✓';document.getElementById('adminEmail').textContent=user.email}else{adminBtn.classList.remove('logged-in');document.getElementById('adminBtnText').textContent='Admin';document.getElementById('adminEmail').textContent='';adminOverlay.classList.remove('open')}});
+adminBtn.addEventListener('click',()=>{if(currentUser){adminOverlay.classList.add('open');renderManageList();updateSyncStatus(firestoreReady)}else{loginOverlay.classList.add('open');document.getElementById('loginEmail').focus()}});
 
-// Auth state listener
-auth.onAuthStateChanged(user => {
-  currentUser = user;
-  if(user){
-    adminBtn.classList.add('logged-in');
-    adminBtnText.textContent = 'Admin ✓';
-    document.getElementById('adminEmail').textContent = user.email;
-  } else {
-    adminBtn.classList.remove('logged-in');
-    adminBtnText.textContent = 'Admin';
-    document.getElementById('adminEmail').textContent = '';
-    // If admin panel is open, close it
-    adminOverlay.classList.remove('open');
-  }
-});
-
-// Admin button click
-adminBtn.addEventListener('click', () => {
-  if(currentUser){
-    // Already logged in → open admin panel
-    adminOverlay.classList.add('open');
-    renderManageList();
-    updateSyncStatus(firestoreReady);
-  } else {
-    // Not logged in → show login modal
-    loginOverlay.classList.add('open');
-    document.getElementById('loginEmail').focus();
-  }
-});
-
-// Login
-const loginSubmitBtn = document.getElementById('loginSubmitBtn');
-const loginError = document.getElementById('loginError');
-const loginEmailInput = document.getElementById('loginEmail');
-const loginPasswordInput = document.getElementById('loginPassword');
-
+const loginSubmitBtn=document.getElementById('loginSubmitBtn'),loginError=document.getElementById('loginError'),loginEmailInput=document.getElementById('loginEmail'),loginPasswordInput=document.getElementById('loginPassword');
 async function handleLogin(){
-  const email = loginEmailInput.value.trim();
-  const password = loginPasswordInput.value;
+  const email=loginEmailInput.value.trim(),password=loginPasswordInput.value;
+  if(!email||!password){loginError.textContent='ইমেইল ও পাসওয়ার্ড দিন';return}
+  loginError.textContent='';loginSubmitBtn.disabled=true;loginSubmitBtn.innerHTML='<span class="spinner"></span> লগইন...';
+  try{await auth.signInWithEmailAndPassword(email,password);loginOverlay.classList.remove('open');loginEmailInput.value='';loginPasswordInput.value='';showToast('✓ লগইন সফল','success');setTimeout(()=>{adminOverlay.classList.add('open');renderManageList();updateSyncStatus(firestoreReady)},300)}
+  catch(e){const m={'auth/user-not-found':'এই ইমেইলে অ্যাকাউন্ট নেই','auth/wrong-password':'ভুল পাসওয়ার্ড','auth/invalid-credential':'ভুল ইমেইল বা পাসওয়ার্ড','auth/invalid-email':'অবৈধ ইমেইল','auth/too-many-requests':'অনেকবার চেষ্টা, পরে আবার করুন','auth/user-disabled':'অ্যাকাউন্ট নিষ্ক্রিয়','auth/network-request-failed':'নেটওয়ার্ক ত্রুটি'};loginError.textContent=m[e.code]||'লগইন ব্যর্থ'}
+  finally{loginSubmitBtn.disabled=false;loginSubmitBtn.innerHTML='<i class="fa-solid fa-right-to-bracket"></i> লগইন'}
+}
+loginSubmitBtn.addEventListener('click',handleLogin);
+loginPasswordInput.addEventListener('keydown',e=>{if(e.key==='Enter')handleLogin()});
+loginEmailInput.addEventListener('keydown',e=>{if(e.key==='Enter')loginPasswordInput.focus()});
+document.getElementById('loginCancelBtn').addEventListener('click',()=>{loginOverlay.classList.remove('open');loginEmailInput.value='';loginPasswordInput.value='';loginError.textContent=''});
+loginOverlay.addEventListener('click',e=>{if(e.target===loginOverlay){loginOverlay.classList.remove('open');loginError.textContent=''}});
+document.getElementById('logoutBtn').addEventListener('click',()=>showConfirm('লগআউট করতে চান?',async()=>{try{await auth.signOut();adminOverlay.classList.remove('open');showToast('লগআউট','info')}catch(e){showToast('লগআউট ব্যর্থ','error')}}));
+document.getElementById('adminCloseBtn').addEventListener('click',()=>adminOverlay.classList.remove('open'));
+adminOverlay.addEventListener('click',e=>{if(e.target===adminOverlay)adminOverlay.classList.remove('open')});
 
-  if(!email || !password){
-    loginError.textContent = 'ইমেইল ও পাসওয়ার্ড দিন';
-    return;
-  }
+// Admin tabs
+document.querySelectorAll('.admin-tab').forEach(tab=>{tab.addEventListener('click',()=>{document.querySelectorAll('.admin-tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.admin-section').forEach(s=>s.classList.remove('active'));tab.classList.add('active');document.getElementById('section-'+tab.dataset.section).classList.add('active');if(tab.dataset.section==='manage')renderManageList();if(tab.dataset.section==='news')renderNewsManage();if(tab.dataset.section==='theme')renderAdminTheme()})});
 
-  loginError.textContent = '';
-  loginSubmitBtn.disabled = true;
-  loginSubmitBtn.innerHTML = '<span class="spinner"></span> লগইন হচ্ছে...';
+// ═══════════════════════════════════════
+// ADMIN — ADD SERVICE
+// ═══════════════════════════════════════
+const addIconInput=document.getElementById('addIcon'),iconPreview=document.getElementById('iconPreview');
+addIconInput.addEventListener('input',()=>{iconPreview.className='fa-solid '+(addIconInput.value.trim()||'fa-circle')});
+document.getElementById('addSubmitBtn').addEventListener('click',async()=>{
+  if(!currentUser){showToast('লগইন করুন','error');return}
+  const name=document.getElementById('addName').value.trim(),url=document.getElementById('addUrl').value.trim(),icon=addIconInput.value.trim()||'fa-circle',tags=document.getElementById('addTags').value.trim(),cat=document.getElementById('addCat').value;
+  if(!name){showToast('নাম দিন','error');return}if(!url){showToast('URL দিন','error');return}if(services.some(s=>s.name===name)){showToast('নাম আগেই আছে','error');return}
+  services.push({name,url,icon,tags,cat});const btn=document.getElementById('addSubmitBtn');btn.disabled=true;btn.innerHTML='<span class="spinner"></span> সেভ...';
+  const saved=await saveServicesToFirestore();showToast(saved?'✓ সেবা যোগ হয়েছে':'সেভ ব্যর্থ',saved?'success':'error');
+  btn.disabled=false;btn.innerHTML='<i class="fa-solid fa-plus"></i> সেবা যোগ করুন';
+  document.getElementById('addName').value='';document.getElementById('addUrl').value='';addIconInput.value='fa-circle';document.getElementById('addTags').value='';iconPreview.className='fa-solid fa-circle';
+  updateCounts();renderServices(lastFilter);
+});
 
-  try {
-    await auth.signInWithEmailAndPassword(email, password);
-    // Success — close login, open admin
-    loginOverlay.classList.remove('open');
-    loginEmailInput.value = '';
-    loginPasswordInput.value = '';
-    loginError.textContent = '';
-    showToast('✓ সফলভাবে লগইন হয়েছে', 'success');
-    // Open admin panel
-    setTimeout(() => {
-      adminOverlay.classList.add('open');
-      renderManageList();
-      updateSyncStatus(firestoreReady);
-    }, 300);
-  } catch(e) {
-    console.error('Login error:', e.code);
-    const errorMessages = {
-      'auth/user-not-found': 'এই ইমেইলে কোনো অ্যাকাউন্ট নেই',
-      'auth/wrong-password': 'ভুল পাসওয়ার্ড',
-      'auth/invalid-credential': 'ভুল ইমেইল বা পাসওয়ার্ড',
-      'auth/invalid-email': 'অবৈধ ইমেইল ঠিকানা',
-      'auth/too-many-requests': 'অনেকবার চেষ্টা করেছেন, কিছুক্ষণ পর আবার চেষ্টা করুন',
-      'auth/user-disabled': 'এই অ্যাকাউন্ট নিষ্ক্রিয় করা হয়েছে',
-      'auth/network-request-failed': 'নেটওয়ার্ক ত্রুটি, ইন্টারনেট সংযোগ পরীক্ষা করুন',
-    };
-    loginError.textContent = errorMessages[e.code] || 'লগইন ব্যর্থ হয়েছে: ' + e.message;
-  } finally {
-    loginSubmitBtn.disabled = false;
-    loginSubmitBtn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> লগইন';
-  }
+// ═══════════════════════════════════════
+// ADMIN — MANAGE SERVICES
+// ═══════════════════════════════════════
+const catLabels={seva:'সেবা',utility:'ইউটিলিটি',update:'আপডেট'},catIcons={seva:'fa-hand-holding-heart',utility:'fa-wrench',update:'fa-rotate'};
+function renderManageList(){
+  const c=document.getElementById('manageList');c.innerHTML='';
+  ['seva','utility','update'].forEach(cat=>{
+    const items=services.filter(s=>s.cat===cat);const t=document.createElement('div');t.className='manage-cat-title '+cat;t.innerHTML=`<i class="fa-solid ${catIcons[cat]}"></i> ${catLabels[cat]} (${items.length})`;c.appendChild(t);
+    if(!items.length){const e=document.createElement('div');e.style.cssText='font-size:12px;opacity:.5;padding:8px 12px;margin-bottom:12px';e.textContent='কোনো সেবা নেই';c.appendChild(e);return}
+    items.forEach(s=>{const gi=services.indexOf(s),oc=Object.keys(catLabels).filter(x=>x!==cat);const item=document.createElement('div');item.className='manage-item';item.innerHTML=`<div class="manage-item-icon"><i class="fa-solid ${s.icon}"></i></div><div class="manage-item-info"><div class="manage-item-name">${s.name}</div><div class="manage-item-tags">${s.tags||'—'}</div></div><div class="manage-item-actions"><select class="move-dropdown" data-idx="${gi}"><option value="" disabled selected>স্থানান্তর</option>${oc.map(x=>`<option value="${x}">→ ${catLabels[x]}</option>`).join('')}</select><button class="btn btn-sm btn-danger" data-remove="${gi}"><i class="fa-solid fa-trash"></i></button></div>`;c.appendChild(item)});
+  });
+  c.querySelectorAll('.move-dropdown').forEach(dd=>{dd.addEventListener('change',async e=>{if(!currentUser)return;const i=parseInt(e.target.dataset.idx),nc=e.target.value;if(nc&&services[i]){services[i].cat=nc;const s=await saveServicesToFirestore();showToast(s?`✓ → ${catLabels[nc]}`:'সেভ ব্যর্থ',s?'success':'error');updateCounts();renderServices(lastFilter);renderManageList()}})});
+  c.querySelectorAll('[data-remove]').forEach(btn=>{btn.addEventListener('click',()=>{if(!currentUser)return;const i=parseInt(btn.dataset.remove),n=services[i].name;showConfirm(`"${n}" মুছে ফেলতে চান?`,async()=>{services.splice(i,1);const s=await saveServicesToFirestore();showToast(s?`✗ "${n}" মুছে ফেলা হয়েছে`:'সেভ ব্যর্থ',s?'info':'error');updateCounts();renderServices(lastFilter);renderManageList()})})});
 }
 
-loginSubmitBtn.addEventListener('click', handleLogin);
-loginPasswordInput.addEventListener('keydown', e => { if(e.key === 'Enter') handleLogin(); });
-loginEmailInput.addEventListener('keydown', e => { if(e.key === 'Enter') loginPasswordInput.focus(); });
+// ═══════════════════════════════════════
+// ADMIN — NEWS MANAGEMENT
+// ═══════════════════════════════════════
+const newsIconInput=document.getElementById('newsIcon'),newsIconPreview=document.getElementById('newsIconPreview');
+newsIconInput.addEventListener('input',()=>{newsIconPreview.className='fa-solid '+(newsIconInput.value.trim()||'fa-bullhorn')});
 
-// Login cancel
-document.getElementById('loginCancelBtn').addEventListener('click', () => {
-  loginOverlay.classList.remove('open');
-  loginEmailInput.value = '';
-  loginPasswordInput.value = '';
-  loginError.textContent = '';
-});
+function generateId(){return Date.now().toString(36)+Math.random().toString(36).substr(2,5)}
 
-// Close login on overlay click
-loginOverlay.addEventListener('click', e => {
-  if(e.target === loginOverlay){
-    loginOverlay.classList.remove('open');
-    loginError.textContent = '';
-  }
-});
+// Submit (Add or Update)
+document.getElementById('newsSubmitBtn').addEventListener('click',async()=>{
+  if(!currentUser){showToast('লগইন করুন','error');return}
+  const title=document.getElementById('newsTitle').value.trim();
+  const body=document.getElementById('newsBody').value.trim();
+  const date=document.getElementById('newsDate').value;
+  const icon=newsIconInput.value.trim()||'fa-bullhorn';
+  const editId=document.getElementById('newsEditId').value;
 
-// Logout
-document.getElementById('logoutBtn').addEventListener('click', () => {
-  showConfirm('লগআউট করতে চান?', async () => {
-    try {
-      await auth.signOut();
-      adminOverlay.classList.remove('open');
-      showToast('লগআউট হয়েছে', 'info');
-    } catch(e) {
-      showToast('লগআউট ব্যর্থ', 'error');
-    }
-  });
-});
+  if(!title){showToast('শিরোনাম দিন','error');return}
+  if(!body){showToast('বিবরণ দিন','error');return}
 
-// Admin panel close
-document.getElementById('adminCloseBtn').addEventListener('click', () => {
-  adminOverlay.classList.remove('open');
-});
-adminOverlay.addEventListener('click', e => {
-  if(e.target === adminOverlay) adminOverlay.classList.remove('open');
-});
+  const btn=document.getElementById('newsSubmitBtn');btn.disabled=true;btn.innerHTML='<span class="spinner"></span> সেভ...';
 
-// Admin section tabs
-document.querySelectorAll('.admin-tab').forEach(tab => {
-  tab.addEventListener('click', () => {
-    document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
-    tab.classList.add('active');
-    document.getElementById('section-' + tab.dataset.section).classList.add('active');
-    if(tab.dataset.section === 'manage') renderManageList();
-  });
-});
-
-// ══════════════════════════════════════════
-// ADMIN — ADD SERVICE
-// ══════════════════════════════════════════
-const addIconInput = document.getElementById('addIcon');
-const iconPreview = document.getElementById('iconPreview');
-
-addIconInput.addEventListener('input', () => {
-  const v = addIconInput.value.trim();
-  iconPreview.className = 'fa-solid ' + (v || 'fa-circle');
-});
-
-document.getElementById('addSubmitBtn').addEventListener('click', async () => {
-  if(!currentUser){ showToast('প্রথমে লগইন করুন', 'error'); return; }
-
-  const name = document.getElementById('addName').value.trim();
-  const url = document.getElementById('addUrl').value.trim();
-  const icon = addIconInput.value.trim() || 'fa-circle';
-  const tags = document.getElementById('addTags').value.trim();
-  const cat = document.getElementById('addCat').value;
-
-  if(!name){ showToast('সেবার নাম দিন', 'error'); return; }
-  if(!url){ showToast('URL দিন', 'error'); return; }
-  if(services.some(s => s.name === name)){ showToast('এই নাম আগেই আছে', 'error'); return; }
-
-  services.push({name, url, icon, tags, cat});
-
-  const btn = document.getElementById('addSubmitBtn');
-  btn.disabled = true;
-  btn.innerHTML = '<span class="spinner"></span> সেভ হচ্ছে...';
-
-  const saved = await saveServicesToFirestore();
-  if(saved){
-    showToast('✓ সেবা যোগ হয়েছে', 'success');
-  } else {
-    showToast('ক্লাউডে সেভ ব্যর্থ, লোকালি সেভ হয়েছে', 'error');
+  if(editId){
+    // Update existing
+    const idx=newsItems.findIndex(n=>n.id===editId);
+    if(idx!==-1){newsItems[idx]={...newsItems[idx],title,body,date,icon}}
+  }else{
+    // Add new
+    newsItems.unshift({id:generateId(),title,body,date:date||new Date().toISOString().split('T')[0],icon});
   }
 
-  btn.disabled = false;
-  btn.innerHTML = '<i class="fa-solid fa-plus"></i> সেবা যোগ করুন';
+  const saved=await saveNewsToFirestore();
+  showToast(saved?(editId?'✓ সংবাদ আপডেট হয়েছে':'✓ সংবাদ যোগ হয়েছে'):'সেভ ব্যর্থ',saved?'success':'error');
+  btn.disabled=false;btn.innerHTML='<i class="fa-solid fa-plus"></i> সংবাদ যোগ করুন';
 
   // Clear form
-  document.getElementById('addName').value = '';
-  document.getElementById('addUrl').value = '';
-  addIconInput.value = 'fa-circle';
-  document.getElementById('addTags').value = '';
-  iconPreview.className = 'fa-solid fa-circle';
+  document.getElementById('newsTitle').value='';
+  document.getElementById('newsBody').value='';
+  document.getElementById('newsDate').value='';
+  newsIconInput.value='fa-bullhorn';newsIconPreview.className='fa-solid fa-bullhorn';
+  document.getElementById('newsEditId').value='';
+  document.getElementById('newsCancelEditBtn').style.display='none';
 
-  updateCounts();
-  renderServices(lastFilter);
+  renderNews();renderNewsManage();
 });
 
-// ══════════════════════════════════════════
-// ADMIN — MANAGE SERVICES
-// ══════════════════════════════════════════
-const catLabels = {seva:'সেবা', utility:'ইউটিলিটি', update:'আপডেট'};
-const catIcons = {seva:'fa-hand-holding-heart', utility:'fa-wrench', update:'fa-rotate'};
+// Cancel edit
+document.getElementById('newsCancelEditBtn').addEventListener('click',()=>{
+  document.getElementById('newsTitle').value='';
+  document.getElementById('newsBody').value='';
+  document.getElementById('newsDate').value='';
+  newsIconInput.value='fa-bullhorn';newsIconPreview.className='fa-solid fa-bullhorn';
+  document.getElementById('newsEditId').value='';
+  document.getElementById('newsCancelEditBtn').style.display='none';
+  document.getElementById('newsSubmitBtn').innerHTML='<i class="fa-solid fa-plus"></i> সংবাদ যোগ করুন';
+});
 
-function renderManageList(){
-  const container = document.getElementById('manageList');
-  container.innerHTML = '';
-
-  ['seva','utility','update'].forEach(cat => {
-    const items = services.filter(s => s.cat === cat);
-    const title = document.createElement('div');
-    title.className = 'manage-cat-title ' + cat;
-    title.innerHTML = `<i class="fa-solid ${catIcons[cat]}"></i> ${catLabels[cat]} (${items.length})`;
-    container.appendChild(title);
-
-    if(!items.length){
-      const empty = document.createElement('div');
-      empty.style.cssText = 'font-size:12px;opacity:.5;padding:8px 12px;margin-bottom:12px;';
-      empty.textContent = 'এই বিভাগে কোনো সেবা নেই';
-      container.appendChild(empty);
-      return;
-    }
-
-    items.forEach(s => {
-      const globalIdx = services.indexOf(s);
-      const otherCats = Object.keys(catLabels).filter(c => c !== cat);
-      const item = document.createElement('div');
-      item.className = 'manage-item';
-      item.innerHTML = `
-        <div class="manage-item-icon"><i class="fa-solid ${s.icon}"></i></div>
-        <div class="manage-item-info">
-          <div class="manage-item-name">${s.name}</div>
-          <div class="manage-item-tags">${s.tags || '—'}</div>
+function renderNewsManage(){
+  const list=document.getElementById('newsManageList');
+  document.getElementById('newsCountLabel').textContent=newsItems.length+'টি সংবাদ';
+  if(!newsItems.length){list.innerHTML='<div style="text-align:center;padding:20px;opacity:.4;font-size:13px">কোনো সংবাদ নেই। উপরের ফর্ম থেকে যোগ করুন।</div>';return}
+  list.innerHTML="";
+  newsItems.forEach((n,idx)=>{
+    const item=document.createElement('div');item.className='news-manage-item';
+    const dateStr=n.date?new Date(n.date).toLocaleDateString('bn-IN',{year:'numeric',month:'short',day:'numeric'}):'';
+    item.innerHTML=`
+      <div class="news-manage-head">
+        <div style="flex:1;min-width:0">
+          <div class="news-manage-title"><i class="fa-solid ${n.icon||'fa-bullhorn'}" style="color:var(--accent);margin-right:4px"></i>${n.title}</div>
+          <div class="news-manage-text">${n.body}</div>
+          <div class="news-manage-date">${dateStr||'তারিখ নেই'}</div>
         </div>
-        <div class="manage-item-actions">
-          <select class="move-dropdown" data-idx="${globalIdx}" title="Move to">
-            <option value="" disabled selected>স্থানান্তর</option>
-            ${otherCats.map(c => `<option value="${c}">→ ${catLabels[c]}</option>`).join('')}
-          </select>
-          <button class="btn btn-sm btn-danger" data-remove="${globalIdx}" title="Remove"><i class="fa-solid fa-trash"></i></button>
+        <div class="news-manage-actions">
+          <button class="btn btn-sm btn-accent" data-edit="${idx}" title="Edit"><i class="fa-solid fa-pen"></i></button>
+          <button class="btn btn-sm btn-danger" data-del="${idx}" title="Delete"><i class="fa-solid fa-trash"></i></button>
         </div>
-      `;
-      container.appendChild(item);
+      </div>`;
+    list.appendChild(item);
+  });
+
+  // Edit buttons
+  list.querySelectorAll('[data-edit]').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const idx=parseInt(btn.dataset.edit);const n=newsItems[idx];
+      document.getElementById('newsTitle').value=n.title;
+      document.getElementById('newsBody').value=n.body;
+      document.getElementById('newsDate').value=n.date||'';
+      newsIconInput.value=n.icon||'fa-bullhorn';newsIconPreview.className='fa-solid '+(n.icon||'fa-bullhorn');
+      document.getElementById('newsEditId').value=n.id;
+      document.getElementById('newsCancelEditBtn').style.display='flex';
+      document.getElementById('newsSubmitBtn').innerHTML='<i class="fa-solid fa-check"></i> সংবাদ আপডেট করুন';
+      // Scroll to form
+      document.getElementById('newsTitle').scrollIntoView({behavior:'smooth',block:'center'});
+      document.getElementById('newsTitle').focus();
     });
   });
 
-  // Bind move events
-  container.querySelectorAll('.move-dropdown').forEach(dd => {
-    dd.addEventListener('change', async e => {
-      if(!currentUser){ showToast('লগইন আবশ্যক', 'error'); return; }
-      const idx = parseInt(e.target.dataset.idx);
-      const newCat = e.target.value;
-      if(newCat && services[idx]){
-        const oldCat = catLabels[services[idx].cat];
-        services[idx].cat = newCat;
-        const saved = await saveServicesToFirestore();
-        showToast(saved ? `✓ "${services[idx].name}" → ${catLabels[newCat]}` : 'ক্লাউড সেভ ব্যর্থ', saved ? 'success' : 'error');
-        updateCounts();
-        renderServices(lastFilter);
-        renderManageList();
-      }
-    });
-  });
-
-  // Bind remove events
-  container.querySelectorAll('[data-remove]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      if(!currentUser){ showToast('লগইন আবশ্যক', 'error'); return; }
-      const idx = parseInt(btn.dataset.remove);
-      const name = services[idx].name;
-      showConfirm(`"${name}" মুছে ফেলতে চান?`, async () => {
-        services.splice(idx, 1);
-        const saved = await saveServicesToFirestore();
-        showToast(saved ? `✗ "${name}" মুছে ফেলা হয়েছে` : 'ক্লাউড সেভ ব্যর্থ', saved ? 'info' : 'error');
-        updateCounts();
-        renderServices(lastFilter);
-        renderManageList();
+  // Delete buttons
+  list.querySelectorAll('[data-del]').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const idx=parseInt(btn.dataset.del);const n=newsItems[idx];
+      showConfirm(`"${n.title}" মুছে ফেলতে চান?`,async()=>{
+        newsItems.splice(idx,1);
+        const saved=await saveNewsToFirestore();
+        showToast(saved?`✗ "${n.title}" মুছে ফেলা হয়েছে`:'সেভ ব্যর্থ',saved?'info':'error');
+        renderNews();renderNewsManage();
       });
     });
   });
 }
 
-// ══════════════════════════════════════════
-// ADMIN — SETTINGS
-// ══════════════════════════════════════════
-
-// Push defaults to Firestore
-document.getElementById('pushDefaultsBtn').addEventListener('click', () => {
-  if(!currentUser){ showToast('লগইন আবশ্যক', 'error'); return; }
-  showConfirm('ডিফল্ট সেবাগুলি ক্লাউডে আপলোড করবেন? বর্তমান ক্লাউড ডেটা প্রতিস্থাপিত হবে।', async () => {
-    services = JSON.parse(JSON.stringify(DEFAULT_SERVICES));
-    const saved = await saveServicesToFirestore();
-    showToast(saved ? '✓ ডিফল্ট ক্লাউডে আপলোড হয়েছে' : 'আপলোড ব্যর্থ', saved ? 'success' : 'error');
-    updateCounts();
-    renderServices(lastFilter);
-    renderManageList();
+// ═══════════════════════════════════════
+// ADMIN — THEME
+// ═══════════════════════════════════════
+function renderAdminTheme(){
+  buildColorGrid('adminThemeGrid','admin-theme-swatch',async id=>{
+    if(!currentUser)return;const s=await saveGlobalTheme(id);applyThemeColor(id);
+    showToast(s?`✓ গ্লোবাল: ${THEME_PRESETS.find(p=>p.id===id).name}`:'সেভ ব্যর্থ',s?'success':'error');
+    document.querySelectorAll('.admin-theme-swatch').forEach(x=>x.classList.toggle('active',x.dataset.id===id));
   });
-});
+  document.querySelectorAll('.admin-theme-swatch').forEach(s=>s.classList.toggle('active',s.dataset.id===globalThemeColor));
+}
+document.getElementById('resetUserThemeBtn').addEventListener('click',()=>{localStorage.removeItem('wb_themeColor');applyThemeColor(globalThemeColor);showToast('🎨 গ্লোবাল থিমে রিসেট','info')});
 
-// Reset to defaults (local)
-document.getElementById('resetAllBtn').addEventListener('click', () => {
-  if(!currentUser){ showToast('লগইন আবশ্যক', 'error'); return; }
-  showConfirm('সব পরিবর্তন মুছে ডিফল্টে ফিরে যাবে?', async () => {
-    services = JSON.parse(JSON.stringify(DEFAULT_SERVICES));
-    const saved = await saveServicesToFirestore();
-    showToast(saved ? '✓ ডিফল্টে রিসেট হয়েছে' : 'রিসেট ব্যর্থ', saved ? 'success' : 'error');
-    updateCounts();
-    renderServices(lastFilter);
-    renderManageList();
-  });
-});
+// ═══════════════════════════════════════
+// ADMIN — MORE
+// ═══════════════════════════════════════
+document.getElementById('pushDefaultsBtn').addEventListener('click',()=>{if(!currentUser)return;showConfirm('ডিফল্ট ক্লাউডে আপলোড?',async()=>{services=JSON.parse(JSON.stringify(DEFAULT_SERVICES));const s=await saveServicesToFirestore();showToast(s?'✓ আপলোড হয়েছে':'আপলোড ব্যর্থ',s?'success':'error');updateCounts();renderServices(lastFilter);renderManageList()})});
+document.getElementById('resetAllBtn').addEventListener('click',()=>{if(!currentUser)return;showConfirm('ডিফল্টে রিসেট?',async()=>{services=JSON.parse(JSON.stringify(DEFAULT_SERVICES));const s=await saveServicesToFirestore();showToast(s?'✓ রিসেট হয়েছে':'রিসেট ব্যর্থ',s?'success':'error');updateCounts();renderServices(lastFilter);renderManageList()})});
+document.getElementById('exportBtn').addEventListener('click',()=>{const b=new Blob([JSON.stringify(services,null,2)],{type:'application/json'}),u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download='banglar_seva_services.json';a.click();URL.revokeObjectURL(u);showToast('✓ এক্সপোর্ট','success')});
+document.getElementById('importFile').addEventListener('change',e=>{if(!currentUser){e.target.value='';return}const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=async ev=>{try{const d=JSON.parse(ev.target.result);if(!Array.isArray(d))throw new Error('Not array');d.forEach((s,i)=>{if(!s.name||!s.url||!s.cat)throw new Error(`Item ${i} invalid`);if(!['seva','utility','update'].includes(s.cat))throw new Error(`Item ${i} bad cat`);if(!s.icon)s.icon='fa-circle';if(!s.tags)s.tags=''});showConfirm(`${d.length}টি ইম্পোর্ট?`,async()=>{services=d;const s=await saveServicesToFirestore();showToast(s?`✓ ${d.length}টি ইম্পোর্ট`:'ইম্পোর্ট ব্যর্থ',s?'success':'error');updateCounts();renderServices(lastFilter);renderManageList()})}catch(err){showToast('JSON বৈধ নয়: '+err.message,'error')}};r.readAsText(f);e.target.value=''});
 
-// Export
-document.getElementById('exportBtn').addEventListener('click', () => {
-  const blob = new Blob([JSON.stringify(services, null, 2)], {type: 'application/json'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a'); a.href = url; a.download = 'banglar_seva_services.json'; a.click();
-  URL.revokeObjectURL(url);
-  showToast('✓ JSON এক্সপোর্ট হয়েছে', 'success');
-});
-
-// Import
-document.getElementById('importFile').addEventListener('change', e => {
-  if(!currentUser){ showToast('লগইন আবশ্যক', 'error'); e.target.value=''; return; }
-  const file = e.target.files[0];
-  if(!file) return;
-  const reader = new FileReader();
-  reader.onload = async ev => {
-    try {
-      const data = JSON.parse(ev.target.result);
-      if(!Array.isArray(data)) throw new Error('Not an array');
-      data.forEach((s, i) => {
-        if(!s.name || !s.url || !s.cat) throw new Error(`Item ${i} missing required fields`);
-        if(!['seva','utility','update'].includes(s.cat)) throw new Error(`Item ${i} has invalid category`);
-        if(!s.icon) s.icon = 'fa-circle';
-        if(!s.tags) s.tags = '';
-      });
-      showConfirm(`${data.length}টি সেবা ইম্পোর্ট করবেন? বর্তমান ডেটা প্রতিস্থাপিত হবে।`, async () => {
-        services = data;
-        const saved = await saveServicesToFirestore();
-        showToast(saved ? `✓ ${data.length}টি সেবা ইম্পোর্ট হয়েছে` : 'ইম্পোর্ট ব্যর্থ', saved ? 'success' : 'error');
-        updateCounts();
-        renderServices(lastFilter);
-        renderManageList();
-      });
-    } catch(err) {
-      showToast('JSON বৈধ নয়: ' + err.message, 'error');
-    }
-  };
-  reader.readAsText(file);
-  e.target.value = '';
-});
-
-// ══════════════════════════════════════════
-// INITIALIZATION
-// ══════════════════════════════════════════
+// ═══════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════
 async function initApp(){
-  // 1. Load from local cache first for instant display
-  loadServicesLocal();
-  updateCounts();
-  renderServices();
-
-  // 2. Try Firestore
-  try {
-    const loaded = await loadServicesFromFirestore();
-    if(loaded){
-      updateCounts();
-      renderServices();
-    }
-    // 3. Set up real-time listener
-    setupFirestoreListener();
-  } catch(e) {
-    console.warn('Firebase init error, using local data:', e.message);
-    updateSyncStatus(false);
-  }
+  loadServicesLocal();loadNewsLocal();updateCounts();renderServices();
+  try{await loadServicesFromFirestore();updateCounts();renderServices();setupFirestoreListener()}catch(e){updateSyncStatus(false)}
+  try{await loadNewsFromFirestore();renderNews();setupNewsListener()}catch(e){}
+  try{await loadGlobalTheme();setupThemeListener()}catch(e){}
 }
-
 initApp();
 </script>
 <script>
-if("serviceWorker" in navigator){
-  window.addEventListener("load",()=>{
-    navigator.serviceWorker.register("./service-worker.js").then(r=>console.log("SW Registered")).catch(e=>console.log(e));
-  });
-}
+if("serviceWorker" in navigator){window.addEventListener("load",()=>{navigator.serviceWorker.register("./service-worker.js").then(r=>console.log("SW Registered")).catch(e=>console.log(e))})}
 </script>
 </body>
 </html>
