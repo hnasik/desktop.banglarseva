@@ -90,25 +90,15 @@
     .card p{font-size:11px;opacity:.8;margin-top:6px;}
     .empty-state{grid-column:1/-1;text-align:center;padding:40px 20px;opacity:.5;font-size:14px;}
 
-    /* ══════════ NEWS IN SHORTS ══════════ */
     .news-section{margin-bottom:16px;}
     .news-header{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
     .news-header h2{font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px;}
     .news-header h2 i{color:var(--accent);}
     .news-badge{font-size:10px;background:var(--accent);color:#fff;padding:2px 8px;border-radius:99px;font-weight:600;}
     .news-list{display:flex;flex-direction:column;gap:10px;}
-    .news-card{
-      display:flex;gap:12px;padding:14px;border-radius:14px;
-      background:var(--glass);border:1px solid var(--glass-border);
-      border-left:3px solid var(--accent);transition:all .2s;
-      position:relative;overflow:hidden;
-    }
+    .news-card{display:flex;gap:12px;padding:14px;border-radius:14px;background:var(--glass);border:1px solid var(--glass-border);border-left:3px solid var(--accent);transition:all .2s;position:relative;overflow:hidden;}
     .news-card:hover{border-left-color:var(--accent-light);background:var(--accent-bg);}
-    .news-card-icon{
-      width:40px;height:40px;border-radius:10px;flex-shrink:0;
-      background:var(--accent-bg);display:flex;align-items:center;justify-content:center;
-      color:var(--accent);font-size:16px;
-    }
+    .news-card-icon{width:40px;height:40px;border-radius:10px;flex-shrink:0;background:var(--accent-bg);display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:16px;}
     .news-card-body{flex:1;min-width:0;}
     .news-card-title{font-size:14px;font-weight:700;margin-bottom:4px;line-height:1.3;}
     .news-card-text{font-size:13px;line-height:1.5;opacity:.75;}
@@ -117,7 +107,6 @@
     @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
     .news-empty{text-align:center;padding:20px;opacity:.4;font-size:13px;}
 
-    /* ══════════ LOGIN MODAL ══════════ */
     .login-overlay{position:fixed;inset:0;background:var(--overlay-bg);z-index:2000;display:none;align-items:center;justify-content:center;animation:fadeIn .25s ease;}
     .login-overlay.open{display:flex;}
     @keyframes fadeIn{from{opacity:0}to{opacity:1}}
@@ -136,7 +125,6 @@
     .login-actions{display:flex;gap:10px;}
     .login-actions .btn{flex:1;justify-content:center;}
 
-    /* ══════════ ADMIN PANEL ══════════ */
     .admin-overlay{position:fixed;inset:0;background:var(--overlay-bg);z-index:1500;display:none;align-items:flex-end;justify-content:center;animation:fadeIn .25s ease;}
     .admin-overlay.open{display:flex;}
     .admin-panel{width:100%;max-width:640px;max-height:92vh;background:var(--admin-bg);border-radius:20px 20px 0 0;display:flex;flex-direction:column;animation:slideUp .35s cubic-bezier(.16,1,.3,1);overflow:hidden;}
@@ -194,7 +182,6 @@
     .sync-dot.online{background:var(--success);}
     .sync-dot.offline{background:var(--danger);}
 
-    /* Admin Theme */
     .admin-theme-section{margin-bottom:20px;}
     .admin-theme-section h3{font-size:13px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:6px;}
     .admin-theme-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
@@ -206,17 +193,12 @@
     .admin-theme-swatch.active .admin-theme-swatch-name{opacity:1;font-weight:600;}
     .admin-theme-note{font-size:11px;opacity:.5;margin-top:8px;text-align:center;}
 
-    /* Admin News */
-    .news-manage-item{
-      padding:12px;border-radius:12px;background:var(--glass);margin-bottom:10px;
-      border:1px solid var(--glass-border);border-left:3px solid var(--accent);
-    }
+    .news-manage-item{padding:12px;border-radius:12px;background:var(--glass);margin-bottom:10px;border:1px solid var(--glass-border);border-left:3px solid var(--accent);}
     .news-manage-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;}
     .news-manage-title{font-size:13px;font-weight:700;}
     .news-manage-text{font-size:12px;opacity:.6;margin-top:4px;line-height:1.4;}
     .news-manage-date{font-size:11px;opacity:.4;margin-top:6px;}
     .news-manage-actions{display:flex;gap:6px;flex-shrink:0;}
-    .news-edit-hint{font-size:11px;opacity:.4;margin-top:8px;font-style:italic;}
 
     .toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(80px);padding:10px 20px;border-radius:10px;font-size:13px;font-weight:600;z-index:3000;opacity:0;transition:all .35s cubic-bezier(.16,1,.3,1);pointer-events:none;white-space:nowrap;font-family:inherit;}
     .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
@@ -268,7 +250,6 @@
     <div class="recent-row" id="recentRow"><span style="font-size:12px;opacity:.7">সাম্প্রতিক সেবা এখানে প্রদর্শিত হবে</span></div>
   </div>
 
-  <!-- News Section (only visible in Update tab) -->
   <div class="news-section" id="newsSection" style="display:none">
     <div class="news-header">
       <h2><i class="fa-solid fa-bolt"></i> সংবাদ সংক্ষেপ</h2>
@@ -316,7 +297,6 @@
         <button class="admin-tab" data-section="settings"><i class="fa-solid fa-gear"></i> More</button>
       </div>
 
-      <!-- ADD SERVICE -->
       <div class="admin-section active" id="section-add">
         <div class="form-group"><label>সেবার নাম *</label><input type="text" id="addName" placeholder="e.g. কন্যাশ্রী"></div>
         <div class="form-group"><label>URL *</label><input type="url" id="addUrl" placeholder="https://example.com"></div>
@@ -328,10 +308,8 @@
         <button class="btn btn-accent btn-full" id="addSubmitBtn"><i class="fa-solid fa-plus"></i> সেবা যোগ করুন</button>
       </div>
 
-      <!-- MANAGE SERVICES -->
       <div class="admin-section" id="section-manage"><div id="manageList"></div></div>
 
-      <!-- NEWS MANAGEMENT -->
       <div class="admin-section" id="section-news">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
           <h3 style="font-size:14px;display:flex;align-items:center;gap:6px;"><i class="fa-solid fa-bolt" style="color:var(--accent)"></i> সংবাদ ব্যবস্থাপনা</h3>
@@ -349,7 +327,6 @@
         <div id="newsManageList" style="margin-top:16px;"></div>
       </div>
 
-      <!-- THEME -->
       <div class="admin-section" id="section-theme">
         <div class="admin-theme-section">
           <h3><i class="fa-solid fa-swatchbook"></i> Global Theme Color</h3>
@@ -360,7 +337,6 @@
         <div style="margin-top:20px"><button class="btn btn-accent btn-full" id="resetUserThemeBtn"><i class="fa-solid fa-rotate-left"></i> Reset Local to Global</button></div>
       </div>
 
-      <!-- MORE SETTINGS -->
       <div class="admin-section" id="section-settings">
         <div style="margin-bottom:16px"><button class="btn btn-success btn-full" id="pushDefaultsBtn"><i class="fa-solid fa-cloud-arrow-up"></i> Push Defaults to Cloud</button></div>
         <div style="margin-bottom:16px"><button class="btn btn-danger btn-full" id="resetAllBtn"><i class="fa-solid fa-arrow-rotate-left"></i> Reset Services</button></div>
@@ -371,7 +347,6 @@
   </div>
 </div>
 
-<!-- Confirm -->
 <div class="confirm-overlay" id="confirmOverlay">
   <div class="confirm-box"><p id="confirmMsg"></p><div class="confirm-actions"><button class="btn btn-sm" style="background:var(--glass);color:var(--text-light)" id="confirmNo">বাতিল</button><button class="btn btn-sm btn-danger" id="confirmYes">হ্যাঁ</button></div></div>
 </div>
@@ -408,9 +383,16 @@ function buildColorGrid(cid,cls,onClick){
 }
 
 // ═══════════════════════════════════════
-// FIREBASE
+// FIREBASE — NEW SDK
 // ═══════════════════════════════════════
-const firebaseConfig={apiKey:"AIzaSyDoKSOvR6SYi7o6P-0LPhabpEy7hBIg4-Q",authDomain:"banglarseva.firebaseapp.com",projectId:"banglarseva",storageBucket:"banglarseva.firebasestorage.app",messagingSenderId:"721081603867",appId:"1:721081603867:web:e109a027fda2e421dc65be",measurementId:"G-1WDTGYHSZB"};
+const firebaseConfig={
+  apiKey:"AIzaSyDJXS1-z9FimmKzfcb5AK_hRCtO1nE_jCM",
+  authDomain:"favo-5r8mhy.firebaseapp.com",
+  projectId:"favo-5r8mhy",
+  storageBucket:"favo-5r8mhy.firebasestorage.app",
+  messagingSenderId:"512884349304",
+  appId:"1:512884349304:web:58e6880c2778e04a31508d"
+};
 firebase.initializeApp(firebaseConfig);const auth=firebase.auth(),db=firebase.firestore();
 
 // ═══════════════════════════════════════
@@ -504,7 +486,6 @@ function renderServices(filter=""){
   let order=JSON.parse(localStorage.getItem('serviceOrder'))||[];
   let sorted=[...services].sort((a,b)=>{let ai=order.indexOf(a.name),bi=order.indexOf(b.name);if(ai===-1&&bi===-1)return 0;if(ai===-1)return 1;if(bi===-1)return -1;return ai-bi});
   const filtered=sorted.filter(s=>s.cat===activeCat&&(normalize(s.name).includes(f)||normalize(s.tags).includes(f)));
-  // Show/hide news section
   document.getElementById('newsSection').style.display=activeCat==='update'?'block':'none';
   if(activeCat==='update')renderNews();
   if(!filtered.length){grid.innerHTML='<div class="empty-state"><i class="fa-solid fa-folder-open" style="font-size:28px;margin-bottom:8px;display:block"></i>এই বিভাগে কোনো সেবা পাওয়া যায়নি</div>';renderRecent(order);return}
@@ -514,28 +495,18 @@ function renderServices(filter=""){
 document.getElementById('searchInput').addEventListener('input',e=>renderServices(e.target.value));
 
 // ═══════════════════════════════════════
-// RENDER NEWS (Public)
+// RENDER NEWS
 // ═══════════════════════════════════════
 function renderNews(){
   const list=document.getElementById('newsList'),badge=document.getElementById('newsBadge');
   badge.textContent=newsItems.length;
   if(!newsItems.length){list.innerHTML='<div class="news-empty"><i class="fa-solid fa-newspaper" style="font-size:20px;margin-bottom:6px;display:block"></i>এখনো কোনো সংবাদ নেই</div>';return}
-  list.innerHTML="";
-  const now=new Date();
+  list.innerHTML="";const now=new Date();
   newsItems.forEach(n=>{
     const card=document.createElement('div');card.className='news-card';
     const isNew=n.date&&((now-new Date(n.date))/(1000*60*60*24))<7;
     const dateStr=n.date?new Date(n.date).toLocaleDateString('bn-IN',{year:'numeric',month:'short',day:'numeric'}):'';
-    card.innerHTML=`
-      <div class="news-card-icon"><i class="fa-solid ${n.icon||'fa-bullhorn'}"></i></div>
-      <div class="news-card-body">
-        <div class="news-card-title">${n.title}</div>
-        <div class="news-card-text">${n.body}</div>
-        <div class="news-card-meta">
-          ${dateStr?`<span><i class="fa-regular fa-calendar"></i> ${dateStr}</span>`:''}
-          ${isNew?'<span class="news-new-tag">নতুন</span>':''}
-        </div>
-      </div>`;
+    card.innerHTML=`<div class="news-card-icon"><i class="fa-solid ${n.icon||'fa-bullhorn'}"></i></div><div class="news-card-body"><div class="news-card-title">${n.title}</div><div class="news-card-text">${n.body}</div><div class="news-card-meta">${dateStr?`<span><i class="fa-regular fa-calendar"></i> ${dateStr}</span>`:''} ${isNew?'<span class="news-new-tag">নতুন</span>':''}</div></div>`;
     list.appendChild(card);
   });
 }
@@ -583,7 +554,6 @@ document.getElementById('logoutBtn').addEventListener('click',()=>showConfirm('�
 document.getElementById('adminCloseBtn').addEventListener('click',()=>adminOverlay.classList.remove('open'));
 adminOverlay.addEventListener('click',e=>{if(e.target===adminOverlay)adminOverlay.classList.remove('open')});
 
-// Admin tabs
 document.querySelectorAll('.admin-tab').forEach(tab=>{tab.addEventListener('click',()=>{document.querySelectorAll('.admin-tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.admin-section').forEach(s=>s.classList.remove('active'));tab.classList.add('active');document.getElementById('section-'+tab.dataset.section).classList.add('active');if(tab.dataset.section==='manage')renderManageList();if(tab.dataset.section==='news')renderNewsManage();if(tab.dataset.section==='theme')renderAdminTheme()})});
 
 // ═══════════════════════════════════════
@@ -618,125 +588,48 @@ function renderManageList(){
 }
 
 // ═══════════════════════════════════════
-// ADMIN — NEWS MANAGEMENT
+// ADMIN — NEWS
 // ═══════════════════════════════════════
 const newsIconInput=document.getElementById('newsIcon'),newsIconPreview=document.getElementById('newsIconPreview');
 newsIconInput.addEventListener('input',()=>{newsIconPreview.className='fa-solid '+(newsIconInput.value.trim()||'fa-bullhorn')});
-
 function generateId(){return Date.now().toString(36)+Math.random().toString(36).substr(2,5)}
 
-// Submit (Add or Update)
 document.getElementById('newsSubmitBtn').addEventListener('click',async()=>{
   if(!currentUser){showToast('লগইন করুন','error');return}
-  const title=document.getElementById('newsTitle').value.trim();
-  const body=document.getElementById('newsBody').value.trim();
-  const date=document.getElementById('newsDate').value;
-  const icon=newsIconInput.value.trim()||'fa-bullhorn';
-  const editId=document.getElementById('newsEditId').value;
-
-  if(!title){showToast('শিরোনাম দিন','error');return}
-  if(!body){showToast('বিবরণ দিন','error');return}
-
+  const title=document.getElementById('newsTitle').value.trim(),body=document.getElementById('newsBody').value.trim(),date=document.getElementById('newsDate').value,icon=newsIconInput.value.trim()||'fa-bullhorn',editId=document.getElementById('newsEditId').value;
+  if(!title){showToast('শিরোনাম দিন','error');return}if(!body){showToast('বিবরণ দিন','error');return}
   const btn=document.getElementById('newsSubmitBtn');btn.disabled=true;btn.innerHTML='<span class="spinner"></span> সেভ...';
-
-  if(editId){
-    // Update existing
-    const idx=newsItems.findIndex(n=>n.id===editId);
-    if(idx!==-1){newsItems[idx]={...newsItems[idx],title,body,date,icon}}
-  }else{
-    // Add new
-    newsItems.unshift({id:generateId(),title,body,date:date||new Date().toISOString().split('T')[0],icon});
-  }
-
-  const saved=await saveNewsToFirestore();
-  showToast(saved?(editId?'✓ সংবাদ আপডেট হয়েছে':'✓ সংবাদ যোগ হয়েছে'):'সেভ ব্যর্থ',saved?'success':'error');
+  if(editId){const idx=newsItems.findIndex(n=>n.id===editId);if(idx!==-1){newsItems[idx]={...newsItems[idx],title,body,date,icon}}}
+  else{newsItems.unshift({id:generateId(),title,body,date:date||new Date().toISOString().split('T')[0],icon})}
+  const saved=await saveNewsToFirestore();showToast(saved?(editId?'✓ সংবাদ আপডেট':'✓ সংবাদ যোগ'):'সেভ ব্যর্থ',saved?'success':'error');
   btn.disabled=false;btn.innerHTML='<i class="fa-solid fa-plus"></i> সংবাদ যোগ করুন';
-
-  // Clear form
-  document.getElementById('newsTitle').value='';
-  document.getElementById('newsBody').value='';
-  document.getElementById('newsDate').value='';
-  newsIconInput.value='fa-bullhorn';newsIconPreview.className='fa-solid fa-bullhorn';
-  document.getElementById('newsEditId').value='';
-  document.getElementById('newsCancelEditBtn').style.display='none';
-
+  document.getElementById('newsTitle').value='';document.getElementById('newsBody').value='';document.getElementById('newsDate').value='';newsIconInput.value='fa-bullhorn';newsIconPreview.className='fa-solid fa-bullhorn';document.getElementById('newsEditId').value='';document.getElementById('newsCancelEditBtn').style.display='none';
   renderNews();renderNewsManage();
 });
 
-// Cancel edit
 document.getElementById('newsCancelEditBtn').addEventListener('click',()=>{
-  document.getElementById('newsTitle').value='';
-  document.getElementById('newsBody').value='';
-  document.getElementById('newsDate').value='';
-  newsIconInput.value='fa-bullhorn';newsIconPreview.className='fa-solid fa-bullhorn';
-  document.getElementById('newsEditId').value='';
-  document.getElementById('newsCancelEditBtn').style.display='none';
-  document.getElementById('newsSubmitBtn').innerHTML='<i class="fa-solid fa-plus"></i> সংবাদ যোগ করুন';
+  document.getElementById('newsTitle').value='';document.getElementById('newsBody').value='';document.getElementById('newsDate').value='';newsIconInput.value='fa-bullhorn';newsIconPreview.className='fa-solid fa-bullhorn';document.getElementById('newsEditId').value='';document.getElementById('newsCancelEditBtn').style.display='none';document.getElementById('newsSubmitBtn').innerHTML='<i class="fa-solid fa-plus"></i> সংবাদ যোগ করুন';
 });
 
 function renderNewsManage(){
-  const list=document.getElementById('newsManageList');
-  document.getElementById('newsCountLabel').textContent=newsItems.length+'টি সংবাদ';
+  const list=document.getElementById('newsManageList');document.getElementById('newsCountLabel').textContent=newsItems.length+'টি সংবাদ';
   if(!newsItems.length){list.innerHTML='<div style="text-align:center;padding:20px;opacity:.4;font-size:13px">কোনো সংবাদ নেই। উপরের ফর্ম থেকে যোগ করুন।</div>';return}
   list.innerHTML="";
   newsItems.forEach((n,idx)=>{
     const item=document.createElement('div');item.className='news-manage-item';
     const dateStr=n.date?new Date(n.date).toLocaleDateString('bn-IN',{year:'numeric',month:'short',day:'numeric'}):'';
-    item.innerHTML=`
-      <div class="news-manage-head">
-        <div style="flex:1;min-width:0">
-          <div class="news-manage-title"><i class="fa-solid ${n.icon||'fa-bullhorn'}" style="color:var(--accent);margin-right:4px"></i>${n.title}</div>
-          <div class="news-manage-text">${n.body}</div>
-          <div class="news-manage-date">${dateStr||'তারিখ নেই'}</div>
-        </div>
-        <div class="news-manage-actions">
-          <button class="btn btn-sm btn-accent" data-edit="${idx}" title="Edit"><i class="fa-solid fa-pen"></i></button>
-          <button class="btn btn-sm btn-danger" data-del="${idx}" title="Delete"><i class="fa-solid fa-trash"></i></button>
-        </div>
-      </div>`;
+    item.innerHTML=`<div class="news-manage-head"><div style="flex:1;min-width:0"><div class="news-manage-title"><i class="fa-solid ${n.icon||'fa-bullhorn'}" style="color:var(--accent);margin-right:4px"></i>${n.title}</div><div class="news-manage-text">${n.body}</div><div class="news-manage-date">${dateStr||'তারিখ নেই'}</div></div><div class="news-manage-actions"><button class="btn btn-sm btn-accent" data-edit="${idx}" title="Edit"><i class="fa-solid fa-pen"></i></button><button class="btn btn-sm btn-danger" data-del="${idx}" title="Delete"><i class="fa-solid fa-trash"></i></button></div></div>`;
     list.appendChild(item);
   });
-
-  // Edit buttons
-  list.querySelectorAll('[data-edit]').forEach(btn=>{
-    btn.addEventListener('click',()=>{
-      const idx=parseInt(btn.dataset.edit);const n=newsItems[idx];
-      document.getElementById('newsTitle').value=n.title;
-      document.getElementById('newsBody').value=n.body;
-      document.getElementById('newsDate').value=n.date||'';
-      newsIconInput.value=n.icon||'fa-bullhorn';newsIconPreview.className='fa-solid '+(n.icon||'fa-bullhorn');
-      document.getElementById('newsEditId').value=n.id;
-      document.getElementById('newsCancelEditBtn').style.display='flex';
-      document.getElementById('newsSubmitBtn').innerHTML='<i class="fa-solid fa-check"></i> সংবাদ আপডেট করুন';
-      // Scroll to form
-      document.getElementById('newsTitle').scrollIntoView({behavior:'smooth',block:'center'});
-      document.getElementById('newsTitle').focus();
-    });
-  });
-
-  // Delete buttons
-  list.querySelectorAll('[data-del]').forEach(btn=>{
-    btn.addEventListener('click',()=>{
-      const idx=parseInt(btn.dataset.del);const n=newsItems[idx];
-      showConfirm(`"${n.title}" মুছে ফেলতে চান?`,async()=>{
-        newsItems.splice(idx,1);
-        const saved=await saveNewsToFirestore();
-        showToast(saved?`✗ "${n.title}" মুছে ফেলা হয়েছে`:'সেভ ব্যর্থ',saved?'info':'error');
-        renderNews();renderNewsManage();
-      });
-    });
-  });
+  list.querySelectorAll('[data-edit]').forEach(btn=>{btn.addEventListener('click',()=>{const idx=parseInt(btn.dataset.edit);const n=newsItems[idx];document.getElementById('newsTitle').value=n.title;document.getElementById('newsBody').value=n.body;document.getElementById('newsDate').value=n.date||'';newsIconInput.value=n.icon||'fa-bullhorn';newsIconPreview.className='fa-solid '+(n.icon||'fa-bullhorn');document.getElementById('newsEditId').value=n.id;document.getElementById('newsCancelEditBtn').style.display='flex';document.getElementById('newsSubmitBtn').innerHTML='<i class="fa-solid fa-check"></i> সংবাদ আপডেট করুন';document.getElementById('newsTitle').scrollIntoView({behavior:'smooth',block:'center'});document.getElementById('newsTitle').focus()})});
+  list.querySelectorAll('[data-del]').forEach(btn=>{btn.addEventListener('click',()=>{const idx=parseInt(btn.dataset.del);const n=newsItems[idx];showConfirm(`"${n.title}" মুছে ফেলতে চান?`,async()=>{newsItems.splice(idx,1);const saved=await saveNewsToFirestore();showToast(saved?`✗ "${n.title}" মুছে ফেলা`:'সেভ ব্যর্থ',saved?'info':'error');renderNews();renderNewsManage()})})});
 }
 
 // ═══════════════════════════════════════
 // ADMIN — THEME
 // ═══════════════════════════════════════
 function renderAdminTheme(){
-  buildColorGrid('adminThemeGrid','admin-theme-swatch',async id=>{
-    if(!currentUser)return;const s=await saveGlobalTheme(id);applyThemeColor(id);
-    showToast(s?`✓ গ্লোবাল: ${THEME_PRESETS.find(p=>p.id===id).name}`:'সেভ ব্যর্থ',s?'success':'error');
-    document.querySelectorAll('.admin-theme-swatch').forEach(x=>x.classList.toggle('active',x.dataset.id===id));
-  });
+  buildColorGrid('adminThemeGrid','admin-theme-swatch',async id=>{if(!currentUser)return;const s=await saveGlobalTheme(id);applyThemeColor(id);showToast(s?`✓ গ্লোবাল: ${THEME_PRESETS.find(p=>p.id===id).name}`:'সেভ ব্যর্থ',s?'success':'error');document.querySelectorAll('.admin-theme-swatch').forEach(x=>x.classList.toggle('active',x.dataset.id===id))});
   document.querySelectorAll('.admin-theme-swatch').forEach(s=>s.classList.toggle('active',s.dataset.id===globalThemeColor));
 }
 document.getElementById('resetUserThemeBtn').addEventListener('click',()=>{localStorage.removeItem('wb_themeColor');applyThemeColor(globalThemeColor);showToast('🎨 গ্লোবাল থিমে রিসেট','info')});
@@ -744,8 +637,8 @@ document.getElementById('resetUserThemeBtn').addEventListener('click',()=>{local
 // ═══════════════════════════════════════
 // ADMIN — MORE
 // ═══════════════════════════════════════
-document.getElementById('pushDefaultsBtn').addEventListener('click',()=>{if(!currentUser)return;showConfirm('ডিফল্ট ক্লাউডে আপলোড?',async()=>{services=JSON.parse(JSON.stringify(DEFAULT_SERVICES));const s=await saveServicesToFirestore();showToast(s?'✓ আপলোড হয়েছে':'আপলোড ব্যর্থ',s?'success':'error');updateCounts();renderServices(lastFilter);renderManageList()})});
-document.getElementById('resetAllBtn').addEventListener('click',()=>{if(!currentUser)return;showConfirm('ডিফল্টে রিসেট?',async()=>{services=JSON.parse(JSON.stringify(DEFAULT_SERVICES));const s=await saveServicesToFirestore();showToast(s?'✓ রিসেট হয়েছে':'রিসেট ব্যর্থ',s?'success':'error');updateCounts();renderServices(lastFilter);renderManageList()})});
+document.getElementById('pushDefaultsBtn').addEventListener('click',()=>{if(!currentUser)return;showConfirm('ডিফল্ট ক্লাউডে আপলোড?',async()=>{services=JSON.parse(JSON.stringify(DEFAULT_SERVICES));const s=await saveServicesToFirestore();showToast(s?'✓ আপলোড':'আপলোড ব্যর্থ',s?'success':'error');updateCounts();renderServices(lastFilter);renderManageList()})});
+document.getElementById('resetAllBtn').addEventListener('click',()=>{if(!currentUser)return;showConfirm('ডিফল্টে রিসেট?',async()=>{services=JSON.parse(JSON.stringify(DEFAULT_SERVICES));const s=await saveServicesToFirestore();showToast(s?'✓ রিসেট':'রিসেট ব্যর্থ',s?'success':'error');updateCounts();renderServices(lastFilter);renderManageList()})});
 document.getElementById('exportBtn').addEventListener('click',()=>{const b=new Blob([JSON.stringify(services,null,2)],{type:'application/json'}),u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download='banglar_seva_services.json';a.click();URL.revokeObjectURL(u);showToast('✓ এক্সপোর্ট','success')});
 document.getElementById('importFile').addEventListener('change',e=>{if(!currentUser){e.target.value='';return}const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=async ev=>{try{const d=JSON.parse(ev.target.result);if(!Array.isArray(d))throw new Error('Not array');d.forEach((s,i)=>{if(!s.name||!s.url||!s.cat)throw new Error(`Item ${i} invalid`);if(!['seva','utility','update'].includes(s.cat))throw new Error(`Item ${i} bad cat`);if(!s.icon)s.icon='fa-circle';if(!s.tags)s.tags=''});showConfirm(`${d.length}টি ইম্পোর্ট?`,async()=>{services=d;const s=await saveServicesToFirestore();showToast(s?`✓ ${d.length}টি ইম্পোর্ট`:'ইম্পোর্ট ব্যর্থ',s?'success':'error');updateCounts();renderServices(lastFilter);renderManageList()})}catch(err){showToast('JSON বৈধ নয়: '+err.message,'error')}};r.readAsText(f);e.target.value=''});
 
