@@ -3,12 +3,15 @@
   "name": "Banglar Seva",
   "short_name": "Banglar Seva",
   "description": "West Bengal Government Service Information",
+  "lang": "en",
+  "dir": "ltr",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#0b1d2a",
   "theme_color": "#0b1d2a",
+
   "icons": [
     {
       "src": "/icons/icon-192.png",
