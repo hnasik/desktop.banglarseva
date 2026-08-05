@@ -1,0 +1,14 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.cart2doors.banglarseva",
+      "sha256_cert_fingerprints": [
+        "3E:16:D2:DF:3C:29:60:FA:18:A7:0D:88:8A:DD:15:71:5B:DF:48:E2:C8:EA:5E:BA:16:58:5E:3C:F3:82:C0:AA"
+      ]
+    }
+  }
+]
