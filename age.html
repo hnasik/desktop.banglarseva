@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Chronos — A More Beautiful Way to See Your Time</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Manrope:wght@300..700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0c0a09;
+    --bg-2: #15110d;
+    --surface: rgba(255, 245, 230, 0.03);
+    --surface-2: rgba(255, 245, 230, 0.06);
+    --border: rgba(255, 245, 230, 0.08);
+    --border-strong: rgba(255, 245, 230, 0.16);
+    --text: #f4ede0;
+    --text-muted: #a89e8f;
+    --text-dim: #6b6358;
+    --accent: #f4a261;
+    --accent-2: #e76f51;
+    --gold: #e9c46a;
+    --teal: #2a9d8f;
+  }
+  * { box-sizing: border-box; }
+  html, body { background: var(--bg); }
+  body {
+    font-family: 'Manrope', sans-serif;
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+    -webkit-font-smoothing: antialiased;
+  }
+  .display { font-family: 'Fraunces', serif; }
+
+  /* Atmospheric orbs */
+  .bg-orb { position: fixed; border-radius: 50%; filter: blur(100px); pointer-events: none; z-index: 0; will-change: transform; }
+  .orb-1 { width: 620px; height: 620px; background: radial-gradient(circle, #e76f51, transparent 70%); top: -220px; right: -120px; opacity: 0.32; animation: float1 22s ease-in-out infinite; }
+  .orb-2 { width: 520px; height: 520px; background: radial-gradient(circle, #f4a261, transparent 70%); bottom: -180px; left: -120px; opacity: 0.22; animation: float2 26s ease-in-out infinite; }
+  .orb-3 { width: 380px; height: 380px; background: radial-gradient(circle, #2a9d8f, transparent 70%); top: 45%; left: 28%; opacity: 0.12; animation: float3 18s ease-in-out infinite; }
+
+  @keyframes float1 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-70px,90px)} }
+  @keyframes float2 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(90px,-70px)} }
+  @keyframes float3 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(50px,40px)} }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.75)} }
+
+  /* Grain texture */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+    opacity: 0.06;
+    pointer-events: none;
+    z-index: 1;
+    mix-blend-mode: overlay;
+  }
+
+  /* Glass cards */
+  .card {
+    background: var(--surface);
+    backdrop-filter: blur(24px) saturate(140%);
+    -webkit-backdrop-filter: blur(24px) saturate(140%);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* Date input wrapper */
+  .date-input-wrap {
+    position: relative;
+    background: rgba(255, 245, 230, 0.03);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 14px 18px;
+    transition: border 0.2s, background 0.2s, box-shadow 0.2s;
+  }
+  .date-input-wrap:hover { border-color: var(--border-strong); }
+  .date-input-wrap:focus-within {
+    border-color: var(--accent);
+    background: rgba(244, 162, 97, 0.05);
+    box-shadow: 0 0 0 4px rgba(244, 162, 97, 0.08);
+  }
+  .date-input-wrap input[type="date"] {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text);
+    font-family: 'Fraunces', serif;
+    font-size: 19px;
+    font-weight: 500;
+    width: 100%;
+    color-scheme: dark;
+    cursor: pointer;
+    padding: 0;
+  }
+  .date-input-wrap input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(0.7) sepia(1) hue-rotate(345deg) saturate(2.5);
+    cursor: pointer;
+    opacity: 0.85;
+  }
+  .date-input-wrap input[type="date"]::-webkit-calendar-picker-indicator:hover { opacity: 1; }
+
+  /* Big hero number */
+  .big-number {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-variation-settings: 'opsz' 144;
+    letter-spacing: -0.045em;
+    line-height: 0.88;
+  }
+
+  /* Stat card */
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 22px;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .stat-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--border-strong);
+    background: var(--surface-2);
+  }
+  .stat-card::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .stat-card:hover::after { opacity: 1; }
+
+  /* Week cells */
+  .week-cell {
+    transition: opacity 0.2s, transform 0.2s;
+    cursor: pointer;
+    transform-origin: center;
+    transform-box: fill-box;
+  }
+  .week-cell:hover {
+    opacity: 1 !important;
+    transform: scale(1.6);
+  }
+  .current-week {
+    animation: weekPulse 2s ease-in-out infinite;
+  }
+  @keyframes weekPulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.7; transform: scale(1.5); }
+  }
+
+  /* Tab buttons */
+  .tab-btn {
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s;
+    background: transparent;
+    border: 1px solid var(--border);
+  }
+  .tab-btn:hover { color: var(--text); border-color: var(--border-strong); }
+  .tab-btn.active {
+    background: var(--accent);
+    color: var(--bg);
+    border-color: var(--accent);
+  }
+
+  /* Tooltip */
+  .tooltip {
+    position: fixed;
+    background: rgba(20, 17, 13, 0.96);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border-strong);
+    border-radius: 10px;
+    padding: 8px 12px;
+    font-size: 12px;
+    color: var(--text);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s;
+    z-index: 100;
+    white-space: nowrap;
+    transform: translate(-50%, -130%);
+  }
+  .tooltip.visible { opacity: 1; }
+  .tooltip-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    color: var(--accent);
+  }
+
+  ::selection { background: var(--accent); color: var(--bg); }
+
+  .divider-line {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border-strong), transparent);
+  }
+
+  /* Milestone bar */
+  .milestone-bar {
+    height: 6px;
+    border-radius: 999px;
+    background: rgba(255, 245, 230, 0.06);
+    overflow: hidden;
+    position: relative;
+  }
+  .milestone-fill {
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    transition: width 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+  }
+  .milestone-fill::after {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 20px; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4));
+    border-radius: 999px;
+  }
+
+  .num-display {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Reveal animation */
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+</style>
+</head>
+<body>
+  <div class="bg-orb orb-1"></div>
+  <div class="bg-orb orb-2"></div>
+  <div class="bg-orb orb-3"></div>
+
+  <div class="relative z-10 max-w-6xl mx-auto px-5 sm:px-8 py-8 md:py-14">
+
+    <!-- Header -->
+    <header class="flex items-center justify-between mb-12 md:mb-16">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background: linear-gradient(135deg, var(--accent), var(--accent-2)); box-shadow: 0 8px 24px rgba(231, 111, 81, 0.3);">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0c0a09" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12 6 12 12 16 14"/>
+          </svg>
+        </div>
+        <div>
+          <div class="display font-bold text-lg leading-none">Chronos</div>
+          <div class="text-[11px] mt-1" style="color: var(--text-muted);">Age in perspective</div>
+        </div>
+      </div>
+      <div class="hidden sm:flex items-center gap-2 text-xs" style="color: var(--text-muted);">
+        <span style="display:inline-block; width:6px; height:6px; border-radius:50%; background: var(--accent); animation: pulse 2s infinite;"></span>
+        <span id="todayDate">Today</span>
+      </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="mb-12 md:mb-16 reveal">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-end mb-8">
+        <div class="md:col-span-2">
+          <div class="text-sm uppercase tracking-widest mb-3" style="color: var(--accent);">You've been alive for</div>
+          <div class="big-number" style="font-size: clamp(3.5rem, 11vw, 8.5rem);">
+            <span id="bigDays" class="num-display">0</span><span style="color: var(--accent);">.</span>
+          </div>
+          <div class="display italic mt-3 text-xl md:text-2xl" style="color: var(--text-muted);">
+            days · <span id="ageBreakdown">— years, — months, — days</span>
+          </div>
+        </div>
+        <div class="card p-5">
+          <div class="text-[11px] uppercase tracking-widest mb-2" style="color: var(--text-muted);">Born on</div>
+          <div class="display font-semibold text-lg leading-tight" id="bornDay">—</div>
+          <div class="text-sm mt-1" style="color: var(--text-muted);" id="bornFull">Pick a date below</div>
+        </div>
+      </div>
+
+      <!-- Date pickers -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div class="date-input-wrap">
+          <div class="text-[11px] uppercase tracking-widest mb-1" style="color: var(--text-muted);">Date of birth</div>
+          <input type="date" id="birthDate" />
+        </div>
+        <div class="date-input-wrap">
+          <div class="text-[11px] uppercase tracking-widest mb-1" style="color: var(--text-muted);">Age at date</div>
+          <input type="date" id="targetDate" />
+        </div>
+      </div>
+    </section>
+
+    <div class="divider-line mb-12"></div>
+
+    <!-- Stats grid -->
+    <section class="mb-12 md:mb-16 reveal">
+      <div class="flex items-baseline justify-between mb-5 flex-wrap gap-2">
+        <h2 class="display font-semibold text-2xl">In other units</h2>
+        <span class="text-xs" style="color: var(--text-muted);">Updated live</span>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div class="stat-card">
+          <div class="text-[11px] uppercase tracking-widest mb-2" style="color: var(--text-muted);">Months</div>
+          <div class="display font-bold text-3xl num-display" id="statMonths">0</div>
+          <div class="text-xs mt-1" style="color: var(--text-dim);">lived</div>
+        </div>
+        <div class="stat-card">
+          <div class="text-[11px] uppercase tracking-widest mb-2" style="color: var(--text-muted);">Weeks</div>
+          <div class="display font-bold text-3xl num-display" id="statWeeks">0</div>
+          <div class="text-xs mt-1" style="color: var(--text-dim);">lived</div>
+        </div>
+        <div class="stat-card">
+          <div class="text-[11px] uppercase tracking-widest mb-2" style="color: var(--text-muted);">Hours</div>
+          <div class="display font-bold text-3xl num-display" id="statHours">0</div>
+          <div class="text-xs mt-1" style="color: var(--text-dim);">lived</div>
+        </div>
+        <div class="stat-card">
+          <div class="text-[11px] uppercase tracking-widest mb-2" style="color: var(--text-muted);">Heartbeats</div>
+          <div class="display font-bold text-3xl num-display" id="statBeats">0</div>
+          <div class="text-xs mt-1" style="color: var(--text-dim);">approx. at 70 bpm</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Life in weeks -->
+    <section class="mb-12 md:mb-16 reveal">
+      <div class="card p-6 md:p-8">
+        <div class="flex items-baseline justify-between mb-2 flex-wrap gap-3">
+          <h2 class="display font-semibold text-2xl">Your life in weeks</h2>
+          <div class="flex gap-1.5">
+            <button class="tab-btn active" data-span="80">80 yrs</button>
+            <button class="tab-btn" data-span="90">90 yrs</button>
+            <button class="tab-btn" data-span="100">100 yrs</button>
+          </div>
+        </div>
+        <p class="text-sm mb-6 max-w-xl" style="color: var(--text-muted);">
+          Each square is one week. Filled squares are behind you. The pulsing one is right now.
+        </p>
+
+        <div class="relative">
+          <div class="overflow-x-auto pb-2 -mx-2 px-2">
+            <svg id="weeksSvg" style="display:block; min-width: 480px; width: 100%; max-width: 620px; margin: 0 auto;"></svg>
+          </div>
+          <div class="tooltip" id="weekTooltip"></div>
+        </div>
+
+        <div class="flex items-center gap-5 mt-5 text-xs flex-wrap" style="color: var(--text-muted);">
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-sm" style="background: var(--accent);"></span>
+            <span>Lived</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-sm" style="background: var(--accent-2); box-shadow: 0 0 8px var(--accent-2);"></span>
+            <span>Now</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-sm border" style="border-color: var(--border-strong); background: transparent;"></span>
+            <span>Ahead</span>
+          </div>
+          <div class="ml-auto display italic text-sm" id="weeksSummary" style="color: var(--text-muted);"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Milestone cards -->
+    <section class="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-12 md:mb-16 reveal">
+
+      <div class="card p-6">
+        <div class="text-[11px] uppercase tracking-widest mb-2" style="color: var(--text-muted);">Next birthday</div>
+        <div class="flex items-baseline gap-2 mb-3">
+          <div class="display font-bold text-4xl num-display" id="nextBdayDays">—</div>
+          <div class="text-sm" style="color: var(--text-muted);">days</div>
+        </div>
+        <div class="text-sm" style="color: var(--text-muted);" id="nextBdayDetail">—</div>
+        <div class="milestone-bar mt-5">
+          <div class="milestone-fill" id="bdayProgress" style="width: 0%"></div>
+        </div>
+        <div class="text-[11px] mt-2" style="color: var(--text-dim);" id="bdayProgressText">—</div>
+      </div>
+
+      <div class="card p-6">
+        <div class="text-[11px] uppercase tracking-widest mb-2" style="color: var(--text-muted);">This calendar year</div>
+        <div class="flex items-baseline gap-2 mb-3">
+          <div class="display font-bold text-4xl num-display" id="yearProgress">0</div>
+          <div class="text-sm" style="color: var(--text-muted);">% complete</div>
+        </div>
+        <div class="text-sm" style="color: var(--text-muted);" id="yearDetail">—</div>
+        <div class="milestone-bar mt-5">
+          <div class="milestone-fill" id="yearProgressBar" style="width: 0%"></div>
+        </div>
+        <div class="text-[11px] mt-2" style="color: var(--text-dim);" id="daysLeftText">0 days remaining</div>
+      </div>
+
+      <div class="card p-6">
+        <div class="text-[11px] uppercase tracking-widest mb-3" style="color: var(--text-muted);">Western zodiac</div>
+        <div class="flex items-center gap-4 mb-4">
+          <div class="w-14 h-14 rounded-2xl flex items-center justify-center" style="background: rgba(244, 162, 97, 0.1); border: 1px solid rgba(244, 162, 97, 0.2);">
+            <span class="text-3xl" id="zodiacSymbol" style="color: var(--accent);">—</span>
+          </div>
+          <div>
+            <div class="display font-bold text-xl leading-tight" id="zodiacSign">—</div>
+            <div class="text-xs" style="color: var(--text-muted);" id="zodiacDates">—</div>
+          </div>
+        </div>
+        <div class="divider-line mb-4"></div>
+        <div class="text-[11px] uppercase tracking-widest mb-3" style="color: var(--text-muted);">Chinese zodiac</div>
+        <div class="flex items-center gap-4">
+          <div class="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl" style="background: rgba(42, 157, 143, 0.1); border: 1px solid rgba(42, 157, 143, 0.2);">
+            <span id="chineseZodiacEmoji">—</span>
+          </div>
+          <div>
+            <div class="display font-bold text-xl leading-tight" id="chineseZodiacName">—</div>
+            <div class="text-xs" style="color: var(--text-muted);" id="chineseZodiacElement">—</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="pt-6 text-center text-xs leading-relaxed" style="border-top: 1px solid var(--border); color: var(--text-dim);">
+      Time is the one thing we cannot make more of. <span class="display italic" style="color: var(--text-muted);">Spend it well.</span>
+    </footer>
+  </div>
+
+<script>
+  // ============ State ============
+  const state = {
+    birthDate: null,
+    targetDate: new Date(),
+    lifeSpan: 80,
+  };
+
+  // ============ Constants ============
+  const ACCENT = '#f4a261';
+  const ACCENT_2 = '#e76f51';
+
+  const westernZodiac = [
+    { sign: 'Capricorn',   symbol: '?', from: [12, 22], to: [1, 19] },
+    { sign: 'Aquarius',    symbol: '?', from: [1, 20],  to: [2, 18] },
+    { sign: 'Pisces',      symbol: '?', from: [2, 19],  to: [3, 20] },
+    { sign: 'Aries',       symbol: '?', from: [3, 21],  to: [4, 19] },
+    { sign: 'Taurus',      symbol: '?', from: [4, 20],  to: [5, 20] },
+    { sign: 'Gemini',      symbol: '?', from: [5, 21],  to: [6, 20] },
+    { sign: 'Cancer',      symbol: '?', from: [6, 21],  to: [7, 22] },
+    { sign: 'Leo',         symbol: '?', from: [7, 23],  to: [8, 22] },
+    { sign: 'Virgo',       symbol: '?', from: [8, 23],  to: [9, 22] },
+    { sign: 'Libra',       symbol: '?', from: [9, 23],  to: [10, 22] },
+    { sign: 'Scorpio',     symbol: '?', from: [10, 23], to: [11, 21] },
+    { sign: 'Sagittarius', symbol: '?', from: [11, 22], to: [12, 21] }
+  ];
+
+  const chineseZodiacNames = ['Rat', 'Ox', 'Tiger', 'Rabbit', 'Dragon', 'Snake', 'Horse', 'Goat', 'Monkey', 'Rooster', 'Dog', 'Pig'];
+  const chineseZodiacEmojis = ['??', '??', '??', '??', '??', '??', '??', '??', '??', '??', '??', '??'];
+  const chineseElements = ['Metal', 'Water', 'Wood', 'Fire', 'Earth'];
+  const monthShort = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+  // ============ Helpers ============
+  function toInputDate(d) {
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${y}-${m}-${day}`;
+  }
+  function parseInputDate(s) {
+    if (!s) return null;
+    const [y, m, d] = s.split('-').map(Number);
+    if (!y || !m || !d) return null;
+    return new Date(y, m - 1, d);
+  }
+
+  function calculateAge(birth, target) {
+    if (!birth || !target || target < birth) return { years: 0, months: 0, days: 0 };
+    let years = target.getFullYear() - birth.getFullYear();
+    let months = target.getMonth() - birth.getMonth();
+    let days = target.getDate() - birth.getDate();
+    if (days < 0) {
+      months--;
+      const prevMonth = new Date(target.getFullYear(), target.getMonth(), 0);
+      days += prevMonth.getDate();
+    }
+    if (months < 0) {
+      years--;
+      months += 12;
+    }
+    if (years < 0) return { years: 0, months: 0, days: 0 };
+    return { years, months, days };
+  }
+
+  function totalUnits(birth, target) {
+    if (!birth || !target || target < birth) {
+      return { days: 0, weeks: 0, months: 0, hours: 0, minutes: 0, beats: 0 };
+    }
+    const ms = target - birth;
+    const minutes = ms / 60000;
+    const hours = minutes / 60;
+    const days = hours / 24;
+    const weeks = days / 7;
+    const months = days / 30.4375;
+    const beats = minutes * 70;
+    return { ms, minutes, hours, days, weeks, months, beats };
+  }
+
+  function getWesternZodiac(date) {
+    if (!date) return null;
+    const m = date.getMonth() + 1, d = date.getDate();
+    for (const z of westernZodiac) {
+      const [fm, fd] = z.from;
+      const [tm, td] = z.to;
+      if (fm > tm) {
+        if ((m === fm && d >= fd) || (m === tm && d <= td)) return z;
+      } else {
+        if ((m === fm && d >= fd) || (m === tm && d <= td) || (m > fm && m < tm)) return z;
+      }
+    }
+    return westernZodiac[0];
+  }
+
+  function getChineseZodiac(date) {
+    if (!date) return null;
+    const year = date.getFullYear();
+    const idx = (year - 4) % 12;
+    const animal = chineseZodiacNames[idx];
+    const emoji = chineseZodiacEmojis[idx];
+    const elementIdx = Math.floor((year % 10) / 2);
+    const element = chineseElements[elementIdx];
+    return { animal, emoji, element };
+  }
+
+  function getNextBirthday(birth, target) {
+    if (!birth || !target) return null;
+    const year = target.getFullYear();
+    let next = new Date(year, birth.getMonth(), birth.getDate());
+    // Handle Feb 29 born in non-leap year
+    if (next.getMonth() !== birth.getMonth()) {
+      next = new Date(year, birth.getMonth() + 1, 1);
+    }
+    if (next <= target) {
+      next = new Date(year + 1, birth.getMonth(), birth.getDate());
+      if (next.getMonth() !== birth.getMonth()) {
+        next = new Date(year + 1, birth.getMonth() + 1, 1);
+      }
+    }
+    const ms = next - target;
+    const days = Math.ceil(ms / 86400000);
+    return { date: next, days };
+  }
+
+  // ============ Number animation ============
+  const animatedValues = {};
+  function animateNumber(id, target, opts = {}) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const duration = opts.duration || 700;
+    const decimals = opts.decimals || 0;
+    const start = animatedValues[id] || 0;
+    const t0 = performance.now();
+
+    function format(v) {
+      if (opts.format === 'compact') {
+        if (v >= 1e9) return (v / 1e9).toFixed(2) + 'B';
+        if (v >= 1e6) return (v / 1e6).toFixed(2) + 'M';
+        if (v >= 1e3) return (v / 1e3).toFixed(1) + 'K';
+        return Math.floor(v).toString();
+      }
+      if (decimals > 0) return v.toFixed(decimals);
+      return Math.floor(v).toLocaleString();
+    }
+
+    function step(now) {
+      const elapsed = now - t0;
+      const t = Math.min(1, elapsed / duration);
+      const eased = 1 - Math.pow(1 - t, 3);
+      const v = start + (target - start) * eased;
+      animatedValues[id] = v;
+      el.textContent = format(v);
+      if (t < 1) requestAnimationFrame(step);
+      else {
+        animatedValues[id] = target;
+        el.textContent = format(target);
+      }
+    }
+    requestAnimationFrame(step);
+  }
+
+  // ============ Life in weeks grid ============
+  function renderLifeWeeks(birth, target, span) {
+    const svg = document.getElementById('weeksSvg');
+    const totalWeeks = span * 52;
+    const cellSize = 8, gap = 2, step = cellSize + gap;
+    const labelW = 26, topPad = 6, leftPad = labelW + 6;
+    const livedWeeks = (birth && target && target > birth) ? Math.floor((target - birth) / (7 * 86400000)) : 0;
+
+    const width = leftPad + 52 * step + 4;
+    const height = topPad + span * step + 4;
+    svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+    svg.innerHTML = '';
+
+    // Decade labels
+    for (let y = 0; y <= span; y += 10) {
+      const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      text.setAttribute('x', labelW);
+      text.setAttribute('y', topPad + y * step + cellSize - 1);
+      text.setAttribute('text-anchor', 'end');
+      text.setAttribute('fill', 'rgba(255,245,230,0.4)');
+      text.setAttribute('font-size', '9');
+      text.setAttribute('font-family', 'Manrope, sans-serif');
+      text.setAttribute('font-weight', '600');
+      text.textContent = y;
+      svg.appendChild(text);
+    }
+
+    // Cells
+    for (let w = 0; w < totalWeeks; w++) {
+      const year = Math.floor(w / 52);
+      const weekInYear = w % 52;
+      const x = leftPad + weekInYear * step;
+      const y = topPad + year * step;
+      const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+      rect.setAttribute('x', x);
+      rect.setAttribute('y', y);
+      rect.setAttribute('width', cellSize);
+      rect.setAttribute('height', cellSize);
+      rect.setAttribute('rx', 1.5);
+      rect.setAttribute('class', 'week-cell');
+      rect.dataset.week = w;
+
+      if (w < livedWeeks) {
+        // Past week — recent ones slightly brighter
+        const recency = Math.min(1, w / Math.max(livedWeeks, 1));
+        const opacity = 0.55 + 0.45 * recency;
+        rect.setAttribute('fill', ACCENT);
+        rect.setAttribute('opacity', opacity.toFixed(2));
+      } else if (w === livedWeeks) {
+        rect.setAttribute('fill', ACCENT_2);
+        rect.setAttribute('class', 'week-cell current-week');
+        rect.setAttribute('opacity', '1');
+      } else {
+        rect.setAttribute('fill', 'transparent');
+        rect.setAttribute('stroke', 'rgba(255,245,230,0.14)');
+        rect.setAttribute('stroke-width', '1');
+      }
+
+      rect.addEventListener('mouseenter', e => showWeekTooltip(e, w, year, birth));
+      rect.addEventListener('mousemove', moveWeekTooltip);
+      rect.addEventListener('mouseleave', hideWeekTooltip);
+
+      svg.appendChild(rect);
+    }
+
+    // Summary
+    const summary = document.getElementById('weeksSummary');
+    if (birth && target && target > birth) {
+      const pct = (livedWeeks / totalWeeks * 100).toFixed(1);
+      summary.textContent = `${livedWeeks.toLocaleString()} of ${totalWeeks.toLocaleString()} weeks · ${pct}%`;
+    } else {
+      summary.textContent = '';
+    }
+  }
+
+  function showWeekTooltip(e, week, year, birth) {
+    const tooltip = document.getElementById('weekTooltip');
+    if (!birth) return;
+    const weekDate = new Date(birth.getTime() + week * 7 * 86400000);
+    const nextWeekDate = new Date(birth.getTime() + (week + 1) * 7 * 86400000);
+    const fmtD = d => d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    tooltip.innerHTML = `
+      <div class="tooltip-title">Week ${week.toLocaleString()}</div>
+      <div>Age ${year}</div>
+      <div style="color: var(--text-muted); margin-top: 2px;">${fmtD(weekDate)} – ${fmtD(nextWeekDate)}</div>
+    `;
+    tooltip.classList.add('visible');
+    moveWeekTooltip(e);
+  }
+  function moveWeekTooltip(e) {
+    const tooltip = document.getElementById('weekTooltip');
+    tooltip.style.left = e.clientX + 'px';
+    tooltip.style.top = e.clientY + 'px';
+  }
+  function hideWeekTooltip() {
+    document.getElementById('weekTooltip').classList.remove('visible');
+  }
+
+  // ============ Update everything ============
+  function update() {
+    const birth = state.birthDate;
+    const target = state.targetDate;
+
+    const units = totalUnits(birth, target);
+    animateNumber('bigDays', units.days);
+    animateNumber('statMonths', units.months);
+    animateNumber('statWeeks', units.weeks);
+    animateNumber('statHours', units.hours);
+    animateNumber('statBeats', units.beats, { format: 'compact', duration: 900 });
+
+    const age = calculateAge(birth, target);
+    document.getElementById('ageBreakdown').textContent =
+      `${age.years} years, ${age.months} months, ${age.days} days`;
+
+    if (birth) {
+      const dayName = birth.toLocaleDateString('en-US', { weekday: 'long' });
+      const full = birth.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+      document.getElementById('bornDay').textContent = dayName;
+      document.getElementById('bornFull').textContent = full;
+    } else {
+      document.getElementById('bornDay').textContent = '—';
+      document.getElementById('bornFull').textContent = 'Pick a date below';
+    }
+
+    // Next birthday
+    if (birth) {
+      const nb = getNextBirthday(birth, target);
+      animateNumber('nextBdayDays', nb.days);
+      const turningAge = nb.date.getFullYear() - birth.getFullYear();
+      const dayName = nb.date.toLocaleDateString('en-US', { weekday: 'long' });
+      const dateStr = nb.date.toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
+      document.getElementById('nextBdayDetail').textContent =
+        `Turning ${turningAge} on ${dayName}, ${dateStr}`;
+
+      // Year progress (from last bday to next bday)
+      let lastBday = new Date(nb.date.getFullYear() - 1, birth.getMonth(), birth.getDate());
+      if (lastBday.getMonth() !== birth.getMonth()) {
+        lastBday = new Date(nb.date.getFullYear() - 1, birth.getMonth() + 1, 1);
+      }
+      if (lastBday < birth) lastBday = new Date(birth);
+      const totalYearMs = nb.date - lastBday;
+      const elapsedMs = target - lastBday;
+      const pct = Math.max(0, Math.min(100, (elapsedMs / totalYearMs) * 100));
+      document.getElementById('bdayProgress').style.width = pct + '%';
+      document.getElementById('bdayProgressText').textContent = `${pct.toFixed(1)}% through your personal year`;
+    } else {
+      document.getElementById('nextBdayDays').textContent = '—';
+      document.getElementById('nextBdayDetail').textContent = '—';
+      document.getElementById('bdayProgress').style.width = '0%';
+      document.getElementById('bdayProgressText').textContent = '—';
+    }
+
+    // Calendar year progress
+    if (target) {
+      const yearStart = new Date(target.getFullYear(), 0, 1);
+      const yearEnd = new Date(target.getFullYear() + 1, 0, 1);
+      const pct = ((target - yearStart) / (yearEnd - yearStart)) * 100;
+      animateNumber('yearProgress', pct, { decimals: 1 });
+      document.getElementById('yearProgressBar').style.width = pct + '%';
+      const daysLeft = Math.ceil((yearEnd - target) / 86400000);
+      document.getElementById('yearDetail').textContent =
+        `${target.toLocaleDateString('en-US', { month: 'long', day: 'numeric' })}, ${target.getFullYear()}`;
+      document.getElementById('daysLeftText').textContent = `${daysLeft} days remaining in ${target.getFullYear()}`;
+    }
+
+    // Western zodiac
+    if (birth) {
+      const z = getWesternZodiac(birth);
+      document.getElementById('zodiacSymbol').textContent = z.symbol;
+      document.getElementById('zodiacSign').textContent = z.sign;
+      document.getElementById('zodiacDates').textContent =
+        `${monthShort[z.from[0]-1]} ${z.from[1]} – ${monthShort[z.to[0]-1]} ${z.to[1]}`;
+
+      const c = getChineseZodiac(birth);
+      document.getElementById('chineseZodiacEmoji').textContent = c.emoji;
+      document.getElementById('chineseZodiacName').textContent = c.animal;
+      document.getElementById('chineseZodiacElement').textContent = c.element + ' year';
+    } else {
+      document.getElementById('zodiacSymbol').textContent = '—';
+      document.getElementById('zodiacSign').textContent = '—';
+      document.getElementById('zodiacDates').textContent = '—';
+      document.getElementById('chineseZodiacEmoji').textContent = '—';
+      document.getElementById('chineseZodiacName').textContent = '—';
+      document.getElementById('chineseZodiacElement').textContent = '—';
+    }
+
+    // Life in weeks
+    renderLifeWeeks(birth, target, state.lifeSpan);
+  }
+
+  // ============ Event listeners ============
+  document.getElementById('birthDate').addEventListener('input', e => {
+    state.birthDate = parseInputDate(e.target.value);
+    update();
+  });
+  document.getElementById('targetDate').addEventListener('input', e => {
+    state.targetDate = parseInputDate(e.target.value) || new Date();
+    update();
+  });
+
+  document.querySelectorAll('.tab-btn[data-span]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn[data-span]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      state.lifeSpan = parseInt(btn.dataset.span);
+      update();
+    });
+  });
+
+  // Today's date in header
+  const today = new Date();
+  document.getElementById('todayDate').textContent =
+    today.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+
+  // Default birth date: ~28 years ago from today
+  const defaultBirth = new Date(today.getFullYear() - 28, today.getMonth(), today.getDate());
+  state.birthDate = defaultBirth;
+  state.targetDate = today;
+  document.getElementById('birthDate').value = toInputDate(defaultBirth);
+  document.getElementById('targetDate').value = toInputDate(today);
+
+  // Initial render
+  update();
+
+  // Reveal animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
