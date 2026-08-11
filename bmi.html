@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Vital Index — BMI Calculator</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..800&family=Manrope:wght@300..700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #0d0a14;
+    --bg-2: #1a1320;
+    --surface: rgba(255, 255, 255, 0.035);
+    --surface-2: rgba(255, 255, 255, 0.06);
+    --border: rgba(255, 255, 255, 0.08);
+    --border-strong: rgba(255, 255, 255, 0.16);
+    --text: #f5ede2;
+    --text-muted: #968a82;
+    --text-dim: #5e565f;
+    --accent: #ff9a3c;
+    --accent-2: #ff6b4a;
+    --underweight: #38bdf8;
+    --normal: #84cc16;
+    --overweight: #fbbf24;
+    --obese: #f43f5e;
+  }
+  * { box-sizing: border-box; }
+  html, body { background: var(--bg); }
+  body {
+    font-family: 'Manrope', sans-serif;
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+    -webkit-font-smoothing: antialiased;
+  }
+  .display { font-family: 'Bricolage Grotesque', sans-serif; }
+
+  /* Atmospheric background */
+  .bg-orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(90px);
+    pointer-events: none;
+    z-index: 0;
+    will-change: transform;
+  }
+  .orb-1 {
+    width: 520px; height: 520px;
+    background: radial-gradient(circle, #ff6b4a, transparent 70%);
+    top: -160px; left: -120px;
+    opacity: 0.45;
+    animation: float1 18s ease-in-out infinite;
+  }
+  .orb-2 {
+    width: 620px; height: 620px;
+    background: radial-gradient(circle, #84cc16, transparent 70%);
+    bottom: -240px; right: -160px;
+    opacity: 0.22;
+    animation: float2 22s ease-in-out infinite;
+  }
+  .orb-3 {
+    width: 380px; height: 380px;
+    background: radial-gradient(circle, #f43f5e, transparent 70%);
+    top: 35%; right: 18%;
+    opacity: 0.18;
+    animation: float3 16s ease-in-out infinite;
+  }
+  @keyframes float1 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(80px,60px)} }
+  @keyframes float2 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-60px,-80px)} }
+  @keyframes float3 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-40px,50px)} }
+
+  /* Grain texture */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+    opacity: 0.05;
+    pointer-events: none;
+    z-index: 1;
+    mix-blend-mode: overlay;
+  }
+
+  /* Glass cards */
+  .card {
+    background: var(--surface);
+    backdrop-filter: blur(24px) saturate(140%);
+    -webkit-backdrop-filter: blur(24px) saturate(140%);
+    border: 1px solid var(--border);
+    border-radius: 28px;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* Range slider */
+  .slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 6px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 999px;
+    outline: none;
+    cursor: pointer;
+  }
+  .slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: grab;
+    box-shadow: 0 0 0 6px rgba(255, 154, 60, 0.16), 0 4px 14px rgba(0,0,0,0.4);
+    border: 3px solid #1a1320;
+    transition: transform 0.15s, box-shadow 0.2s;
+  }
+  .slider::-webkit-slider-thumb:hover { transform: scale(1.18); }
+  .slider::-webkit-slider-thumb:active {
+    cursor: grabbing; transform: scale(1.05);
+    box-shadow: 0 0 0 10px rgba(255, 154, 60, 0.22), 0 4px 14px rgba(0,0,0,0.4);
+  }
+  .slider::-moz-range-thumb {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: grab;
+    border: 3px solid #1a1320;
+    box-shadow: 0 0 0 6px rgba(255, 154, 60, 0.16);
+  }
+
+  /* Number input */
+  .num-input {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-weight: 600;
+    font-size: 18px;
+    text-align: right;
+    border-radius: 12px;
+    padding: 6px 12px;
+    width: 100px;
+    outline: none;
+    transition: border 0.2s, background 0.2s;
+  }
+  .num-input:focus {
+    border-color: var(--accent);
+    background: rgba(255, 154, 60, 0.06);
+  }
+  .num-input::-webkit-outer-spin-button,
+  .num-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  .num-input[type=number] { -moz-appearance: textfield; }
+
+  /* Toggle */
+  .toggle-group {
+    display: inline-flex;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 4px;
+    position: relative;
+  }
+  .toggle-btn {
+    padding: 8px 18px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--text-muted);
+    cursor: pointer;
+    position: relative;
+    z-index: 2;
+    transition: color 0.25s;
+    background: transparent;
+    border: none;
+  }
+  .toggle-btn.active { color: #1a1320; }
+  .toggle-indicator {
+    position: absolute;
+    top: 4px; bottom: 4px; left: 4px;
+    background: var(--accent);
+    border-radius: 999px;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1;
+    box-shadow: 0 4px 12px rgba(255, 154, 60, 0.35);
+  }
+
+  /* Preset buttons */
+  .preset-btn {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'Manrope', sans-serif;
+    font-weight: 500;
+    font-size: 12px;
+    padding: 10px 8px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+  }
+  .preset-btn:hover {
+    background: rgba(255, 154, 60, 0.08);
+    border-color: rgba(255, 154, 60, 0.3);
+    color: var(--accent);
+    transform: translateY(-1px);
+  }
+  .preset-btn:active { transform: translateY(0); }
+
+  /* Gauge indicator */
+  #indicatorGroup {
+    transition: transform 0.85s cubic-bezier(0.34, 1.4, 0.5, 1);
+  }
+  .indicator-glow {
+    animation: indicatorPulse 2.5s ease-in-out infinite;
+  }
+  @keyframes indicatorPulse {
+    0%, 100% { opacity: 0.25; }
+    50% { opacity: 0.55; }
+  }
+
+  /* Category badge */
+  .category-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 16px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    transition: all 0.4s;
+  }
+  .badge-under { background: rgba(56,189,248,0.12); color: #7dd3fc; border: 1px solid rgba(56,189,248,0.3); }
+  .badge-normal { background: rgba(132,204,22,0.12); color: #bef264; border: 1px solid rgba(132,204,22,0.3); }
+  .badge-over { background: rgba(251,191,36,0.12); color: #fcd34d; border: 1px solid rgba(251,191,36,0.3); }
+  .badge-obese { background: rgba(244,63,94,0.12); color: #fda4af; border: 1px solid rgba(244,63,94,0.3); }
+
+  .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%,100%{opacity:1;transform:scale(1)}
+    50%{opacity:0.5;transform:scale(0.75)}
+  }
+
+  /* Ticker */
+  .ticker {
+    overflow: hidden;
+    mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  }
+  .ticker-track {
+    display: flex;
+    gap: 44px;
+    animation: scroll 35s linear infinite;
+    white-space: nowrap;
+    width: max-content;
+  }
+  @keyframes scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* Category cards */
+  .cat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 18px;
+    transition: all 0.3s;
+  }
+  .cat-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--border-strong);
+    background: var(--surface-2);
+  }
+
+  /* Selection */
+  ::selection { background: var(--accent); color: #1a1320; }
+
+  /* BMI number text */
+  .bmi-text {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.04em;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+</style>
+</head>
+<body>
+  <div class="bg-orb orb-1"></div>
+  <div class="bg-orb orb-2"></div>
+  <div class="bg-orb orb-3"></div>
+
+  <div class="relative z-10 max-w-6xl mx-auto px-5 sm:px-8 py-8 md:py-14">
+
+    <!-- Header -->
+    <header class="flex items-center justify-between mb-10 md:mb-14">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background: linear-gradient(135deg, var(--accent), var(--accent-2)); box-shadow: 0 8px 24px rgba(255, 107, 74, 0.3);">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1a1320" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 12h4l3-9 4 18 3-9h4"/>
+          </svg>
+        </div>
+        <div>
+          <div class="display font-bold text-lg leading-none">Vital Index</div>
+          <div class="text-[11px] mt-1" style="color: var(--text-muted);">Body Mass Calculator</div>
+        </div>
+      </div>
+      <div class="hidden sm:flex items-center gap-2 text-xs" style="color: var(--text-muted);">
+        <span class="dot" style="color: var(--normal);"></span>
+        Real-time computation
+      </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="mb-10 md:mb-14 max-w-3xl">
+      <h1 class="display font-bold leading-[0.95] tracking-tight" style="font-size: clamp(2.4rem, 6vw, 4.5rem);">
+        Know your <em style="font-style: italic; background: linear-gradient(120deg, var(--accent), var(--accent-2)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">body</em><br />
+        in one number.
+      </h1>
+      <p class="mt-5 text-base md:text-lg max-w-xl leading-relaxed" style="color: var(--text-muted);">
+        A quick, science-backed snapshot of where you stand — and what it actually means for your everyday health.
+      </p>
+    </section>
+
+    <!-- Calculator Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-5 gap-5 md:gap-6">
+
+      <!-- Input Card -->
+      <section class="card p-6 md:p-8 lg:col-span-2">
+        <div class="flex items-center justify-between mb-7 flex-wrap gap-3">
+          <h2 class="display font-semibold text-xl">Your measurements</h2>
+          <div class="toggle-group" id="unitToggle" role="tablist">
+            <button class="toggle-btn active" data-unit="metric" role="tab">Metric</button>
+            <button class="toggle-btn" data-unit="imperial" role="tab">Imperial</button>
+            <div class="toggle-indicator" id="toggleIndicator"></div>
+          </div>
+        </div>
+
+        <!-- Height -->
+        <div class="mb-7">
+          <div class="flex items-baseline justify-between mb-3">
+            <label for="heightSlider" class="text-sm font-semibold" style="color: var(--text-muted);">Height</label>
+            <div class="flex items-baseline gap-2">
+              <input type="number" id="heightInput" class="num-input" value="170" min="100" max="250" aria-label="Height value" />
+              <span class="text-sm font-medium w-6" style="color: var(--text-muted);" id="heightUnit">cm</span>
+            </div>
+          </div>
+          <input type="range" id="heightSlider" class="slider" min="100" max="250" step="1" value="170" aria-label="Height slider" />
+          <div class="flex justify-between text-[11px] mt-2" style="color: var(--text-dim);">
+            <span id="heightMin">100 cm</span>
+            <span id="heightMax">250 cm</span>
+          </div>
+        </div>
+
+        <!-- Weight -->
+        <div class="mb-7">
+          <div class="flex items-baseline justify-between mb-3">
+            <label for="weightSlider" class="text-sm font-semibold" style="color: var(--text-muted);">Weight</label>
+            <div class="flex items-baseline gap-2">
+              <input type="number" id="weightInput" class="num-input" value="65" min="30" max="200" step="0.5" aria-label="Weight value" />
+              <span class="text-sm font-medium w-10" style="color: var(--text-muted);" id="weightUnit">kg</span>
+            </div>
+          </div>
+          <input type="range" id="weightSlider" class="slider" min="30" max="200" step="0.5" value="65" aria-label="Weight slider" />
+          <div class="flex justify-between text-[11px] mt-2" style="color: var(--text-dim);">
+            <span id="weightMin">30 kg</span>
+            <span id="weightMax">200 kg</span>
+          </div>
+        </div>
+
+        <!-- Quick presets -->
+        <div>
+          <div class="text-[11px] font-semibold uppercase tracking-widest mb-3" style="color: var(--text-dim);">Quick presets</div>
+          <div class="grid grid-cols-3 gap-2">
+            <button class="preset-btn" data-h="160" data-w="55">Petite</button>
+            <button class="preset-btn" data-h="175" data-w="70">Average</button>
+            <button class="preset-btn" data-h="185" data-w="85">Athletic</button>
+          </div>
+        </div>
+
+        <!-- Note -->
+        <div class="mt-7 pt-6 flex items-start gap-3 text-xs leading-relaxed" style="border-top: 1px solid var(--border); color: var(--text-muted);">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="flex-shrink-0 mt-0.5">
+            <circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/>
+          </svg>
+          BMI is a screening tool, not a diagnosis. Body composition, muscle mass, and lifestyle matter just as much.
+        </div>
+      </section>
+
+      <!-- Result Card -->
+      <section class="card p-6 md:p-8 lg:col-span-3 relative overflow-hidden">
+        <!-- Gauge SVG -->
+        <div class="flex justify-center mb-2">
+          <svg viewBox="0 0 400 260" width="100%" style="max-width: 480px;" aria-label="BMI gauge">
+            <defs>
+              <linearGradient id="gradUnder" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#0ea5e9"/><stop offset="100%" stop-color="#38bdf8"/>
+              </linearGradient>
+              <linearGradient id="gradNormal" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#84cc16"/><stop offset="100%" stop-color="#a3e635"/>
+              </linearGradient>
+              <linearGradient id="gradOver" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#fbbf24"/><stop offset="100%" stop-color="#f59e0b"/>
+              </linearGradient>
+              <linearGradient id="gradObese" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#f43f5e"/><stop offset="100%" stop-color="#e11d48"/>
+              </linearGradient>
+              <filter id="indicatorBlur" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="6"/>
+              </filter>
+            </defs>
+
+            <!-- Track background -->
+            <path id="trackPath" d="" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="22" stroke-linecap="round" />
+
+            <!-- Colored segments -->
+            <path id="segUnder" d="" fill="none" stroke="url(#gradUnder)" stroke-width="22" stroke-linecap="round" />
+            <path id="segNormal" d="" fill="none" stroke="url(#gradNormal)" stroke-width="22" stroke-linecap="round" />
+            <path id="segOver" d="" fill="none" stroke="url(#gradOver)" stroke-width="22" stroke-linecap="round" />
+            <path id="segObese" d="" fill="none" stroke="url(#gradObese)" stroke-width="22" stroke-linecap="round" />
+
+            <!-- Tick marks -->
+            <g id="ticksGroup"></g>
+
+            <!-- Indicator (glowing dot) -->
+            <g id="indicatorGroup" transform="translate(0, -150)">
+              <circle class="indicator-glow" cx="200" cy="50" r="16" fill="#ff9a3c" filter="url(#indicatorBlur)"/>
+              <circle cx="200" cy="50" r="11" fill="#ff9a3c" stroke="#1a1320" stroke-width="3"/>
+              <circle cx="200" cy="50" r="3" fill="#fff"/>
+            </g>
+
+            <!-- BMI value text inside gauge -->
+            <text id="bmiNumber" x="200" y="180" text-anchor="middle" class="bmi-text" fill="#f5ede2" font-size="64">22.5</text>
+            <text x="200" y="205" text-anchor="middle" fill="#968a82" font-size="10" font-weight="700" letter-spacing="3">BMI · KG/M²</text>
+          </svg>
+        </div>
+
+        <!-- Category badge -->
+        <div class="flex flex-col items-center text-center mb-6">
+          <div id="categoryBadge" class="category-badge badge-normal">
+            <span class="dot"></span>
+            <span id="categoryText">Healthy weight</span>
+          </div>
+        </div>
+
+        <!-- Stats grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5">
+          <div class="rounded-2xl p-4" style="background: rgba(255,255,255,0.025); border: 1px solid var(--border);">
+            <div class="text-[11px] uppercase tracking-widest mb-1.5" style="color: var(--text-muted);">Healthy weight range</div>
+            <div class="display font-semibold text-lg leading-tight" id="healthyRange">53.5 – 71.9 kg</div>
+            <div class="text-[11px] mt-1" style="color: var(--text-dim);" id="healthyRangeAlt">˜ 118 – 158 lbs</div>
+          </div>
+          <div class="rounded-2xl p-4" style="background: rgba(255,255,255,0.025); border: 1px solid var(--border);">
+            <div class="text-[11px] uppercase tracking-widest mb-1.5" style="color: var(--text-muted);">From healthy midpoint</div>
+            <div class="display font-semibold text-lg leading-tight" id="diffValue">-2.0 kg</div>
+            <div class="text-[11px] mt-1" style="color: var(--text-dim);" id="diffLabel">below midpoint</div>
+          </div>
+        </div>
+
+        <!-- Tip -->
+        <div class="rounded-2xl p-5 flex gap-4 items-start" style="background: linear-gradient(135deg, rgba(255,154,60,0.08), rgba(255,107,74,0.03)); border: 1px solid rgba(255,154,60,0.15);">
+          <div class="w-10 h-10 rounded-xl flex-shrink-0 flex items-center justify-center" style="background: rgba(255,154,60,0.12);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ff9a3c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/>
+            </svg>
+          </div>
+          <div class="flex-1">
+            <div class="text-sm font-semibold mb-1" id="tipTitle">You're in a healthy range</div>
+            <div class="text-[13px] leading-relaxed" style="color: var(--text-muted);" id="tipBody">Maintain your current habits — balanced meals, regular movement, and quality sleep keep you right where you want to be.</div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Categories reference -->
+    <section class="mt-14">
+      <div class="flex items-baseline justify-between mb-5 flex-wrap gap-2">
+        <h2 class="display font-semibold text-2xl">BMI categories</h2>
+        <span class="text-xs" style="color: var(--text-muted);">WHO classification</span>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div class="cat-card">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="w-2 h-2 rounded-full" style="background: var(--underweight);"></span>
+            <span class="text-[11px] font-semibold uppercase tracking-wider" style="color: var(--underweight);">Underweight</span>
+          </div>
+          <div class="display font-bold text-lg">Below 18.5</div>
+          <div class="text-xs mt-1 leading-relaxed" style="color: var(--text-muted);">Insufficient weight for height</div>
+        </div>
+        <div class="cat-card">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="w-2 h-2 rounded-full" style="background: var(--normal);"></span>
+            <span class="text-[11px] font-semibold uppercase tracking-wider" style="color: var(--normal);">Healthy</span>
+          </div>
+          <div class="display font-bold text-lg">18.5 – 24.9</div>
+          <div class="text-xs mt-1 leading-relaxed" style="color: var(--text-muted);">Lowest health risk range</div>
+        </div>
+        <div class="cat-card">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="w-2 h-2 rounded-full" style="background: var(--overweight);"></span>
+            <span class="text-[11px] font-semibold uppercase tracking-wider" style="color: var(--overweight);">Overweight</span>
+          </div>
+          <div class="display font-bold text-lg">25.0 – 29.9</div>
+          <div class="text-xs mt-1 leading-relaxed" style="color: var(--text-muted);">Moderately increased risk</div>
+        </div>
+        <div class="cat-card">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="w-2 h-2 rounded-full" style="background: var(--obese);"></span>
+            <span class="text-[11px] font-semibold uppercase tracking-wider" style="color: var(--obese);">Obese</span>
+          </div>
+          <div class="display font-bold text-lg">30.0 and above</div>
+          <div class="text-xs mt-1 leading-relaxed" style="color: var(--text-muted);">Higher health risk</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Ticker -->
+    <section class="mt-14 ticker py-4" style="border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+      <div class="ticker-track text-sm" style="color: var(--text-muted);">
+        <span>Body Mass Index</span><span>·</span>
+        <span>Adolphe Quetelet, 1832</span><span>·</span>
+        <span>Weight-to-height ratio</span><span>·</span>
+        <span>Screening tool, not diagnosis</span><span>·</span>
+        <span>Doesn't measure body fat directly</span><span>·</span>
+        <span>Body Mass Index</span><span>·</span>
+        <span>Adolphe Quetelet, 1832</span><span>·</span>
+        <span>Weight-to-height ratio</span><span>·</span>
+        <span>Screening tool, not diagnosis</span><span>·</span>
+        <span>Doesn't measure body fat directly</span><span>·</span>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="mt-8 text-center text-xs leading-relaxed" style="color: var(--text-dim);">
+      Made for awareness · Always consult a healthcare professional for personal advice
+    </footer>
+  </div>
+
+<script>
+  // ---------- State ----------
+  const state = {
+    unit: 'metric',
+    height: 170,  // cm when metric, in when imperial
+    weight: 65,   // kg when metric, lb when imperial
+  };
+
+  // ---------- Conversions ----------
+  const cmToIn = cm => cm / 2.54;
+  const inToCm = inch => inch * 2.54;
+  const kgToLb = kg => kg * 2.20462;
+  const lbToKg = lb => lb / 2.20462;
+
+  // ---------- BMI ----------
+  function getBMI() {
+    let hCm, wKg;
+    if (state.unit === 'metric') {
+      hCm = state.height;
+      wKg = state.weight;
+    } else {
+      hCm = inToCm(state.height);
+      wKg = lbToKg(state.weight);
+    }
+    const m = Math.max(0.5, hCm / 100);
+    return wKg / (m * m);
+  }
+
+  // Map BMI 10..40 ? gauge angle 180°..0°
+  function bmiToAngle(bmi) {
+    const clamped = Math.max(10, Math.min(40, bmi));
+    return 180 - ((clamped - 10) / 30) * 180;
+  }
+
+  // ---------- SVG helpers ----------
+  function polarToCartesian(cx, cy, r, angleDeg) {
+    const a = (angleDeg * Math.PI) / 180;
+    return { x: cx + r * Math.cos(a), y: cy - r * Math.sin(a) };
+  }
+  // Arc from startAngle to endAngle going over the top (sweep flag 0)
+  function arcPath(cx, cy, r, startAngle, endAngle) {
+    const start = polarToCartesian(cx, cy, r, startAngle);
+    const end = polarToCartesian(cx, cy, r, endAngle);
+    const largeArc = Math.abs(startAngle - endAngle) > 180 ? 1 : 0;
+    return `M ${start.x} ${start.y} A ${r} ${r} 0 ${largeArc} 0 ${end.x} ${end.y}`;
+  }
+
+  // ---------- Build gauge ----------
+  function setupGauge() {
+    const cx = 200, cy = 200, r = 150;
+    const bmiToAng = bmi => 180 - ((Math.max(10, Math.min(40, bmi)) - 10) / 30) * 180;
+    const gap = 1.2;
+
+    const underStart = bmiToAng(10);
+    const underEnd = bmiToAng(18.5);
+    const normalEnd = bmiToAng(25);
+    const overEnd = bmiToAng(30);
+    const obeseEnd = bmiToAng(40);
+
+    document.getElementById('trackPath').setAttribute('d', arcPath(cx, cy, r, 180, 0));
+    document.getElementById('segUnder').setAttribute('d', arcPath(cx, cy, r, underStart, underEnd + gap));
+    document.getElementById('segNormal').setAttribute('d', arcPath(cx, cy, r, underEnd - gap, normalEnd + gap));
+    document.getElementById('segOver').setAttribute('d', arcPath(cx, cy, r, normalEnd - gap, overEnd + gap));
+    document.getElementById('segObese').setAttribute('d', arcPath(cx, cy, r, overEnd - gap, obeseEnd));
+
+    // Tick marks at thresholds
+    const ticksGroup = document.getElementById('ticksGroup');
+    const ticks = [
+      { bmi: 10, label: '10' },
+      { bmi: 18.5, label: '18.5' },
+      { bmi: 25, label: '25' },
+      { bmi: 30, label: '30' },
+      { bmi: 40, label: '40+' }
+    ];
+    ticks.forEach(t => {
+      const angle = bmiToAng(t.bmi);
+      const inner = polarToCartesian(cx, cy, r - 18, angle);
+      const outer = polarToCartesian(cx, cy, r + 10, angle);
+      const labelPos = polarToCartesian(cx, cy, r + 24, angle);
+
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('x1', inner.x);
+      line.setAttribute('y1', inner.y);
+      line.setAttribute('x2', outer.x);
+      line.setAttribute('y2', outer.y);
+      line.setAttribute('stroke', 'rgba(255,255,255,0.25)');
+      line.setAttribute('stroke-width', '1.5');
+      line.setAttribute('stroke-linecap', 'round');
+      ticksGroup.appendChild(line);
+
+      const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      text.setAttribute('x', labelPos.x);
+      text.setAttribute('y', labelPos.y + 4);
+      text.setAttribute('text-anchor', 'middle');
+      text.setAttribute('fill', 'rgba(255,255,255,0.4)');
+      text.setAttribute('font-size', '10');
+      text.setAttribute('font-weight', '700');
+      text.setAttribute('font-family', 'Manrope, sans-serif');
+      text.textContent = t.label;
+      ticksGroup.appendChild(text);
+    });
+  }
+
+  // ---------- Update indicator ----------
+  function updateIndicator(bmi) {
+    const angle = bmiToAngle(bmi);
+    const pos = polarToCartesian(200, 200, 150, angle);
+    const dx = pos.x - 200;
+    const dy = pos.y - 200;
+    document.getElementById('indicatorGroup').setAttribute('transform', `translate(${dx}, ${dy})`);
+  }
+
+  // ---------- Animate BMI number ----------
+  let displayBMI = 22.5;
+  let targetBMI = 22.5;
+  let animFrame = null;
+  function animateNumber() {
+    if (animFrame) cancelAnimationFrame(animFrame);
+    const start = displayBMI;
+    const end = targetBMI;
+    const duration = 650;
+    const t0 = performance.now();
+    function step(now) {
+      const elapsed = now - t0;
+      const t = Math.min(1, elapsed / duration);
+      const eased = 1 - Math.pow(1 - t, 3);
+      displayBMI = start + (end - start) * eased;
+      document.getElementById('bmiNumber').textContent = displayBMI.toFixed(1);
+      if (t < 1) animFrame = requestAnimationFrame(step);
+    }
+    animFrame = requestAnimationFrame(step);
+  }
+
+  // ---------- Update all results ----------
+  function updateResult() {
+    const bmi = getBMI();
+    targetBMI = bmi;
+    animateNumber();
+    updateIndicator(bmi);
+
+    // Category + tip
+    let category, badgeClass, tipTitle, tipBody;
+    if (bmi < 18.5) {
+      category = 'Underweight';
+      badgeClass = 'badge-under';
+      tipTitle = 'Consider nutrient-dense foods';
+      tipBody = 'A BMI below 18.5 may indicate insufficient nourishment. Focus on balanced, calorie-rich whole foods and consult a professional for personalized guidance.';
+    } else if (bmi < 25) {
+      category = 'Healthy weight';
+      badgeClass = 'badge-normal';
+      tipTitle = "You're in a healthy range";
+      tipBody = 'Maintain your current habits — balanced meals, regular movement, and quality sleep keep you right where you want to be.';
+    } else if (bmi < 30) {
+      category = 'Overweight';
+      badgeClass = 'badge-over';
+      tipTitle = 'Small changes add up';
+      tipBody = 'A modest weight reduction of 5–10% can meaningfully improve metabolic health. Focus on whole foods, daily movement, and sustainable habits.';
+    } else {
+      category = 'Obese';
+      badgeClass = 'badge-obese';
+      tipTitle = 'A good time to take action';
+      tipBody = 'Higher BMI increases risk for several conditions. A healthcare professional can help design a realistic plan — gradual changes tend to last longest.';
+    }
+    const badge = document.getElementById('categoryBadge');
+    badge.className = `category-badge ${badgeClass}`;
+    document.getElementById('categoryText').textContent = category;
+    document.getElementById('tipTitle').textContent = tipTitle;
+    document.getElementById('tipBody').textContent = tipBody;
+
+    // Healthy weight range (always computed in metric internally)
+    let hCm;
+    if (state.unit === 'metric') hCm = state.height;
+    else hCm = inToCm(state.height);
+    const h = hCm / 100;
+    const minKg = 18.5 * h * h;
+    const maxKg = 24.9 * h * h;
+    const midKg = (minKg + maxKg) / 2;
+
+    let mainMin, mainMax, altMin, altMax;
+    if (state.unit === 'metric') {
+      mainMin = `${minKg.toFixed(1)} kg`;
+      mainMax = `${maxKg.toFixed(1)} kg`;
+      altMin = `${kgToLb(minKg).toFixed(0)} lbs`;
+      altMax = `${kgToLb(maxKg).toFixed(0)} lbs`;
+    } else {
+      mainMin = `${kgToLb(minKg).toFixed(1)} lbs`;
+      mainMax = `${kgToLb(maxKg).toFixed(1)} lbs`;
+      altMin = `${minKg.toFixed(1)} kg`;
+      altMax = `${maxKg.toFixed(1)} kg`;
+    }
+    document.getElementById('healthyRange').textContent = `${mainMin} – ${mainMax}`;
+    document.getElementById('healthyRangeAlt').textContent = `˜ ${altMin} – ${altMax}`;
+
+    // Difference from midpoint (in current unit)
+    const currentWeightKg = (state.unit === 'metric') ? state.weight : lbToKg(state.weight);
+    const diffKg = currentWeightKg - midKg;
+    const diffDisplay = state.unit === 'metric' ? diffKg : kgToLb(diffKg);
+    const sign = diffDisplay < -0.05 ? '-' : (diffDisplay > 0.05 ? '+' : '');
+    const absVal = Math.abs(diffDisplay).toFixed(1);
+    const unit = state.unit === 'metric' ? 'kg' : 'lbs';
+    document.getElementById('diffValue').textContent = `${sign}${absVal} ${unit}`;
+    document.getElementById('diffLabel').textContent =
+      diffDisplay < -0.05 ? 'below healthy midpoint' :
+      diffDisplay > 0.05 ? 'above healthy midpoint' :
+      'right at midpoint';
+  }
+
+  // ---------- Unit switching ----------
+  function setUnit(unit) {
+    if (unit === state.unit) return;
+    if (unit === 'imperial') {
+      state.height = Math.round(cmToIn(state.height) * 10) / 10;
+      state.weight = Math.round(kgToLb(state.weight) * 10) / 10;
+    } else {
+      state.height = Math.round(inToCm(state.height));
+      state.weight = Math.round(lbToKg(state.weight) * 10) / 10;
+    }
+    state.unit = unit;
+    updateInputRanges();
+    syncInputs();
+    updateResult();
+    document.querySelectorAll('.toggle-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.unit === unit);
+    });
+    moveToggleIndicator();
+  }
+
+  function updateInputRanges() {
+    const heightSlider = document.getElementById('heightSlider');
+    const heightInput = document.getElementById('heightInput');
+    const weightSlider = document.getElementById('weightSlider');
+    const weightInput = document.getElementById('weightInput');
+    const heightUnit = document.getElementById('heightUnit');
+    const weightUnit = document.getElementById('weightUnit');
+    const heightMin = document.getElementById('heightMin');
+    const heightMax = document.getElementById('heightMax');
+    const weightMin = document.getElementById('weightMin');
+    const weightMax = document.getElementById('weightMax');
+
+    if (state.unit === 'metric') {
+      heightSlider.min = 100; heightSlider.max = 250; heightSlider.step = 1;
+      heightInput.min = 100; heightInput.max = 250; heightInput.step = 1;
+      weightSlider.min = 30; weightSlider.max = 200; weightSlider.step = 0.5;
+      weightInput.min = 30; weightInput.max = 200; weightInput.step = 0.5;
+      heightUnit.textContent = 'cm';
+      weightUnit.textContent = 'kg';
+      heightMin.textContent = '100 cm';
+      heightMax.textContent = '250 cm';
+      weightMin.textContent = '30 kg';
+      weightMax.textContent = '200 kg';
+    } else {
+      heightSlider.min = 40; heightSlider.max = 100; heightSlider.step = 0.5;
+      heightInput.min = 40; heightInput.max = 100; heightInput.step = 0.5;
+      weightSlider.min = 66; weightSlider.max = 440; weightSlider.step = 0.5;
+      weightInput.min = 66; weightInput.max = 440; weightInput.step = 0.5;
+      heightUnit.textContent = 'in';
+      weightUnit.textContent = 'lbs';
+      heightMin.textContent = '40 in';
+      heightMax.textContent = '100 in';
+      weightMin.textContent = '66 lbs';
+      weightMax.textContent = '440 lbs';
+    }
+  }
+
+  function syncInputs() {
+    document.getElementById('heightSlider').value = state.height;
+    document.getElementById('heightInput').value = state.height;
+    document.getElementById('weightSlider').value = state.weight;
+    document.getElementById('weightInput').value = state.weight;
+  }
+
+  function moveToggleIndicator() {
+    const active = document.querySelector('.toggle-btn.active');
+    const indicator = document.getElementById('toggleIndicator');
+    if (active && indicator) {
+      indicator.style.width = `${active.offsetWidth}px`;
+      indicator.style.transform = `translateX(${active.offsetLeft - 4}px)`;
+    }
+  }
+
+  // ---------- Event listeners ----------
+  document.querySelectorAll('.toggle-btn').forEach(btn => {
+    btn.addEventListener('click', () => setUnit(btn.dataset.unit));
+  });
+
+  function bindInputPair(sliderId, inputId, key) {
+    const slider = document.getElementById(sliderId);
+    const input = document.getElementById(inputId);
+    slider.addEventListener('input', e => {
+      const v = parseFloat(e.target.value);
+      if (isNaN(v)) return;
+      state[key] = v;
+      input.value = v;
+      updateResult();
+    });
+    input.addEventListener('input', e => {
+      let v = parseFloat(e.target.value);
+      if (isNaN(v)) return;
+      const min = parseFloat(input.min);
+      const max = parseFloat(input.max);
+      v = Math.max(min, Math.min(max, v));
+      state[key] = v;
+      slider.value = v;
+      updateResult();
+    });
+    input.addEventListener('blur', e => {
+      // Re-clamp and reformat
+      let v = parseFloat(e.target.value);
+      if (isNaN(v)) v = state[key];
+      v = Math.max(parseFloat(input.min), Math.min(parseFloat(input.max), v));
+      state[key] = v;
+      e.target.value = v;
+      slider.value = v;
+      updateResult();
+    });
+  }
+
+  bindInputPair('heightSlider', 'heightInput', 'height');
+  bindInputPair('weightSlider', 'weightInput', 'weight');
+
+  // Presets (always stored in metric in data attributes)
+  document.querySelectorAll('.preset-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      let h = parseFloat(btn.dataset.h);
+      let w = parseFloat(btn.dataset.w);
+      if (state.unit === 'imperial') {
+        h = Math.round(cmToIn(h) * 10) / 10;
+        w = Math.round(kgToLb(w) * 10) / 10;
+      }
+      state.height = h;
+      state.weight = w;
+      syncInputs();
+      updateResult();
+    });
+  });
+
+  // ---------- Init ----------
+  setupGauge();
+  updateInputRanges();
+  syncInputs();
+  updateResult();
+  // Wait for next frame so layout is computed
+  requestAnimationFrame(() => moveToggleIndicator());
+  window.addEventListener('resize', moveToggleIndicator);
+</script>
+</body>
+</html>
