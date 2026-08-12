@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- Make sure this meta tag is the very first thing in the head -->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bindu � English to Bangla Typing</title>
+<title>Bindu — English to Bangla Typing</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -37,7 +38,6 @@
   .bn { font-family: 'Hind Siliguri', sans-serif; }
   .bn-serif { font-family: 'Noto Serif Bengali', serif; }
 
-  /* Paper dot pattern */
   body::before {
     content: '';
     position: fixed; inset: 0;
@@ -71,7 +71,6 @@
   textarea::placeholder { color: var(--text-dim); }
   textarea::selection { background: var(--highlight); }
 
-  /* Bengali output words - clickable */
   .word {
     cursor: pointer;
     border-radius: 6px;
@@ -85,9 +84,7 @@
     background: rgba(252, 211, 77, 0.4);
     box-shadow: 0 0 0 1.5px var(--accent);
   }
-  .word-divider { color: var(--text-dim); }
 
-  /* Suggestion chips */
   .chip {
     background: var(--surface-2);
     border: 1px solid var(--border);
@@ -237,31 +234,31 @@
       <div class="flex items-center gap-3">
         <div class="w-11 h-11 rounded-xl flex items-center justify-center bn-serif"
              style="background: linear-gradient(135deg, var(--accent), #d97706); color: var(--bg-2); font-weight: 700; font-size: 24px; box-shadow: 0 6px 18px rgba(181, 70, 32, 0.35);">
-          ?
+          ব
         </div>
         <div>
           <div class="display font-bold text-lg leading-none">Bindu</div>
-          <div class="text-[11px] mt-1" style="color: var(--text-muted);">English ? Bangla typing</div>
+          <div class="text-[11px] mt-1" style="color: var(--text-muted);">English → Bangla typing</div>
         </div>
       </div>
       <div class="hidden sm:flex items-center gap-2 text-xs" style="color: var(--text-muted);">
         <span class="pulse-dot"></span>
-        <span>Phonetic engine � live</span>
+        <span>Phonetic engine · live</span>
       </div>
     </header>
 
     <!-- Hero -->
     <section class="mb-12 md:mb-14 relative">
-      <div class="deco-char hidden md:block" style="font-size: 280px; top: -50px; right: -30px;">??</div>
+      <div class="deco-char hidden md:block" style="font-size: 280px; top: -50px; right: -30px;">াং</div>
       <div class="text-[11px] uppercase tracking-[0.2em] mb-4 font-semibold" style="color: var(--accent);">
         Phonetic transliteration
       </div>
       <h1 class="display font-bold leading-[0.95] relative" style="font-size: clamp(2.4rem, 6.5vw, 4.8rem); letter-spacing: -0.025em;">
         Type in English.<br/>
-        Read in <span class="bn-serif italic" style="color: var(--accent); font-style: italic;">?????</span>.
+        Read in <span class="bn-serif italic" style="color: var(--accent); font-style: italic;">বাংলা</span>.
       </h1>
       <p class="mt-5 text-base md:text-lg max-w-xl leading-relaxed" style="color: var(--text-muted);">
-        Just type how it sounds. <span class="bn">"ami bhalo achi"</span> becomes <span class="bn">"??? ???? ???"</span>. Pick from live suggestions to get the exact Bengali you want.
+        Just type how it sounds. <span class="bn">"ami bhalo achi"</span> becomes <span class="bn">"আমি ভালো আছি"</span>. Pick from live suggestions to get the exact Bengali you want.
       </p>
     </section>
 
@@ -274,7 +271,7 @@
           <div class="flex items-center justify-between mb-3">
             <div class="flex items-center gap-2">
               <div class="text-[11px] uppercase tracking-[0.18em] font-bold" style="color: var(--text-muted);">English</div>
-              <span style="color: var(--text-dim);">�</span>
+              <span style="color: var(--text-dim);">·</span>
               <div class="text-[11px]" style="color: var(--text-dim);">type phonetically</div>
             </div>
             <div class="text-[11px] font-medium" style="color: var(--text-dim);" id="enWordCount">0 words</div>
@@ -290,8 +287,8 @@
         <div class="card p-5" style="background: var(--surface-2);">
           <div class="flex items-center justify-between mb-3">
             <div class="flex items-center gap-2">
-              <div class="text-[11px] uppercase tracking-[0.18em] font-bold bn-serif" style="color: var(--accent);">?????</div>
-              <span style="color: var(--text-dim);">�</span>
+              <div class="text-[11px] uppercase tracking-[0.18em] font-bold bn-serif" style="color: var(--accent);">বাংলা</div>
+              <span style="color: var(--text-dim);">·</span>
               <div class="text-[11px]" style="color: var(--text-dim);">click any word to refine</div>
             </div>
             <button id="copyBtn" class="btn btn-secondary" style="padding: 5px 12px; font-size: 11px;">
@@ -314,9 +311,9 @@
         <div class="flex items-center justify-between flex-wrap gap-3 mb-3">
           <div class="flex items-baseline gap-2 flex-wrap">
             <div class="text-[11px] uppercase tracking-[0.18em] font-bold" style="color: var(--text-muted);">Suggestions for</div>
-            <div class="phonetics-tag" id="currentWordDisplay">�</div>
+            <div class="phonetics-tag" id="currentWordDisplay">—</div>
           </div>
-          <div class="text-[11px]" style="color: var(--text-dim);">click to apply � press 1�6 to pick</div>
+          <div class="text-[11px]" style="color: var(--text-dim);">click to apply · press 1–6 to pick</div>
         </div>
         <div id="suggestions" class="flex flex-wrap gap-2"></div>
       </div>
@@ -359,46 +356,46 @@
         <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-1">
           <div>
             <div class="text-[11px] uppercase tracking-widest font-bold mb-2" style="color: var(--accent);">Vowels</div>
-            <div class="guide-row"><span class="guide-key">a / aa</span><span class="guide-val">? / ?</span></div>
-            <div class="guide-row"><span class="guide-key">i / ii</span><span class="guide-val">? / ?</span></div>
-            <div class="guide-row"><span class="guide-key">u / uu</span><span class="guide-val">? / ?</span></div>
-            <div class="guide-row"><span class="guide-key">e / oi</span><span class="guide-val">? / ?</span></div>
-            <div class="guide-row"><span class="guide-key">o / ou</span><span class="guide-val">? / ?</span></div>
+            <div class="guide-row"><span class="guide-key">a / aa</span><span class="guide-val">অ / আ</span></div>
+            <div class="guide-row"><span class="guide-key">i / ii</span><span class="guide-val">ই / ঈ</span></div>
+            <div class="guide-row"><span class="guide-key">u / uu</span><span class="guide-val">উ / ঊ</span></div>
+            <div class="guide-row"><span class="guide-key">e / oi</span><span class="guide-val">এ / ঐ</span></div>
+            <div class="guide-row"><span class="guide-key">o / ou</span><span class="guide-val">ও / ঔ</span></div>
           </div>
           <div>
             <div class="text-[11px] uppercase tracking-widest font-bold mb-2" style="color: var(--accent);">Voiceless</div>
-            <div class="guide-row"><span class="guide-key">k / kh</span><span class="guide-val">? / ?</span></div>
-            <div class="guide-row"><span class="guide-key">c / ch</span><span class="guide-val">? / ?</span></div>
-            <div class="guide-row"><span class="guide-key">t / th</span><span class="guide-val">? / ?</span></div>
-            <div class="guide-row"><span class="guide-key">T / Th</span><span class="guide-val">? / ?</span></div>
-            <div class="guide-row"><span class="guide-key">p / ph</span><span class="guide-val">? / ?</span></div>
+            <div class="guide-row"><span class="guide-key">k / kh</span><span class="guide-val">ক / খ</span></div>
+            <div class="guide-row"><span class="guide-key">c / ch</span><span class="guide-val">চ / ছ</span></div>
+            <div class="guide-row"><span class="guide-key">t / th</span><span class="guide-val">ত / থ</span></div>
+            <div class="guide-row"><span class="guide-key">T / Th</span><span class="guide-val">ট / ঠ</span></div>
+            <div class="guide-row"><span class="guide-key">p / ph</span><span class="guide-val">প / ফ</span></div>
           </div>
           <div>
             <div class="text-[11px] uppercase tracking-widest font-bold mb-2" style="color: var(--accent);">Voiced</div>
-            <div class="guide-row"><span class="guide-key">g / gh</span><span class="guide-val">? / ?</span></div>
-            <div class="guide-row"><span class="guide-key">j / jh</span><span class="guide-val">? / ?</span></div>
-            <div class="guide-row"><span class="guide-key">d / dh</span><span class="guide-val">? / ?</span></div>
-            <div class="guide-row"><span class="guide-key">D / Dh</span><span class="guide-val">? / ?</span></div>
-            <div class="guide-row"><span class="guide-key">b / bh</span><span class="guide-val">? / ?</span></div>
+            <div class="guide-row"><span class="guide-key">g / gh</span><span class="guide-val">গ / ঘ</span></div>
+            <div class="guide-row"><span class="guide-key">j / jh</span><span class="guide-val">জ / ঝ</span></div>
+            <div class="guide-row"><span class="guide-key">d / dh</span><span class="guide-val">দ / ধ</span></div>
+            <div class="guide-row"><span class="guide-key">D / Dh</span><span class="guide-val">ড / ঢ</span></div>
+            <div class="guide-row"><span class="guide-key">b / bh</span><span class="guide-val">ব / ভ</span></div>
           </div>
           <div>
             <div class="text-[11px] uppercase tracking-widest font-bold mb-2" style="color: var(--accent);">Sibilants & more</div>
-            <div class="guide-row"><span class="guide-key">sh / Sh</span><span class="guide-val">? / ?</span></div>
-            <div class="guide-row"><span class="guide-key">s / h</span><span class="guide-val">? / ?</span></div>
-            <div class="guide-row"><span class="guide-key">n / N</span><span class="guide-val">? / ?</span></div>
-            <div class="guide-row"><span class="guide-key">m / r</span><span class="guide-val">? / ?</span></div>
-            <div class="guide-row"><span class="guide-key">y / w</span><span class="guide-val">?? / ?</span></div>
+            <div class="guide-row"><span class="guide-key">sh / Sh</span><span class="guide-val">শ / ষ</span></div>
+            <div class="guide-row"><span class="guide-key">s / h</span><span class="guide-val">স / হ</span></div>
+            <div class="guide-row"><span class="guide-key">n / N</span><span class="guide-val">ন / ণ</span></div>
+            <div class="guide-row"><span class="guide-key">m / r</span><span class="guide-val">ম / র</span></div>
+            <div class="guide-row"><span class="guide-key">y / w</span><span class="guide-val">য় / ও</span></div>
           </div>
         </div>
         <div class="mt-6 pt-5 text-xs leading-relaxed" style="border-top: 1px dashed var(--border); color: var(--text-muted);">
-          <strong style="color: var(--text);">Tip:</strong> Use <code style="background: rgba(0,0,0,0.05); padding: 1px 5px; border-radius: 3px; font-family: monospace;">aa</code> for long ? sounds (Aam ? ??), <code style="background: rgba(0,0,0,0.05); padding: 1px 5px; border-radius: 3px; font-family: monospace;">T</code>/<code style="background: rgba(0,0,0,0.05); padding: 1px 5px; border-radius: 3px; font-family: monospace;">D</code> for retroflex ?/?, and <code style="background: rgba(0,0,0,0.05); padding: 1px 5px; border-radius: 3px; font-family: monospace;">N</code> for ?. End a sentence with <code style="background: rgba(0,0,0,0.05); padding: 1px 5px; border-radius: 3px; font-family: monospace;">.</code> for Bengali ???????
+          <strong style="color: var(--text);">Tip:</strong> Use <code style="background: rgba(0,0,0,0.05); padding: 1px 5px; border-radius: 3px; font-family: monospace;">aa</code> for long আ sounds (Aam → আম), <code style="background: rgba(0,0,0,0.05); padding: 1px 5px; border-radius: 3px; font-family: monospace;">T</code>/<code style="background: rgba(0,0,0,0.05); padding: 1px 5px; border-radius: 3px; font-family: monospace;">D</code> for retroflex ট/ড, and <code style="background: rgba(0,0,0,0.05); padding: 1px 5px; border-radius: 3px; font-family: monospace;">N</code> for ণ. End a sentence with <code style="background: rgba(0,0,0,0.05); padding: 1px 5px; border-radius: 3px; font-family: monospace;">.</code> for Bengali দাঁড়ি।
         </div>
       </div>
     </section>
 
     <!-- Footer -->
     <footer class="pt-6 text-center text-xs leading-relaxed" style="border-top: 1px solid var(--border); color: var(--text-dim);">
-      Phonetic transliteration � <span class="bn" style="color: var(--text-muted);">????? ???? ??????? ???</span>
+      Phonetic transliteration · <span class="bn" style="color: var(--text-muted);">বাংলা ভাষা চিরজীবী হোক</span>
     </footer>
   </div>
 
@@ -412,151 +409,108 @@
 <script>
   // ============ Dictionary (common words) ============
   const dictionary = {
-    // Pronouns
-    'ami': '???', 'amra': '????', 'tumi': '????', 'tomra': '?????',
-    'apni': '????', 'apnara': '??????', 'se': '??', 'tara': '????',
-    'ta': '??', 'eta': '???', 'ota': '???', 'egulo': '?????', 'ogulo': '?????',
-    'amake': '?????', 'tomake': '??????', 'apnake': '??????',
-    'amar': '????', 'tomar': '?????', 'apnar': '?????', 'tar': '???',
-    'amader': '??????', 'tomader': '???????', 'apnader': '???????', 'tader': '?????',
-
-    // Common verbs - present
-    'kori': '???', 'koro': '???', 'koren': '????', 'korbo': '???', 'korbe': '????',
-    'korchi': '????', 'korcho': '???', 'korchen': '?????',
-    'kori': '???', 'kore': '???', 'korechilo': '??????',
-    // Past
-    'korlam': '?????', 'korlen': '?????', 'korlo': '???',
-    'korechi': '?????', 'korecho': '????', 'korechen': '??????',
-    'korechilam': '????????', 'korechilen': '????????',
-    'korchilam': '???????', 'korchilen': '???????',
-    // Habitual past
-    'kortam': '?????', 'korten': '?????',
-
-    // To be
-    'hoy': '???', 'hobe': '???', 'hole': '???', 'hoyni': '?????',
-    'hoyeche': '??????', 'hochhe': '?????', 'hoise': '??????', 'holo': '???',
-    'hoise': '??????', 'hoyechilo': '???????',
-
-    // To say
-    'boli': '???', 'bolo': '???', 'bolen': '????', 'bolbo': '???',
-    'bolam': '?????', 'bollen': '?????', 'bole': '???',
-
-    // To be (location)
-    'achi': '???', 'acho': '??', 'achen': '????', 'ache': '???', 'achilo': '???',
-    'chilo': '???', 'chilam': '?????', 'chilen': '?????',
-    'thaki': '????', 'thako': '????', 'thaken': '?????', 'thakbo': '????',
-    'thaklam': '??????', 'thaklam': '??????',
-
-    // To know
-    'jani': '????', 'jano': '????', 'janen': '?????', 'janbo': '????',
-    'jantam': '??????', 'janlam': '??????', 'jane': '????',
-
-    // To see
-    'dekhi': '????', 'dekho': '????', 'dekhen': '?????', 'dekhabo': '?????',
-    'deklam': '??????', 'dekhechi': '??????', 'dekhechilam': '?????????',
-    'dekhe': '????',
-
-    // To hear
-    'shunlam': '??????', 'shunbo': '????', 'shunchi': '?????', 'shunen': '?????',
-    'shunsi': '??????', 'shunechi': '??????',
-
-    // To come / go
-    'asi': '???', 'aso': '???', 'ashen': '????', 'asbo': '???',
-    'echi': '?????', 'echo': '????', 'echen': '??????', 'elam': '????', 'echilam': '????????',
-    'jai': '???', 'jao': '???', 'jan': '???', 'jabo': '???', 'gelam': '?????',
-    'gechi': '????', 'gechilam': '???????', 'gelen': '?????',
-
-    // To eat / drink
-    'khai': '???', 'khao': '???', 'khan': '???', 'khabo': '???',
-    'khelam': '?????', 'kheyechi': '???????', 'kheyechilam': '??????????',
-
-    // To give / take
-    'di': '??', 'dao': '???', 'den': '???', 'dibo': '???', 'diyechi': '???????',
-    'nilam': '?????', 'nibo': '???', 'nite': '????', 'niyechi': '???????',
-
-    // Question words
-    'ki': '??', 'ke': '??', 'kothay': '??????', 'kobe': '???', 'kemon': '????',
-    'keno': '???', 'kivabe': '??????', 'koto': '??', 'kotha': '???',
-    'kar': '???', 'kake': '????', 'karon': '????', 'kache': '????',
-
-    // Adjectives
-    'bhalo': '????', 'kharap': '?????', 'boro': '???', 'choto': '???',
-    'sundor': '??????', 'notun': '????', 'purono': '??????', 'shada': '????',
-    'kalo': '????', 'lal': '???', 'sobuj': '????', 'holud': '????', 'nil': '???',
-    'shanto': '?????', 'shottik': '?????', 'shotti': '?????', 'sotti': '?????',
-
-    // Adverbs/conjunctions
-    'ekhon': '???', 'tokhon': '???', 'age': '???', 'pore': '???',
-    'khub': '???', 'ektu': '????', 'onek': '????', 'beshi': '????', 'kom': '??',
-    'sob': '??', 'sobai': '????', 'mone': '???', 'theke': '????',
-    'kintu': '??????', 'tobe': '???', 'ebong': '???', 'othoba': '????',
-    'tai': '???', 'tarpor': '?????', 'tahole': '?????',
-
-    // Nouns - people/family
-    'manush': '?????', 'chele': '????', 'meye': '?????', 'baba': '????',
-    'ma': '??', 'bon': '???', 'vai': '???', 'didi': '????', 'dada': '????',
-    'nana': '????', 'nani': '????', 'dadu': '????', 'dida': '????',
-    'chacha': '????', 'chachi': '????', 'mama': '????', 'mami': '????',
-
-    // Nouns - time/place/objects
-    'din': '???', 'rat': '???', 'ratri': '??????', 'shokal': '????', 'belaa': '????',
-    'bikal': '?????', 'boi': '??', 'kolom': '???', 'ghor': '??',
-    'jibon': '????', 'mon': '??', 'vasha': '????', 'desh': '???',
-    'shehar': '???', 'gram': '?????', 'rong': '??', 'khabar': '?????',
-    'pani': '????', 'batash': '?????', 'alo': '???', 'rasta': '??????',
-
-    // Numbers
-    'ek': '??', 'dui': '???', 'tin': '???', 'char': '???', 'pach': '????',
-    'chhoy': '???', 'sat': '???', 'at': '??', 'noy': '???', 'dosh': '??',
-
-    // Greetings
-    'nomoskar': '???????', 'suprobhat': '????????', 'shuvoratri': '?????????',
-    'dhonnobad': '???????', 'dhonnavad': '???????',
-
-    // Common
-    'ha': '?????', 'na': '??', 'hai': '?????',
-    'bangla': '?????', 'bangladesh': '????????', 'bhasha': '????',
-    'shikhi': '????', 'shikho': '????', 'shikhen': '?????', 'shikhbo': '????',
-    'shikhlam': '??????', 'shikhechi': '??????',
-    'likhi': '????', 'likho': '????', 'likhen': '?????', 'likhbo': '????',
-    'pori': '????', 'poro': '????', 'poren': '?????', 'porbo': '????',
-    'khuji': '?????', 'khujo': '?????', 'khujen': '??????', 'khujechi': '???????',
-    'bhalobashi': '????????', 'bhalobashbo': '????????',
-    'shuno': '????', 'shunen': '?????',
+    'ami': 'আমি', 'amra': 'আমরা', 'tumi': 'তুমি', 'tomra': 'তোমরা',
+    'apni': 'আপনি', 'apnara': 'আপনারা', 'se': 'সে', 'tara': 'তারা',
+    'ta': 'টা', 'eta': 'এটা', 'ota': 'ওটা', 'egulo': 'এগুলো', 'ogulo': 'ওগুলো',
+    'amake': 'আমাকে', 'tomake': 'তোমাকে', 'apnake': 'আপনাকে',
+    'amar': 'আমার', 'tomar': 'তোমার', 'apnar': 'আপনার', 'tar': 'তার',
+    'amader': 'আমাদের', 'tomader': 'তোমাদের', 'apnader': 'আপনাদের', 'tader': 'তাদের',
+    'kori': 'করি', 'koro': 'করো', 'koren': 'করেন', 'korbo': 'করব', 'korbe': 'করবে',
+    'korchi': 'করছি', 'korcho': 'করছ', 'korchen': 'করছেন',
+    'kore': 'করে', 'korechilo': 'করেছিল',
+    'korlam': 'করলাম', 'korlen': 'করলেন', 'korlo': 'করল',
+    'korechi': 'করেছি', 'korecho': 'করেছ', 'korechen': 'করেছেন',
+    'korechilam': 'করেছিলাম', 'korechilen': 'করেছিলেন',
+    'korchilam': 'করছিলাম', 'korchilen': 'করছিলেন',
+    'kortam': 'করতাম', 'korten': 'করতেন',
+    'hoy': 'হয়', 'hobe': 'হবে', 'hole': 'হলে', 'hoyni': 'হয়নি',
+    'hoyeche': 'হয়েছে', 'hochhe': 'হচ্ছে', 'hoise': 'হয়েছে', 'holo': 'হলো',
+    'hoyechilo': 'হয়েছিল',
+    'boli': 'বলি', 'bolo': 'বলো', 'bolen': 'বলেন', 'bolbo': 'বলব',
+    'bolam': 'বললাম', 'bollen': 'বললেন', 'bole': 'বলে',
+    'achi': 'আছি', 'acho': 'আছ', 'achen': 'আছেন', 'ache': 'আছে', 'achilo': 'ছিল',
+    'chilo': 'ছিল', 'chilam': 'ছিলাম', 'chilen': 'ছিলেন',
+    'thaki': 'থাকি', 'thako': 'থাকো', 'thaken': 'থাকেন', 'thakbo': 'থাকব',
+    'thaklam': 'থাকলাম',
+    'jani': 'জানি', 'jano': 'জানো', 'janen': 'জানেন', 'janbo': 'জানব',
+    'jantam': 'জানতাম', 'janlam': 'জানলাম', 'jane': 'জানে',
+    'dekhi': 'দেখি', 'dekho': 'দেখো', 'dekhen': 'দেখেন', 'dekhabo': 'দেখাব',
+    'deklam': 'দেখলাম', 'dekhechi': 'দেখেছি', 'dekhechilam': 'দেখেছিলাম',
+    'dekhe': 'দেখে',
+    'shunlam': 'শুনলাম', 'shunbo': 'শুনব', 'shunchi': 'শুনছি', 'shunen': 'শুনেন',
+    'shunsi': 'শুনেছি', 'shunechi': 'শুনেছি',
+    'asi': 'আসি', 'aso': 'এসো', 'ashen': 'আসেন', 'asbo': 'আসব',
+    'echi': 'এসেছি', 'echo': 'এসেছ', 'echen': 'এসেছেন', 'elam': 'এলাম', 'echilam': 'এসেছিলাম',
+    'jai': 'যাই', 'jao': 'যাও', 'jan': 'যান', 'jabo': 'যাব', 'gelam': 'গেলাম',
+    'gechi': 'গেছি', 'gechilam': 'গেছিলাম', 'gelen': 'গেলেন',
+    'khai': 'খাই', 'khao': 'খাও', 'khan': 'খান', 'khabo': 'খাব',
+    'khelam': 'খেলাম', 'kheyechi': 'খেয়েছি', 'kheyechilam': 'খেয়েছিলাম',
+    'di': 'দি', 'dao': 'দাও', 'den': 'দেন', 'dibo': 'দিব', 'diyechi': 'দিয়েছি',
+    'nilam': 'নিলাম', 'nibo': 'নিব', 'nite': 'নিতে', 'niyechi': 'নিয়েছি',
+    'ki': 'কী', 'ke': 'কে', 'kothay': 'কোথায়', 'kobe': 'কবে', 'kemon': 'কেমন',
+    'keno': 'কেন', 'kivabe': 'কীভাবে', 'koto': 'কত', 'kotha': 'কথা',
+    'kar': 'কার', 'kake': 'কাকে', 'karon': 'কারণ', 'kache': 'কাছে',
+    'bhalo': 'ভালো', 'kharap': 'খারাপ', 'boro': 'বড়', 'choto': 'ছোট',
+    'sundor': 'সুন্দর', 'notun': 'নতুন', 'purono': 'পুরোনো', 'shada': 'সাদা',
+    'kalo': 'কালো', 'lal': 'লাল', 'sobuj': 'সবুজ', 'holud': 'হলুদ', 'nil': 'নীল',
+    'shanto': 'শান্ত', 'shottik': 'সত্যি', 'shotti': 'সত্যি', 'sotti': 'সত্যি',
+    'ekhon': 'এখন', 'tokhon': 'তখন', 'age': 'আগে', 'pore': 'পরে',
+    'khub': 'খুব', 'ektu': 'একটু', 'onek': 'অনেক', 'beshi': 'বেশি', 'kom': 'কম',
+    'sob': 'সব', 'sobai': 'সবাই', 'mone': 'মনে', 'theke': 'থেকে',
+    'kintu': 'কিন্তু', 'tobe': 'তবে', 'ebong': 'এবং', 'othoba': 'অথবা',
+    'tai': 'তাই', 'tarpor': 'তারপর', 'tahole': 'তাহলে',
+    'manush': 'মানুষ', 'chele': 'ছেলে', 'meye': 'মেয়ে', 'baba': 'বাবা',
+    'ma': 'মা', 'bon': 'বোন', 'vai': 'ভাই', 'didi': 'দিদি', 'dada': 'দাদা',
+    'nana': 'নানা', 'nani': 'নানী', 'dadu': 'দাদু', 'dida': 'দিদা',
+    'chacha': 'চাচা', 'chachi': 'চাচি', 'mama': 'মামা', 'mami': 'মামি',
+    'din': 'দিন', 'rat': 'রাত', 'ratri': 'রাত্রি', 'shokal': 'সকাল', 'belaa': 'বেলা',
+    'bikal': 'বিকেল', 'boi': 'বই', 'kolom': 'কলম', 'ghor': 'ঘর',
+    'jibon': 'জীবন', 'mon': 'মন', 'vasha': 'ভাষা', 'desh': 'দেশ',
+    'shehar': 'শহর', 'gram': 'গ্রাম', 'rong': 'রঙ', 'khabar': 'খাবার',
+    'pani': 'পানি', 'batash': 'বাতাস', 'alo': 'আলো', 'rasta': 'রাস্তা',
+    'ek': 'এক', 'dui': 'দুই', 'tin': 'তিন', 'char': 'চার', 'pach': 'পাঁচ',
+    'chhoy': 'ছয়', 'sat': 'সাত', 'at': 'আট', 'noy': 'নয়', 'dosh': 'দশ',
+    'nomoskar': 'নমস্কার', 'suprobhat': 'সুপ্রভাত', 'shuvoratri': 'শুভরাত্রি',
+    'dhonnobad': 'ধন্যবাদ', 'dhonnavad': 'ধন্যবাদ',
+    'ha': 'হ্যাঁ', 'na': 'না', 'hai': 'হ্যাঁ',
+    'bangla': 'বাংলা', 'bangladesh': 'বাংলাদেশ', 'bhasha': 'ভাষা',
+    'shikhi': 'শিখি', 'shikho': 'শিখো', 'shikhen': 'শিখেন', 'shikhbo': 'শিখব',
+    'shikhlam': 'শিখলাম', 'shikhechi': 'শিখেছি',
+    'likhi': 'লিখি', 'likho': 'লিখো', 'likhen': 'লিখেন', 'likhbo': 'লিখব',
+    'pori': 'পড়ি', 'poro': 'পড়ো', 'poren': 'পড়েন', 'porbo': 'পড়ব',
+    'khuji': 'খুঁজি', 'khujo': 'খুঁজো', 'khujen': 'খুঁজেন', 'khujechi': 'খুঁজেছি',
+    'bhalobashi': 'ভালোবাসি', 'bhalobashbo': 'ভালোবাসব',
+    'shuno': 'শোনো', 'shunen': 'শুনুন',
   };
 
   // ============ Transliteration rules ============
   const consRules = [
-    // 2-char (longest first - aspirated/compound)
-    ['chh','?'], ['kh','?'], ['gh','?'], ['ch','?'],
-    ['jh','?'], ['th','?'], ['dh','?'], ['ph','?'],
-    ['bh','?'], ['sh','?'], ['Sh','?'], ['Th','?'],
-    ['Dh','?'], ['Rh','??'], ['ng','?'],
-    // 1-char
-    ['k','?'], ['g','?'], ['c','?'], ['j','?'],
-    ['T','?'], ['D','?'], ['N','?'], ['t','?'],
-    ['d','?'], ['n','?'], ['p','?'], ['f','?'],
-    ['b','?'], ['v','?'], ['m','?'], ['z','?'],
-    ['y','??'], ['r','?'], ['l','?'], ['S','?'],
-    ['s','?'], ['h','?'], ['R','??'], ['Y','?'],
-    ['w','?'],
+    ['chh','ছ'], ['kh','খ'], ['gh','ঘ'], ['ch','ছ'],
+    ['jh','ঝ'], ['th','থ'], ['dh','ধ'], ['ph','ফ'],
+    ['bh','ভ'], ['sh','শ'], ['Sh','ষ'], ['Th','ঠ'],
+    ['Dh','ঢ'], ['Rh','ঢ়'], ['ng','ং'],
+    ['k','ক'], ['g','গ'], ['c','চ'], ['j','জ'],
+    ['T','ট'], ['D','ড'], ['N','ণ'], ['t','ত'],
+    ['d','দ'], ['n','ন'], ['p','প'], ['f','ফ'],
+    ['b','ব'], ['v','ভ'], ['m','ম'], ['z','য'],
+    ['y','য়'], ['r','র'], ['l','ল'], ['S','ষ'],
+    ['s','স'], ['h','হ'], ['R','ড়'], ['Y','য'],
+    ['w','ও'],
   ];
 
   const vowelRules = [
-    ['aa','?','?'], ['ii','?','?'], ['uu','?','?'],
-    ['oi','?','?'], ['ou','?','?'], ['au','?','?'],
-    ['a','?',''], ['i','?','?'], ['u','?','?'],
-    ['e','?','?'], ['o','?','?'],
-    ['A','?','?'], ['I','?','?'], ['U','?','?'],
-    ['E','?','?'], ['O','?','?'],
+    ['aa','আ','া'], ['ii','ঈ','ী'], ['uu','ঊ','ূ'],
+    ['oi','ঐ','ৈ'], ['ou','ঔ','ৌ'], ['au','ঔ','ৌ'],
+    ['a','অ',''], ['i','ই','ি'], ['u','উ','ু'],
+    ['e','এ','ে'], ['o','ও','ো'],
+    ['A','আ','া'], ['I','ঈ','ী'], ['U','ঊ','ূ'],
+    ['E','এ','ে'], ['O','ও','ো'],
   ];
 
-  const bnDigits = ['?','?','?','?','?','?','?','?','?','?'];
+  const bnDigits = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
 
   function transliterateWord(word) {
     if (!word) return '';
-
-    // All-caps acronyms (NASA, USA) - keep as-is
     if (word.length > 1 && word === word.toUpperCase() && /[A-Z]/.test(word) && !/[a-z]/.test(word) && !/[0-9]/.test(word)) {
       return word;
     }
@@ -568,7 +522,6 @@
     while (i < word.length) {
       const ch = word[i];
 
-      // Digits ? Bengali
       if (/[0-9]/.test(ch)) {
         result += bnDigits[parseInt(ch)];
         i++;
@@ -576,49 +529,25 @@
         continue;
       }
 
-      // Special chars
-      if (ch === '~' || ch === '`' || ch === '^') {
-        result += '?';
-        i++;
-        continue;
-      }
-      if (ch === ':') {
-        result += '?';
-        i++;
-        continue;
-      }
-      if (ch === '+') {
-        result += '?';
-        i++;
-        continue;
-      }
+      if (ch === '~' || ch === '`' || ch === '^') { result += 'ঁ'; i++; continue; }
+      if (ch === ':') { result += 'ঃ'; i++; continue; }
+      if (ch === '+') { result += 'ৎ'; i++; continue; }
       if (ch === '.') {
-        // Period at end of word or before space ? Bengali danda
-        if (i === word.length - 1) {
-          result += '?';
-          i++;
-          lastWasConsonant = false;
-          continue;
-        }
+        if (i === word.length - 1) { result += '।'; i++; lastWasConsonant = false; continue; }
       }
       if (ch === '-' || ch === "'" || ch === '"' || ch === ',' || ch === ';' || ch === '!' || ch === '?' || ch === '(' || ch === ')' || ch === '/' || ch === '@' || ch === '#' || ch === '$' || ch === '%') {
-        result += ch;
-        i++;
-        lastWasConsonant = false;
-        continue;
+        result += ch; i++; lastWasConsonant = false; continue;
       }
 
-      // Try consonants (already longest-first)
       let matched = false;
       for (const [eng, ben] of consRules) {
         if (word.substr(i, eng.length) === eng) {
           if (eng === 'ng') {
-            // ? if followed by k/kh/g/gh (velar conjunct), else ? anusvara
             const next = word.substr(i + 2, 2);
             if (next === 'kh' || next === 'gh' || next === 'k' || next === 'g') {
-              result += '?';
+              result += 'ঙ';
             } else {
-              result += '?';
+              result += 'ং';
             }
           } else {
             result += ben;
@@ -631,7 +560,6 @@
       }
       if (matched) continue;
 
-      // Try vowels
       for (const [eng, ind, kar] of vowelRules) {
         if (word.substr(i, eng.length) === eng) {
           if (lastWasConsonant) {
@@ -647,7 +575,6 @@
       }
       if (matched) continue;
 
-      // Unknown � pass through
       result += ch;
       i++;
       lastWasConsonant = false;
@@ -656,7 +583,6 @@
     return result;
   }
 
-  // ============ Variant generation ============
   function generateVariants(word) {
     if (!word) return [];
     const variants = [];
@@ -664,31 +590,23 @@
     function add(v) { if (v && !seen.has(v) && v !== word) { seen.add(v); variants.push(v); } }
 
     const lower = word.toLowerCase();
+    if (dictionary[lower]) { variants.push(dictionary[lower]); seen.add(dictionary[lower]); }
 
-    // 1. Dictionary (highest priority)
-    if (dictionary[lower]) variants.push(dictionary[lower]), seen.add(dictionary[lower]);
-
-    // 2. Default transliteration
     const def = transliterateWord(word);
     if (!seen.has(def)) { seen.add(def); variants.push(def); }
 
-    // 3. Long-a variant: try 'a' ? 'aa' (for ??? ? ???? type cases)
     const longA = word.replace(/a(?!a)/g, 'aa');
     if (longA !== word) add(transliterateWord(longA));
 
-    // 4. t/T swap (dental vs retroflex)
     const tSwap = word.replace(/t/g, 'T').replace(/T/g, 't');
     if (tSwap !== word) add(transliterateWord(tSwap));
 
-    // 5. d/D swap
     const dSwap = word.replace(/d/g, 'D').replace(/D/g, 'd');
     if (dSwap !== word) add(transliterateWord(dSwap));
 
-    // 6. n/N swap
     const nSwap = word.replace(/n/g, 'N').replace(/N/g, 'n');
     if (nSwap !== word) add(transliterateWord(nSwap));
 
-    // 7. s/sh/Sh swap (sibilants)
     const sToSh = word.replace(/s/g, 'sh');
     if (sToSh !== word) add(transliterateWord(sToSh));
     const shToS = word.replace(/sh/g, 's').replace(/Sh/g, 'S');
@@ -696,36 +614,29 @@
     const shToSh = word.replace(/sh/g, 'Sh');
     if (shToSh !== word) add(transliterateWord(shToSh));
 
-    // 8. b/v swap
     const bvSwap = word.replace(/b/g, 'v').replace(/v/g, 'b');
     if (bvSwap !== word) add(transliterateWord(bvSwap));
 
-    // 9. y/Y swap
     const ySwap = word.replace(/y/g, 'Y').replace(/Y/g, 'y');
     if (ySwap !== word) add(transliterateWord(ySwap));
 
-    // 10. e?i, o?u
     const eToI = word.replace(/e/g, 'i');
     if (eToI !== word) add(transliterateWord(eToI));
 
-    // Limit
     return variants.slice(0, 6);
   }
 
-  // ============ State ============
   const state = {
     inputText: '',
-    appliedVariants: {}, // { lowercaseWord: BengaliString }
+    appliedVariants: {},
     currentWord: '',
-    activeWord: null, // lowercase word being edited in suggestion bar
+    activeWord: null,
   };
 
-  // ============ Process & render ============
   function processInput(text) {
     const tokens = text.split(/(\s+)/);
     return tokens.map((token, idx) => {
-      if (/^\s+$/.test(token) || !token) return { type: 'space', text: token };
-      // Split into prefix-punct / word / suffix-punct
+      if ((/^\s+$/.test(token) || !token)) return { type: 'space', text: token };
       const match = token.match(/^([^\w]*)([\w']+)([^\w]*)$/);
       if (!match) {
         return { type: 'word', en: token, bn: transliterateWord(token), prefix: '', suffix: '', idx };
@@ -749,7 +660,7 @@
     output.innerHTML = '';
 
     if (!state.inputText.trim()) {
-      output.innerHTML = '<span style="color: var(--text-dim); font-style: italic; font-size: 16px;">????? ???? ????? ???? ????...<br><span style="font-size:13px">(Your Bengali text will appear here)</span></span>';
+      output.innerHTML = '<span style="color: var(--text-dim); font-style: italic; font-size: 16px;">আপনার লেখা এখানে দেখা যাবে...<br><span style="font-size:13px">(Your Bengali text will appear here)</span></span>';
       return;
     }
 
@@ -772,7 +683,6 @@
       if (item.suffix) output.appendChild(document.createTextNode(item.suffix));
 
       span.addEventListener('click', (e) => {
-        // Only trigger on click without selection
         if (window.getSelection().toString().length > 0) return;
         state.activeWord = item.en.toLowerCase();
         showSuggestionsForWord(item.en);
@@ -830,7 +740,6 @@
     document.getElementById('totalChars').textContent = state.inputText.length;
   }
 
-  // ============ Event listeners ============
   const enInput = document.getElementById('enInput');
 
   enInput.addEventListener('input', (e) => {
@@ -843,7 +752,6 @@
       state.activeWord = null;
       showSuggestionsForWord(currentWord);
     } else if (currentWord === state.currentWord && currentWord) {
-      // Update suggestions live as user types
       const suggestions = generateVariants(currentWord);
       if (!document.getElementById('suggestionBar').classList.contains('hidden')) {
         renderSuggestions(suggestions, currentWord);
@@ -860,7 +768,6 @@
   });
 
   enInput.addEventListener('keydown', (e) => {
-    // Number keys 1-6 to pick suggestion
     if (e.key >= '1' && e.key <= '6' && !document.getElementById('suggestionBar').classList.contains('hidden')) {
       const chips = document.querySelectorAll('#suggestions .chip');
       const idx = parseInt(e.key) - 1;
@@ -869,31 +776,12 @@
         chips[idx].click();
       }
     }
-    // Escape to close suggestion bar
     if (e.key === 'Escape') {
       hideSuggestions();
       renderOutput();
     }
-    // Enter to commit current word and start new
-    if (e.key === 'Enter' && state.currentWord) {
-      // Commit the current applied variant (already in state)
-      state.currentWord = '';
-      // Don't hide bar immediately - let user continue typing
-    }
   });
 
-  enInput.addEventListener('blur', () => {
-    // Delay to allow chip clicks
-    setTimeout(() => {
-      if (document.activeElement !== enInput && !document.activeElement.closest('#suggestionBar')) {
-        // keep suggestions visible but deactivate word
-        state.activeWord = null;
-        renderOutput();
-      }
-    }, 200);
-  });
-
-  // Click outside to deselect active word
   document.addEventListener('click', (e) => {
     if (!e.target.closest('#bnOutput') && !e.target.closest('#suggestionBar') && !e.target.closest('#enInput')) {
       if (state.activeWord) {
@@ -903,17 +791,15 @@
     }
   });
 
-  // Copy button
   document.getElementById('copyBtn').addEventListener('click', () => {
     const text = document.getElementById('bnOutput').innerText;
-    if (!text.trim() || text.startsWith('????? ????')) {
+    if (!text.trim() || text.startsWith('আপনার লেখা')) {
       showToast('Nothing to copy yet');
       return;
     }
     navigator.clipboard.writeText(text).then(() => {
       showToast('Copied to clipboard');
     }).catch(() => {
-      // Fallback
       const ta = document.createElement('textarea');
       ta.value = text;
       document.body.appendChild(ta);
@@ -923,7 +809,6 @@
     });
   });
 
-  // Clear button
   document.getElementById('clearBtn').addEventListener('click', () => {
     enInput.value = '';
     state.inputText = '';
@@ -936,7 +821,6 @@
     enInput.focus();
   });
 
-  // Sample button
   const samples = [
     "ami bangla bhasha shikhi. tumi kemon acho? khub bhalo. amra sobai mile ekta sundor shongbad gori.",
     "aj ke shokal theke brishti hochhe. amra bazar e gelam. kintu rasta khub-i kharap chilo.",
@@ -952,10 +836,8 @@
     state.activeWord = null;
     renderOutput();
     updateStats();
-    // Move caret to end
     enInput.focus();
     enInput.setSelectionRange(sample.length, sample.length);
-    // Show suggestions for last word
     const lastWord = sample.trim().split(/\s+/).pop().replace(/[^\w]/g, '');
     if (lastWord) {
       state.currentWord = lastWord;
@@ -963,17 +845,16 @@
     }
   });
 
-  // ============ Common phrases ============
   const phrases = [
-    { en: 'ami bangla shikhi', bn: '??? ????? ????', enTrans: 'I learn Bengali' },
-    { en: 'tomar nam ki', bn: '????? ??? ??', enTrans: 'What is your name' },
-    { en: 'apni kemon achen', bn: '???? ???? ????', enTrans: 'How are you (formal)' },
-    { en: 'khub bhalo', bn: '??? ????', enTrans: 'Very good' },
-    { en: 'dhonnobad', bn: '???????', enTrans: 'Thank you' },
-    { en: 'ami tomake bhalobashi', bn: '??? ?????? ????????', enTrans: 'I love you' },
-    { en: 'shuvo shokal', bn: '??? ????', enTrans: 'Good morning' },
-    { en: 'shuvo ratri', bn: '??? ??????', enTrans: 'Good night' },
-    { en: 'ekhon ki korbe', bn: '??? ?? ????', enTrans: 'What will you do now' },
+    { en: 'ami bangla shikhi', bn: 'আমি বাংলা শিখি', enTrans: 'I learn Bengali' },
+    { en: 'tomar nam ki', bn: 'তোমার নাম কী', enTrans: 'What is your name' },
+    { en: 'apni kemon achen', bn: 'আপনি কেমন আছেন', enTrans: 'How are you (formal)' },
+    { en: 'khub bhalo', bn: 'খুব ভালো', enTrans: 'Very good' },
+    { en: 'dhonnobad', bn: 'ধন্যবাদ', enTrans: 'Thank you' },
+    { en: 'ami tomake bhalobashi', bn: 'আমি তোমাকে ভালোবাসি', enTrans: 'I love you' },
+    { en: 'shuvo shokal', bn: 'শুভ সকাল', enTrans: 'Good morning' },
+    { en: 'shuvo ratri', bn: 'শুভ রাত্রি', enTrans: 'Good night' },
+    { en: 'ekhon ki korbe', bn: 'এখন কী করবে', enTrans: 'What will you do now' },
   ];
 
   function renderPhrases() {
@@ -1007,7 +888,6 @@
     });
   }
 
-  // ============ Toast ============
   let toastTimer = null;
   function showToast(message) {
     const toast = document.getElementById('toast');
@@ -1019,11 +899,9 @@
     }, 1800);
   }
 
-  // ============ Init ============
   renderPhrases();
   renderOutput();
   updateStats();
-  // Focus input on load
   setTimeout(() => enInput.focus(), 100);
 </script>
 </body>
