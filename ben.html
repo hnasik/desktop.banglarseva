@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Make sure this meta tag is the very first thing in the head -->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Bindu — English to Bangla Typing</title>
@@ -218,6 +217,65 @@
   .guide-key { font-family: 'Manrope', monospace; font-size: 12px; color: var(--text-muted); min-width: 70px; }
   .guide-val { font-family: 'Hind Siliguri', sans-serif; font-size: 18px; color: var(--text); }
 
+  /* Modal Styles */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(26, 20, 16, 0.65);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+  .modal-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .modal-content {
+    background: var(--bg-2);
+    border: 1px solid var(--border-strong);
+    border-radius: 24px;
+    max-width: 800px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 2rem;
+    transform: scale(0.95) translateY(10px);
+    transition: transform 0.3s ease;
+    position: relative;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  }
+  .modal-overlay.active .modal-content {
+    transform: scale(1) translateY(0);
+  }
+  .modal-close {
+    position: absolute;
+    top: 1.2rem;
+    right: 1.2rem;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.05);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    transition: all 0.2s;
+  }
+  .modal-close:hover {
+    background: rgba(181, 70, 32, 0.1);
+    color: var(--accent);
+    transform: rotate(90deg);
+  }
+
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
   }
@@ -331,6 +389,14 @@
       <button class="btn btn-secondary" id="sampleBtn">
         Try a sample
       </button>
+      <button class="btn btn-secondary" id="helpBtn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/>
+          <line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+        Help / টাইপিংয়ের জন্য সহায়তা
+      </button>
       <div class="ml-auto flex items-center gap-5 text-xs font-medium" style="color: var(--text-muted);">
         <div><span id="totalWords" style="color: var(--text);">0</span> words</div>
         <div><span id="totalChars" style="color: var(--text);">0</span> chars</div>
@@ -346,57 +412,69 @@
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3" id="phraseGrid"></div>
     </section>
 
-    <!-- Phonetic guide -->
-    <section class="mb-12 md:mb-16">
-      <div class="card p-6 md:p-8">
-        <div class="flex items-baseline justify-between mb-5 flex-wrap gap-2">
-          <h2 class="display font-semibold text-2xl">How it works</h2>
-          <span class="text-xs" style="color: var(--text-muted);">Quick reference</span>
-        </div>
-        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-1">
-          <div>
-            <div class="text-[11px] uppercase tracking-widest font-bold mb-2" style="color: var(--accent);">Vowels</div>
-            <div class="guide-row"><span class="guide-key">a / aa</span><span class="guide-val">অ / আ</span></div>
-            <div class="guide-row"><span class="guide-key">i / ii</span><span class="guide-val">ই / ঈ</span></div>
-            <div class="guide-row"><span class="guide-key">u / uu</span><span class="guide-val">উ / ঊ</span></div>
-            <div class="guide-row"><span class="guide-key">e / oi</span><span class="guide-val">এ / ঐ</span></div>
-            <div class="guide-row"><span class="guide-key">o / ou</span><span class="guide-val">ও / ঔ</span></div>
-          </div>
-          <div>
-            <div class="text-[11px] uppercase tracking-widest font-bold mb-2" style="color: var(--accent);">Voiceless</div>
-            <div class="guide-row"><span class="guide-key">k / kh</span><span class="guide-val">ক / খ</span></div>
-            <div class="guide-row"><span class="guide-key">c / ch</span><span class="guide-val">চ / ছ</span></div>
-            <div class="guide-row"><span class="guide-key">t / th</span><span class="guide-val">ত / থ</span></div>
-            <div class="guide-row"><span class="guide-key">T / Th</span><span class="guide-val">ট / ঠ</span></div>
-            <div class="guide-row"><span class="guide-key">p / ph</span><span class="guide-val">প / ফ</span></div>
-          </div>
-          <div>
-            <div class="text-[11px] uppercase tracking-widest font-bold mb-2" style="color: var(--accent);">Voiced</div>
-            <div class="guide-row"><span class="guide-key">g / gh</span><span class="guide-val">গ / ঘ</span></div>
-            <div class="guide-row"><span class="guide-key">j / jh</span><span class="guide-val">জ / ঝ</span></div>
-            <div class="guide-row"><span class="guide-key">d / dh</span><span class="guide-val">দ / ধ</span></div>
-            <div class="guide-row"><span class="guide-key">D / Dh</span><span class="guide-val">ড / ঢ</span></div>
-            <div class="guide-row"><span class="guide-key">b / bh</span><span class="guide-val">ব / ভ</span></div>
-          </div>
-          <div>
-            <div class="text-[11px] uppercase tracking-widest font-bold mb-2" style="color: var(--accent);">Sibilants & more</div>
-            <div class="guide-row"><span class="guide-key">sh / Sh</span><span class="guide-val">শ / ষ</span></div>
-            <div class="guide-row"><span class="guide-key">s / h</span><span class="guide-val">স / হ</span></div>
-            <div class="guide-row"><span class="guide-key">n / N</span><span class="guide-val">ন / ণ</span></div>
-            <div class="guide-row"><span class="guide-key">m / r</span><span class="guide-val">ম / র</span></div>
-            <div class="guide-row"><span class="guide-key">y / w</span><span class="guide-val">য় / ও</span></div>
-          </div>
-        </div>
-        <div class="mt-6 pt-5 text-xs leading-relaxed" style="border-top: 1px dashed var(--border); color: var(--text-muted);">
-          <strong style="color: var(--text);">Tip:</strong> Use <code style="background: rgba(0,0,0,0.05); padding: 1px 5px; border-radius: 3px; font-family: monospace;">aa</code> for long আ sounds (Aam → আম), <code style="background: rgba(0,0,0,0.05); padding: 1px 5px; border-radius: 3px; font-family: monospace;">T</code>/<code style="background: rgba(0,0,0,0.05); padding: 1px 5px; border-radius: 3px; font-family: monospace;">D</code> for retroflex ট/ড, and <code style="background: rgba(0,0,0,0.05); padding: 1px 5px; border-radius: 3px; font-family: monospace;">N</code> for ণ. End a sentence with <code style="background: rgba(0,0,0,0.05); padding: 1px 5px; border-radius: 3px; font-family: monospace;">.</code> for Bengali দাঁড়ি।
-        </div>
-      </div>
-    </section>
-
     <!-- Footer -->
     <footer class="pt-6 text-center text-xs leading-relaxed" style="border-top: 1px solid var(--border); color: var(--text-dim);">
       Phonetic transliteration · <span class="bn" style="color: var(--text-muted);">বাংলা ভাষা চিরজীবী হোক</span>
     </footer>
+  </div>
+
+  <!-- Help Modal -->
+  <div id="helpModal" class="modal-overlay">
+    <div class="modal-content">
+      <button class="modal-close" id="closeModalBtn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+      
+      <div class="text-[11px] uppercase tracking-[0.2em] mb-3 font-semibold" style="color: var(--accent);">
+        Typing Guide
+      </div>
+      <h2 class="display font-bold text-3xl mb-2">টাইপিংয়ের জন্য সহায়তা</h2>
+      <p class="text-sm mb-8" style="color: var(--text-muted);">
+        Type Bengali phonetically using English letters. Here is the mapping of English keys to Bengali letters.
+      </p>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-1 mb-8">
+        <div>
+          <div class="text-[11px] uppercase tracking-widest font-bold mb-2" style="color: var(--accent);">Vowels</div>
+          <div class="guide-row"><span class="guide-key">a / aa</span><span class="guide-val">অ / আ</span></div>
+          <div class="guide-row"><span class="guide-key">i / ii</span><span class="guide-val">ই / ঈ</span></div>
+          <div class="guide-row"><span class="guide-key">u / uu</span><span class="guide-val">উ / ঊ</span></div>
+          <div class="guide-row"><span class="guide-key">e / oi</span><span class="guide-val">এ / ঐ</span></div>
+          <div class="guide-row"><span class="guide-key">o / ou</span><span class="guide-val">ও / ঔ</span></div>
+        </div>
+        <div>
+          <div class="text-[11px] uppercase tracking-widest font-bold mb-2" style="color: var(--accent);">Voiceless</div>
+          <div class="guide-row"><span class="guide-key">k / kh</span><span class="guide-val">ক / খ</span></div>
+          <div class="guide-row"><span class="guide-key">c / ch</span><span class="guide-val">চ / ছ</span></div>
+          <div class="guide-row"><span class="guide-key">t / th</span><span class="guide-val">ত / থ</span></div>
+          <div class="guide-row"><span class="guide-key">T / Th</span><span class="guide-val">ট / ঠ</span></div>
+          <div class="guide-row"><span class="guide-key">p / ph</span><span class="guide-val">প / ফ</span></div>
+        </div>
+        <div>
+          <div class="text-[11px] uppercase tracking-widest font-bold mb-2" style="color: var(--accent);">Voiced</div>
+          <div class="guide-row"><span class="guide-key">g / gh</span><span class="guide-val">গ / ঘ</span></div>
+          <div class="guide-row"><span class="guide-key">j / jh</span><span class="guide-val">জ / ঝ</span></div>
+          <div class="guide-row"><span class="guide-key">d / dh</span><span class="guide-val">দ / ধ</span></div>
+          <div class="guide-row"><span class="guide-key">D / Dh</span><span class="guide-val">ড / ঢ</span></div>
+          <div class="guide-row"><span class="guide-key">b / bh</span><span class="guide-val">ব / ভ</span></div>
+        </div>
+        <div>
+          <div class="text-[11px] uppercase tracking-widest font-bold mb-2" style="color: var(--accent);">Sibilants & more</div>
+          <div class="guide-row"><span class="guide-key">sh / Sh</span><span class="guide-val">শ / ষ</span></div>
+          <div class="guide-row"><span class="guide-key">s / h</span><span class="guide-val">স / হ</span></div>
+          <div class="guide-row"><span class="guide-key">n / N</span><span class="guide-val">ন / ণ</span></div>
+          <div class="guide-row"><span class="guide-key">m / r</span><span class="guide-val">ম / র</span></div>
+          <div class="guide-row"><span class="guide-key">y / w</span><span class="guide-val">য় / ও</span></div>
+        </div>
+      </div>
+
+      <div class="mt-6 pt-5 text-xs leading-relaxed" style="border-top: 1px dashed var(--border); color: var(--text-muted);">
+        <strong style="color: var(--text);">Tip:</strong> Use <code style="background: rgba(0,0,0,0.05); padding: 1px 5px; border-radius: 3px; font-family: monospace;">aa</code> for long আ sounds (Aam → আম), <code style="background: rgba(0,0,0,0.05); padding: 1px 5px; border-radius: 3px; font-family: monospace;">T</code>/<code style="background: rgba(0,0,0,0.05); padding: 1px 5px; border-radius: 3px; font-family: monospace;">D</code> for retroflex ট/ড, and <code style="background: rgba(0,0,0,0.05); padding: 1px 5px; border-radius: 3px; font-family: monospace;">N</code> for ণ. End a sentence with <code style="background: rgba(0,0,0,0.05); padding: 1px 5px; border-radius: 3px; font-family: monospace;">.</code> for Bengali দাঁড়ি।
+      </div>
+    </div>
   </div>
 
   <!-- Toast -->
@@ -779,6 +857,8 @@
     if (e.key === 'Escape') {
       hideSuggestions();
       renderOutput();
+      // Also close help modal if open
+      document.getElementById('helpModal').classList.remove('active');
     }
   });
 
@@ -842,6 +922,20 @@
     if (lastWord) {
       state.currentWord = lastWord;
       showSuggestionsForWord(lastWord);
+    }
+  });
+
+  // Modal Logic
+  const helpModal = document.getElementById('helpModal');
+  document.getElementById('helpBtn').addEventListener('click', () => {
+    helpModal.classList.add('active');
+  });
+  document.getElementById('closeModalBtn').addEventListener('click', () => {
+    helpModal.classList.remove('active');
+  });
+  helpModal.addEventListener('click', (e) => {
+    if (e.target === helpModal) {
+      helpModal.classList.remove('active');
     }
   });
 
