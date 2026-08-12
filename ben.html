@@ -288,7 +288,7 @@
   <div class="relative max-w-6xl mx-auto px-5 sm:px-8 py-8 md:py-14">
 
     <!-- Header -->
-    <header class="flex items-center justify-between mb-12 md:mb-16 relative">
+    <header class="flex items-center justify-between mb-12 md:mb-16 relative gap-4">
       <div class="flex items-center gap-3">
         <div class="w-11 h-11 rounded-xl flex items-center justify-center bn-serif"
              style="background: linear-gradient(135deg, var(--accent), #d97706); color: var(--bg-2); font-weight: 700; font-size: 24px; box-shadow: 0 6px 18px rgba(181, 70, 32, 0.35);">
@@ -299,9 +299,22 @@
           <div class="text-[11px] mt-1" style="color: var(--text-muted);">English → Bangla typing</div>
         </div>
       </div>
-      <div class="hidden sm:flex items-center gap-2 text-xs" style="color: var(--text-muted);">
-        <span class="pulse-dot"></span>
-        <span>Phonetic engine · live</span>
+      
+      <!-- Header Right Side -->
+      <div class="flex items-center gap-4">
+        <div class="hidden sm:flex items-center gap-2 text-xs" style="color: var(--text-muted);">
+          <span class="pulse-dot"></span>
+          <span>Phonetic engine · live</span>
+        </div>
+        <button class="btn btn-secondary" id="helpBtn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/>
+            <line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+          <span class="hidden md:inline">Help / টাইপিংয়ের জন্য সহায়তা</span>
+          <span class="md:hidden">Help</span>
+        </button>
       </div>
     </header>
 
@@ -388,14 +401,6 @@
       </button>
       <button class="btn btn-secondary" id="sampleBtn">
         Try a sample
-      </button>
-      <button class="btn btn-secondary" id="helpBtn">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="10"/>
-          <path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/>
-          <line x1="12" y1="17" x2="12.01" y2="17"/>
-        </svg>
-        Help / টাইপিংয়ের জন্য সহায়তা
       </button>
       <div class="ml-auto flex items-center gap-5 text-xs font-medium" style="color: var(--text-muted);">
         <div><span id="totalWords" style="color: var(--text);">0</span> words</div>
