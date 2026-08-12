@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bindu — English to Bangla Typing</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..700&family=Manrope:wght@300..700&family=Hind+Siliguri:wght@300..700&family=Noto+Serif+Bengali:wght@400..700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f3ead7;
+    --bg-2: #fbf6ec;
+    --surface: rgba(255, 255, 255, 0.55);
+    --surface-2: rgba(255, 255, 255, 0.85);
+    --border: #d4c4a8;
+    --border-strong: #b8a784;
+    --text: #1a1410;
+    --text-muted: #6b5d50;
+    --text-dim: #9c8f7e;
+    --accent: #b54620;
+    --accent-2: #0d6e54;
+    --highlight: #fcd34d;
+  }
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Manrope', sans-serif;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    position: relative;
+    overflow-x: hidden;
+  }
+  .display { font-family: 'Newsreader', serif; }
+  .bn { font-family: 'Hind Siliguri', sans-serif; }
+  .bn-serif { font-family: 'Noto Serif Bengali', serif; }
+
+  /* Paper dot pattern */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: radial-gradient(circle at 1px 1px, rgba(26, 20, 16, 0.05) 1px, transparent 0);
+    background-size: 22px 22px;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .blob {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(90px);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .blob-1 { width: 480px; height: 480px; background: radial-gradient(circle, rgba(181, 70, 32, 0.18), transparent 70%); top: -140px; right: -100px; animation: float1 20s ease-in-out infinite; }
+  .blob-2 { width: 380px; height: 380px; background: radial-gradient(circle, rgba(13, 110, 84, 0.12), transparent 70%); bottom: -120px; left: -80px; animation: float2 24s ease-in-out infinite; }
+  @keyframes float1 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-60px,80px)} }
+  @keyframes float2 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(80px,-60px)} }
+
+  .card {
+    background: var(--surface);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    position: relative;
+    z-index: 1;
+  }
+  textarea { font-family: 'Manrope', sans-serif; color: var(--text); }
+  textarea::placeholder { color: var(--text-dim); }
+  textarea::selection { background: var(--highlight); }
+
+  /* Bengali output words - clickable */
+  .word {
+    cursor: pointer;
+    border-radius: 6px;
+    padding: 1px 3px;
+    margin: 0 -1px;
+    transition: background 0.15s, box-shadow 0.15s;
+    border-radius: 5px;
+  }
+  .word:hover { background: rgba(181, 70, 32, 0.10); }
+  .word.active {
+    background: rgba(252, 211, 77, 0.4);
+    box-shadow: 0 0 0 1.5px var(--accent);
+  }
+  .word-divider { color: var(--text-dim); }
+
+  /* Suggestion chips */
+  .chip {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'Hind Siliguri', sans-serif;
+    font-size: 18px;
+    padding: 8px 14px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    line-height: 1;
+  }
+  .chip:hover {
+    background: white;
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(181, 70, 32, 0.12);
+  }
+  .chip.active {
+    background: var(--accent);
+    color: var(--bg-2);
+    border-color: var(--accent);
+    box-shadow: 0 4px 14px rgba(181, 70, 32, 0.3);
+  }
+  .chip-key {
+    font-size: 10px;
+    font-family: 'Manrope', sans-serif;
+    font-weight: 700;
+    opacity: 0.55;
+    background: rgba(0,0,0,0.06);
+    padding: 2px 5px;
+    border-radius: 4px;
+    line-height: 1;
+  }
+  .chip.active .chip-key { background: rgba(255,255,255,0.18); opacity: 0.85; }
+
+  .btn {
+    background: var(--text);
+    color: var(--bg-2);
+    padding: 10px 18px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .btn:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(26, 20, 16, 0.22); }
+  .btn:active { transform: translateY(0); }
+  .btn-secondary {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .btn-secondary:hover { background: var(--surface-2); border-color: var(--border-strong); box-shadow: 0 4px 12px rgba(26, 20, 16, 0.08); }
+
+  .phrase-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .phrase-card:hover {
+    background: var(--surface-2);
+    border-color: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 22px rgba(181, 70, 32, 0.12);
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(0.8); opacity: 0.5; }
+  }
+  .pulse-dot {
+    display: inline-block;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent-2);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .suggestion-bar { transition: opacity 0.25s, transform 0.25s, max-height 0.3s; max-height: 200px; overflow: hidden; }
+  .suggestion-bar.hidden { opacity: 0; transform: translateY(-8px); pointer-events: none; max-height: 0; }
+  .suggestion-bar:not(.hidden) { animation: slideUp 0.3s ease-out; }
+
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 999px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--border-strong); }
+
+  ::selection { background: var(--highlight); color: var(--text); }
+
+  .deco-char {
+    position: absolute;
+    font-family: 'Noto Serif Bengali', serif;
+    color: var(--accent);
+    opacity: 0.06;
+    pointer-events: none;
+    user-select: none;
+    line-height: 0.8;
+    font-weight: 700;
+  }
+
+  .phonetics-tag {
+    display: inline-block;
+    padding: 3px 8px;
+    background: rgba(181, 70, 32, 0.1);
+    color: var(--accent);
+    border-radius: 5px;
+    font-family: 'Manrope', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+
+  .guide-row { display: flex; align-items: baseline; gap: 12px; padding: 6px 0; border-bottom: 1px dashed var(--border); }
+  .guide-row:last-child { border-bottom: none; }
+  .guide-key { font-family: 'Manrope', monospace; font-size: 12px; color: var(--text-muted); min-width: 70px; }
+  .guide-val { font-family: 'Hind Siliguri', sans-serif; font-size: 18px; color: var(--text); }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+</style>
+</head>
+<body>
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+
+  <div class="relative max-w-6xl mx-auto px-5 sm:px-8 py-8 md:py-14">
+
+    <!-- Header -->
+    <header class="flex items-center justify-between mb-12 md:mb-16 relative">
+      <div class="flex items-center gap-3">
+        <div class="w-11 h-11 rounded-xl flex items-center justify-center bn-serif"
+             style="background: linear-gradient(135deg, var(--accent), #d97706); color: var(--bg-2); font-weight: 700; font-size: 24px; box-shadow: 0 6px 18px rgba(181, 70, 32, 0.35);">
+          ?
+        </div>
+        <div>
+          <div class="display font-bold text-lg leading-none">Bindu</div>
+          <div class="text-[11px] mt-1" style="color: var(--text-muted);">English ? Bangla typing</div>
+        </div>
+      </div>
+      <div class="hidden sm:flex items-center gap-2 text-xs" style="color: var(--text-muted);">
+        <span class="pulse-dot"></span>
+        <span>Phonetic engine · live</span>
+      </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="mb-12 md:mb-14 relative">
+      <div class="deco-char hidden md:block" style="font-size: 280px; top: -50px; right: -30px;">??</div>
+      <div class="text-[11px] uppercase tracking-[0.2em] mb-4 font-semibold" style="color: var(--accent);">
+        Phonetic transliteration
+      </div>
+      <h1 class="display font-bold leading-[0.95] relative" style="font-size: clamp(2.4rem, 6.5vw, 4.8rem); letter-spacing: -0.025em;">
+        Type in English.<br/>
+        Read in <span class="bn-serif italic" style="color: var(--accent); font-style: italic;">?????</span>.
+      </h1>
+      <p class="mt-5 text-base md:text-lg max-w-xl leading-relaxed" style="color: var(--text-muted);">
+        Just type how it sounds. <span class="bn">"ami bhalo achi"</span> becomes <span class="bn">"??? ???? ???"</span>. Pick from live suggestions to get the exact Bengali you want.
+      </p>
+    </section>
+
+    <!-- Editor -->
+    <section class="mb-5">
+      <div class="grid lg:grid-cols-2 gap-4">
+
+        <!-- English input -->
+        <div class="card p-5">
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <div class="text-[11px] uppercase tracking-[0.18em] font-bold" style="color: var(--text-muted);">English</div>
+              <span style="color: var(--text-dim);">·</span>
+              <div class="text-[11px]" style="color: var(--text-dim);">type phonetically</div>
+            </div>
+            <div class="text-[11px] font-medium" style="color: var(--text-dim);" id="enWordCount">0 words</div>
+          </div>
+          <textarea id="enInput"
+                    class="w-full h-56 bg-transparent outline-none resize-none text-lg leading-relaxed"
+                    placeholder="ami bangla bhasha shikhi..."
+                    spellcheck="false"
+                    autocomplete="off"></textarea>
+        </div>
+
+        <!-- Bengali output -->
+        <div class="card p-5" style="background: var(--surface-2);">
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <div class="text-[11px] uppercase tracking-[0.18em] font-bold bn-serif" style="color: var(--accent);">?????</div>
+              <span style="color: var(--text-dim);">·</span>
+              <div class="text-[11px]" style="color: var(--text-dim);">click any word to refine</div>
+            </div>
+            <button id="copyBtn" class="btn btn-secondary" style="padding: 5px 12px; font-size: 11px;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="9" y="9" width="13" height="13" rx="2"/>
+                <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+              </svg>
+              Copy
+            </button>
+          </div>
+          <div id="bnOutput"
+               class="bn w-full h-56 overflow-auto"
+               style="font-size: 22px; line-height: 1.75;"></div>
+        </div>
+
+      </div>
+
+      <!-- Suggestion bar -->
+      <div id="suggestionBar" class="card p-4 mt-4 suggestion-bar hidden">
+        <div class="flex items-center justify-between flex-wrap gap-3 mb-3">
+          <div class="flex items-baseline gap-2 flex-wrap">
+            <div class="text-[11px] uppercase tracking-[0.18em] font-bold" style="color: var(--text-muted);">Suggestions for</div>
+            <div class="phonetics-tag" id="currentWordDisplay">—</div>
+          </div>
+          <div class="text-[11px]" style="color: var(--text-dim);">click to apply · press 1–6 to pick</div>
+        </div>
+        <div id="suggestions" class="flex flex-wrap gap-2"></div>
+      </div>
+
+    </section>
+
+    <!-- Action row -->
+    <section class="flex flex-wrap items-center gap-2 mb-12 md:mb-16">
+      <button class="btn" id="clearBtn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z"/>
+        </svg>
+        Clear
+      </button>
+      <button class="btn btn-secondary" id="sampleBtn">
+        Try a sample
+      </button>
+      <div class="ml-auto flex items-center gap-5 text-xs font-medium" style="color: var(--text-muted);">
+        <div><span id="totalWords" style="color: var(--text);">0</span> words</div>
+        <div><span id="totalChars" style="color: var(--text);">0</span> chars</div>
+      </div>
+    </section>
+
+    <!-- Common phrases -->
+    <section class="mb-12 md:mb-16">
+      <div class="flex items-baseline justify-between mb-5 flex-wrap gap-2">
+        <h2 class="display font-semibold text-2xl">Try these phrases</h2>
+        <span class="text-xs" style="color: var(--text-muted);">Click any to load into the editor</span>
+      </div>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3" id="phraseGrid"></div>
+    </section>
+
+    <!-- Phonetic guide -->
+    <section class="mb-12 md:mb-16">
+      <div class="card p-6 md:p-8">
+        <div class="flex items-baseline justify-between mb-5 flex-wrap gap-2">
+          <h2 class="display font-semibold text-2xl">How it works</h2>
+          <span class="text-xs" style="color: var(--text-muted);">Quick reference</span>
+        </div>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-1">
+          <div>
+            <div class="text-[11px] uppercase tracking-widest font-bold mb-2" style="color: var(--accent);">Vowels</div>
+            <div class="guide-row"><span class="guide-key">a / aa</span><span class="guide-val">? / ?</span></div>
+            <div class="guide-row"><span class="guide-key">i / ii</span><span class="guide-val">? / ?</span></div>
+            <div class="guide-row"><span class="guide-key">u / uu</span><span class="guide-val">? / ?</span></div>
+            <div class="guide-row"><span class="guide-key">e / oi</span><span class="guide-val">? / ?</span></div>
+            <div class="guide-row"><span class="guide-key">o / ou</span><span class="guide-val">? / ?</span></div>
+          </div>
+          <div>
+            <div class="text-[11px] uppercase tracking-widest font-bold mb-2" style="color: var(--accent);">Voiceless</div>
+            <div class="guide-row"><span class="guide-key">k / kh</span><span class="guide-val">? / ?</span></div>
+            <div class="guide-row"><span class="guide-key">c / ch</span><span class="guide-val">? / ?</span></div>
+            <div class="guide-row"><span class="guide-key">t / th</span><span class="guide-val">? / ?</span></div>
+            <div class="guide-row"><span class="guide-key">T / Th</span><span class="guide-val">? / ?</span></div>
+            <div class="guide-row"><span class="guide-key">p / ph</span><span class="guide-val">? / ?</span></div>
+          </div>
+          <div>
+            <div class="text-[11px] uppercase tracking-widest font-bold mb-2" style="color: var(--accent);">Voiced</div>
+            <div class="guide-row"><span class="guide-key">g / gh</span><span class="guide-val">? / ?</span></div>
+            <div class="guide-row"><span class="guide-key">j / jh</span><span class="guide-val">? / ?</span></div>
+            <div class="guide-row"><span class="guide-key">d / dh</span><span class="guide-val">? / ?</span></div>
+            <div class="guide-row"><span class="guide-key">D / Dh</span><span class="guide-val">? / ?</span></div>
+            <div class="guide-row"><span class="guide-key">b / bh</span><span class="guide-val">? / ?</span></div>
+          </div>
+          <div>
+            <div class="text-[11px] uppercase tracking-widest font-bold mb-2" style="color: var(--accent);">Sibilants & more</div>
+            <div class="guide-row"><span class="guide-key">sh / Sh</span><span class="guide-val">? / ?</span></div>
+            <div class="guide-row"><span class="guide-key">s / h</span><span class="guide-val">? / ?</span></div>
+            <div class="guide-row"><span class="guide-key">n / N</span><span class="guide-val">? / ?</span></div>
+            <div class="guide-row"><span class="guide-key">m / r</span><span class="guide-val">? / ?</span></div>
+            <div class="guide-row"><span class="guide-key">y / w</span><span class="guide-val">?? / ?</span></div>
+          </div>
+        </div>
+        <div class="mt-6 pt-5 text-xs leading-relaxed" style="border-top: 1px dashed var(--border); color: var(--text-muted);">
+          <strong style="color: var(--text);">Tip:</strong> Use <code style="background: rgba(0,0,0,0.05); padding: 1px 5px; border-radius: 3px; font-family: monospace;">aa</code> for long ? sounds (Aam ? ??), <code style="background: rgba(0,0,0,0.05); padding: 1px 5px; border-radius: 3px; font-family: monospace;">T</code>/<code style="background: rgba(0,0,0,0.05); padding: 1px 5px; border-radius: 3px; font-family: monospace;">D</code> for retroflex ?/?, and <code style="background: rgba(0,0,0,0.05); padding: 1px 5px; border-radius: 3px; font-family: monospace;">N</code> for ?. End a sentence with <code style="background: rgba(0,0,0,0.05); padding: 1px 5px; border-radius: 3px; font-family: monospace;">.</code> for Bengali ???????
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="pt-6 text-center text-xs leading-relaxed" style="border-top: 1px solid var(--border); color: var(--text-dim);">
+      Phonetic transliteration · <span class="bn" style="color: var(--text-muted);">????? ???? ??????? ???</span>
+    </footer>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast"
+       class="fixed bottom-6 left-1/2 -translate-x-1/2 px-5 py-2.5 rounded-full text-sm font-medium pointer-events-none opacity-0 transition-opacity"
+       style="background: var(--text); color: var(--bg-2); z-index: 100; box-shadow: 0 8px 24px rgba(0,0,0,0.2);">
+    Copied to clipboard
+  </div>
+
+<script>
+  // ============ Dictionary (common words) ============
+  const dictionary = {
+    // Pronouns
+    'ami': '???', 'amra': '????', 'tumi': '????', 'tomra': '?????',
+    'apni': '????', 'apnara': '??????', 'se': '??', 'tara': '????',
+    'ta': '??', 'eta': '???', 'ota': '???', 'egulo': '?????', 'ogulo': '?????',
+    'amake': '?????', 'tomake': '??????', 'apnake': '??????',
+    'amar': '????', 'tomar': '?????', 'apnar': '?????', 'tar': '???',
+    'amader': '??????', 'tomader': '???????', 'apnader': '???????', 'tader': '?????',
+
+    // Common verbs - present
+    'kori': '???', 'koro': '???', 'koren': '????', 'korbo': '???', 'korbe': '????',
+    'korchi': '????', 'korcho': '???', 'korchen': '?????',
+    'kori': '???', 'kore': '???', 'korechilo': '??????',
+    // Past
+    'korlam': '?????', 'korlen': '?????', 'korlo': '???',
+    'korechi': '?????', 'korecho': '????', 'korechen': '??????',
+    'korechilam': '????????', 'korechilen': '????????',
+    'korchilam': '???????', 'korchilen': '???????',
+    // Habitual past
+    'kortam': '?????', 'korten': '?????',
+
+    // To be
+    'hoy': '???', 'hobe': '???', 'hole': '???', 'hoyni': '?????',
+    'hoyeche': '??????', 'hochhe': '?????', 'hoise': '??????', 'holo': '???',
+    'hoise': '??????', 'hoyechilo': '???????',
+
+    // To say
+    'boli': '???', 'bolo': '???', 'bolen': '????', 'bolbo': '???',
+    'bolam': '?????', 'bollen': '?????', 'bole': '???',
+
+    // To be (location)
+    'achi': '???', 'acho': '??', 'achen': '????', 'ache': '???', 'achilo': '???',
+    'chilo': '???', 'chilam': '?????', 'chilen': '?????',
+    'thaki': '????', 'thako': '????', 'thaken': '?????', 'thakbo': '????',
+    'thaklam': '??????', 'thaklam': '??????',
+
+    // To know
+    'jani': '????', 'jano': '????', 'janen': '?????', 'janbo': '????',
+    'jantam': '??????', 'janlam': '??????', 'jane': '????',
+
+    // To see
+    'dekhi': '????', 'dekho': '????', 'dekhen': '?????', 'dekhabo': '?????',
+    'deklam': '??????', 'dekhechi': '??????', 'dekhechilam': '?????????',
+    'dekhe': '????',
+
+    // To hear
+    'shunlam': '??????', 'shunbo': '????', 'shunchi': '?????', 'shunen': '?????',
+    'shunsi': '??????', 'shunechi': '??????',
+
+    // To come / go
+    'asi': '???', 'aso': '???', 'ashen': '????', 'asbo': '???',
+    'echi': '?????', 'echo': '????', 'echen': '??????', 'elam': '????', 'echilam': '????????',
+    'jai': '???', 'jao': '???', 'jan': '???', 'jabo': '???', 'gelam': '?????',
+    'gechi': '????', 'gechilam': '???????', 'gelen': '?????',
+
+    // To eat / drink
+    'khai': '???', 'khao': '???', 'khan': '???', 'khabo': '???',
+    'khelam': '?????', 'kheyechi': '???????', 'kheyechilam': '??????????',
+
+    // To give / take
+    'di': '??', 'dao': '???', 'den': '???', 'dibo': '???', 'diyechi': '???????',
+    'nilam': '?????', 'nibo': '???', 'nite': '????', 'niyechi': '???????',
+
+    // Question words
+    'ki': '??', 'ke': '??', 'kothay': '??????', 'kobe': '???', 'kemon': '????',
+    'keno': '???', 'kivabe': '??????', 'koto': '??', 'kotha': '???',
+    'kar': '???', 'kake': '????', 'karon': '????', 'kache': '????',
+
+    // Adjectives
+    'bhalo': '????', 'kharap': '?????', 'boro': '???', 'choto': '???',
+    'sundor': '??????', 'notun': '????', 'purono': '??????', 'shada': '????',
+    'kalo': '????', 'lal': '???', 'sobuj': '????', 'holud': '????', 'nil': '???',
+    'shanto': '?????', 'shottik': '?????', 'shotti': '?????', 'sotti': '?????',
+
+    // Adverbs/conjunctions
+    'ekhon': '???', 'tokhon': '???', 'age': '???', 'pore': '???',
+    'khub': '???', 'ektu': '????', 'onek': '????', 'beshi': '????', 'kom': '??',
+    'sob': '??', 'sobai': '????', 'mone': '???', 'theke': '????',
+    'kintu': '??????', 'tobe': '???', 'ebong': '???', 'othoba': '????',
+    'tai': '???', 'tarpor': '?????', 'tahole': '?????',
+
+    // Nouns - people/family
+    'manush': '?????', 'chele': '????', 'meye': '?????', 'baba': '????',
+    'ma': '??', 'bon': '???', 'vai': '???', 'didi': '????', 'dada': '????',
+    'nana': '????', 'nani': '????', 'dadu': '????', 'dida': '????',
+    'chacha': '????', 'chachi': '????', 'mama': '????', 'mami': '????',
+
+    // Nouns - time/place/objects
+    'din': '???', 'rat': '???', 'ratri': '??????', 'shokal': '????', 'belaa': '????',
+    'bikal': '?????', 'boi': '??', 'kolom': '???', 'ghor': '??',
+    'jibon': '????', 'mon': '??', 'vasha': '????', 'desh': '???',
+    'shehar': '???', 'gram': '?????', 'rong': '??', 'khabar': '?????',
+    'pani': '????', 'batash': '?????', 'alo': '???', 'rasta': '??????',
+
+    // Numbers
+    'ek': '??', 'dui': '???', 'tin': '???', 'char': '???', 'pach': '????',
+    'chhoy': '???', 'sat': '???', 'at': '??', 'noy': '???', 'dosh': '??',
+
+    // Greetings
+    'nomoskar': '???????', 'suprobhat': '????????', 'shuvoratri': '?????????',
+    'dhonnobad': '???????', 'dhonnavad': '???????',
+
+    // Common
+    'ha': '?????', 'na': '??', 'hai': '?????',
+    'bangla': '?????', 'bangladesh': '????????', 'bhasha': '????',
+    'shikhi': '????', 'shikho': '????', 'shikhen': '?????', 'shikhbo': '????',
+    'shikhlam': '??????', 'shikhechi': '??????',
+    'likhi': '????', 'likho': '????', 'likhen': '?????', 'likhbo': '????',
+    'pori': '????', 'poro': '????', 'poren': '?????', 'porbo': '????',
+    'khuji': '?????', 'khujo': '?????', 'khujen': '??????', 'khujechi': '???????',
+    'bhalobashi': '????????', 'bhalobashbo': '????????',
+    'shuno': '????', 'shunen': '?????',
+  };
+
+  // ============ Transliteration rules ============
+  const consRules = [
+    // 2-char (longest first - aspirated/compound)
+    ['chh','?'], ['kh','?'], ['gh','?'], ['ch','?'],
+    ['jh','?'], ['th','?'], ['dh','?'], ['ph','?'],
+    ['bh','?'], ['sh','?'], ['Sh','?'], ['Th','?'],
+    ['Dh','?'], ['Rh','??'], ['ng','?'],
+    // 1-char
+    ['k','?'], ['g','?'], ['c','?'], ['j','?'],
+    ['T','?'], ['D','?'], ['N','?'], ['t','?'],
+    ['d','?'], ['n','?'], ['p','?'], ['f','?'],
+    ['b','?'], ['v','?'], ['m','?'], ['z','?'],
+    ['y','??'], ['r','?'], ['l','?'], ['S','?'],
+    ['s','?'], ['h','?'], ['R','??'], ['Y','?'],
+    ['w','?'],
+  ];
+
+  const vowelRules = [
+    ['aa','?','?'], ['ii','?','?'], ['uu','?','?'],
+    ['oi','?','?'], ['ou','?','?'], ['au','?','?'],
+    ['a','?',''], ['i','?','?'], ['u','?','?'],
+    ['e','?','?'], ['o','?','?'],
+    ['A','?','?'], ['I','?','?'], ['U','?','?'],
+    ['E','?','?'], ['O','?','?'],
+  ];
+
+  const bnDigits = ['?','?','?','?','?','?','?','?','?','?'];
+
+  function transliterateWord(word) {
+    if (!word) return '';
+
+    // All-caps acronyms (NASA, USA) - keep as-is
+    if (word.length > 1 && word === word.toUpperCase() && /[A-Z]/.test(word) && !/[a-z]/.test(word) && !/[0-9]/.test(word)) {
+      return word;
+    }
+
+    let result = '';
+    let i = 0;
+    let lastWasConsonant = false;
+
+    while (i < word.length) {
+      const ch = word[i];
+
+      // Digits ? Bengali
+      if (/[0-9]/.test(ch)) {
+        result += bnDigits[parseInt(ch)];
+        i++;
+        lastWasConsonant = false;
+        continue;
+      }
+
+      // Special chars
+      if (ch === '~' || ch === '`' || ch === '^') {
+        result += '?';
+        i++;
+        continue;
+      }
+      if (ch === ':') {
+        result += '?';
+        i++;
+        continue;
+      }
+      if (ch === '+') {
+        result += '?';
+        i++;
+        continue;
+      }
+      if (ch === '.') {
+        // Period at end of word or before space ? Bengali danda
+        if (i === word.length - 1) {
+          result += '?';
+          i++;
+          lastWasConsonant = false;
+          continue;
+        }
+      }
+      if (ch === '-' || ch === "'" || ch === '"' || ch === ',' || ch === ';' || ch === '!' || ch === '?' || ch === '(' || ch === ')' || ch === '/' || ch === '@' || ch === '#' || ch === '$' || ch === '%') {
+        result += ch;
+        i++;
+        lastWasConsonant = false;
+        continue;
+      }
+
+      // Try consonants (already longest-first)
+      let matched = false;
+      for (const [eng, ben] of consRules) {
+        if (word.substr(i, eng.length) === eng) {
+          if (eng === 'ng') {
+            // ? if followed by k/kh/g/gh (velar conjunct), else ? anusvara
+            const next = word.substr(i + 2, 2);
+            if (next === 'kh' || next === 'gh' || next === 'k' || next === 'g') {
+              result += '?';
+            } else {
+              result += '?';
+            }
+          } else {
+            result += ben;
+          }
+          i += eng.length;
+          lastWasConsonant = true;
+          matched = true;
+          break;
+        }
+      }
+      if (matched) continue;
+
+      // Try vowels
+      for (const [eng, ind, kar] of vowelRules) {
+        if (word.substr(i, eng.length) === eng) {
+          if (lastWasConsonant) {
+            result += kar;
+          } else {
+            result += ind;
+          }
+          i += eng.length;
+          lastWasConsonant = false;
+          matched = true;
+          break;
+        }
+      }
+      if (matched) continue;
+
+      // Unknown — pass through
+      result += ch;
+      i++;
+      lastWasConsonant = false;
+    }
+
+    return result;
+  }
+
+  // ============ Variant generation ============
+  function generateVariants(word) {
+    if (!word) return [];
+    const variants = [];
+    const seen = new Set();
+    function add(v) { if (v && !seen.has(v) && v !== word) { seen.add(v); variants.push(v); } }
+
+    const lower = word.toLowerCase();
+
+    // 1. Dictionary (highest priority)
+    if (dictionary[lower]) variants.push(dictionary[lower]), seen.add(dictionary[lower]);
+
+    // 2. Default transliteration
+    const def = transliterateWord(word);
+    if (!seen.has(def)) { seen.add(def); variants.push(def); }
+
+    // 3. Long-a variant: try 'a' ? 'aa' (for ??? ? ???? type cases)
+    const longA = word.replace(/a(?!a)/g, 'aa');
+    if (longA !== word) add(transliterateWord(longA));
+
+    // 4. t/T swap (dental vs retroflex)
+    const tSwap = word.replace(/t/g, 'T').replace(/T/g, 't');
+    if (tSwap !== word) add(transliterateWord(tSwap));
+
+    // 5. d/D swap
+    const dSwap = word.replace(/d/g, 'D').replace(/D/g, 'd');
+    if (dSwap !== word) add(transliterateWord(dSwap));
+
+    // 6. n/N swap
+    const nSwap = word.replace(/n/g, 'N').replace(/N/g, 'n');
+    if (nSwap !== word) add(transliterateWord(nSwap));
+
+    // 7. s/sh/Sh swap (sibilants)
+    const sToSh = word.replace(/s/g, 'sh');
+    if (sToSh !== word) add(transliterateWord(sToSh));
+    const shToS = word.replace(/sh/g, 's').replace(/Sh/g, 'S');
+    if (shToS !== word) add(transliterateWord(shToS));
+    const shToSh = word.replace(/sh/g, 'Sh');
+    if (shToSh !== word) add(transliterateWord(shToSh));
+
+    // 8. b/v swap
+    const bvSwap = word.replace(/b/g, 'v').replace(/v/g, 'b');
+    if (bvSwap !== word) add(transliterateWord(bvSwap));
+
+    // 9. y/Y swap
+    const ySwap = word.replace(/y/g, 'Y').replace(/Y/g, 'y');
+    if (ySwap !== word) add(transliterateWord(ySwap));
+
+    // 10. e?i, o?u
+    const eToI = word.replace(/e/g, 'i');
+    if (eToI !== word) add(transliterateWord(eToI));
+
+    // Limit
+    return variants.slice(0, 6);
+  }
+
+  // ============ State ============
+  const state = {
+    inputText: '',
+    appliedVariants: {}, // { lowercaseWord: BengaliString }
+    currentWord: '',
+    activeWord: null, // lowercase word being edited in suggestion bar
+  };
+
+  // ============ Process & render ============
+  function processInput(text) {
+    const tokens = text.split(/(\s+)/);
+    return tokens.map((token, idx) => {
+      if (/^\s+$/.test(token) || !token) return { type: 'space', text: token };
+      // Split into prefix-punct / word / suffix-punct
+      const match = token.match(/^([^\w]*)([\w']+)([^\w]*)$/);
+      if (!match) {
+        return { type: 'word', en: token, bn: transliterateWord(token), prefix: '', suffix: '', idx };
+      }
+      const [, prefix, word, suffix] = match;
+      const lower = word.toLowerCase();
+      const bnWord = state.appliedVariants[lower] || (dictionary[lower] || transliterateWord(word));
+      return { type: 'word', en: word, bn: bnWord, prefix, suffix, idx };
+    });
+  }
+
+  function getCurrentWordAtCaret(text, caretPos) {
+    const before = text.substring(0, caretPos);
+    const match = before.match(/(\w+)$/);
+    return match ? match[1] : '';
+  }
+
+  function renderOutput() {
+    const processed = processInput(state.inputText);
+    const output = document.getElementById('bnOutput');
+    output.innerHTML = '';
+
+    if (!state.inputText.trim()) {
+      output.innerHTML = '<span style="color: var(--text-dim); font-style: italic; font-size: 16px;">????? ???? ????? ???? ????...<br><span style="font-size:13px">(Your Bengali text will appear here)</span></span>';
+      return;
+    }
+
+    processed.forEach(item => {
+      if (item.type === 'space') {
+        output.appendChild(document.createTextNode(item.text));
+        return;
+      }
+      const span = document.createElement('span');
+      span.className = 'word';
+      if (state.activeWord && state.activeWord === item.en.toLowerCase()) {
+        span.classList.add('active');
+      }
+      span.dataset.en = item.en;
+      if (item.prefix) output.appendChild(document.createTextNode(item.prefix));
+      const bnSpan = document.createElement('span');
+      bnSpan.className = 'bn';
+      bnSpan.textContent = item.bn;
+      span.appendChild(bnSpan);
+      if (item.suffix) output.appendChild(document.createTextNode(item.suffix));
+
+      span.addEventListener('click', (e) => {
+        // Only trigger on click without selection
+        if (window.getSelection().toString().length > 0) return;
+        state.activeWord = item.en.toLowerCase();
+        showSuggestionsForWord(item.en);
+        renderOutput();
+      });
+
+      output.appendChild(span);
+    });
+  }
+
+  function renderSuggestions(suggestions, word) {
+    const container = document.getElementById('suggestions');
+    container.innerHTML = '';
+
+    if (!suggestions.length) {
+      container.innerHTML = '<div class="text-sm" style="color: var(--text-dim);">No alternatives</div>';
+      return;
+    }
+
+    const currentApplied = state.appliedVariants[word.toLowerCase()] || suggestions[0];
+
+    suggestions.forEach((s, i) => {
+      const chip = document.createElement('button');
+      chip.className = 'chip';
+      if (s === currentApplied) chip.classList.add('active');
+      chip.innerHTML = `<span>${s}</span><span class="chip-key">${i + 1}</span>`;
+      chip.addEventListener('click', () => {
+        state.appliedVariants[word.toLowerCase()] = s;
+        renderOutput();
+        renderSuggestions(suggestions, word);
+      });
+      container.appendChild(chip);
+    });
+
+    document.getElementById('currentWordDisplay').textContent = word;
+  }
+
+  function showSuggestionsForWord(word) {
+    state.currentWord = word;
+    const suggestions = generateVariants(word);
+    const bar = document.getElementById('suggestionBar');
+    bar.classList.remove('hidden');
+    renderSuggestions(suggestions, word);
+  }
+
+  function hideSuggestions() {
+    document.getElementById('suggestionBar').classList.add('hidden');
+    state.activeWord = null;
+  }
+
+  function updateStats() {
+    const words = state.inputText.trim().split(/\s+/).filter(Boolean);
+    document.getElementById('enWordCount').textContent = `${words.length} words`;
+    document.getElementById('totalWords').textContent = words.length;
+    document.getElementById('totalChars').textContent = state.inputText.length;
+  }
+
+  // ============ Event listeners ============
+  const enInput = document.getElementById('enInput');
+
+  enInput.addEventListener('input', (e) => {
+    state.inputText = e.target.value;
+    const caretPos = e.target.selectionStart;
+    const currentWord = getCurrentWordAtCaret(state.inputText, caretPos);
+
+    if (currentWord && currentWord !== state.currentWord) {
+      state.currentWord = currentWord;
+      state.activeWord = null;
+      showSuggestionsForWord(currentWord);
+    } else if (currentWord === state.currentWord && currentWord) {
+      // Update suggestions live as user types
+      const suggestions = generateVariants(currentWord);
+      if (!document.getElementById('suggestionBar').classList.contains('hidden')) {
+        renderSuggestions(suggestions, currentWord);
+      } else {
+        showSuggestionsForWord(currentWord);
+      }
+    } else if (!currentWord) {
+      hideSuggestions();
+      state.currentWord = '';
+    }
+
+    renderOutput();
+    updateStats();
+  });
+
+  enInput.addEventListener('keydown', (e) => {
+    // Number keys 1-6 to pick suggestion
+    if (e.key >= '1' && e.key <= '6' && !document.getElementById('suggestionBar').classList.contains('hidden')) {
+      const chips = document.querySelectorAll('#suggestions .chip');
+      const idx = parseInt(e.key) - 1;
+      if (chips[idx]) {
+        e.preventDefault();
+        chips[idx].click();
+      }
+    }
+    // Escape to close suggestion bar
+    if (e.key === 'Escape') {
+      hideSuggestions();
+      renderOutput();
+    }
+    // Enter to commit current word and start new
+    if (e.key === 'Enter' && state.currentWord) {
+      // Commit the current applied variant (already in state)
+      state.currentWord = '';
+      // Don't hide bar immediately - let user continue typing
+    }
+  });
+
+  enInput.addEventListener('blur', () => {
+    // Delay to allow chip clicks
+    setTimeout(() => {
+      if (document.activeElement !== enInput && !document.activeElement.closest('#suggestionBar')) {
+        // keep suggestions visible but deactivate word
+        state.activeWord = null;
+        renderOutput();
+      }
+    }, 200);
+  });
+
+  // Click outside to deselect active word
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('#bnOutput') && !e.target.closest('#suggestionBar') && !e.target.closest('#enInput')) {
+      if (state.activeWord) {
+        state.activeWord = null;
+        renderOutput();
+      }
+    }
+  });
+
+  // Copy button
+  document.getElementById('copyBtn').addEventListener('click', () => {
+    const text = document.getElementById('bnOutput').innerText;
+    if (!text.trim() || text.startsWith('????? ????')) {
+      showToast('Nothing to copy yet');
+      return;
+    }
+    navigator.clipboard.writeText(text).then(() => {
+      showToast('Copied to clipboard');
+    }).catch(() => {
+      // Fallback
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); showToast('Copied to clipboard'); } catch (e) { showToast('Copy failed'); }
+      document.body.removeChild(ta);
+    });
+  });
+
+  // Clear button
+  document.getElementById('clearBtn').addEventListener('click', () => {
+    enInput.value = '';
+    state.inputText = '';
+    state.appliedVariants = {};
+    state.currentWord = '';
+    state.activeWord = null;
+    hideSuggestions();
+    renderOutput();
+    updateStats();
+    enInput.focus();
+  });
+
+  // Sample button
+  const samples = [
+    "ami bangla bhasha shikhi. tumi kemon acho? khub bhalo. amra sobai mile ekta sundor shongbad gori.",
+    "aj ke shokal theke brishti hochhe. amra bazar e gelam. kintu rasta khub-i kharap chilo.",
+    "tomar nam ki? amar nam rahim. apni kemon achen? ami ekhon khub bhalo achi. dhonnobad.",
+  ];
+  let sampleIdx = 0;
+  document.getElementById('sampleBtn').addEventListener('click', () => {
+    const sample = samples[sampleIdx % samples.length];
+    sampleIdx++;
+    enInput.value = sample;
+    state.inputText = sample;
+    state.appliedVariants = {};
+    state.activeWord = null;
+    renderOutput();
+    updateStats();
+    // Move caret to end
+    enInput.focus();
+    enInput.setSelectionRange(sample.length, sample.length);
+    // Show suggestions for last word
+    const lastWord = sample.trim().split(/\s+/).pop().replace(/[^\w]/g, '');
+    if (lastWord) {
+      state.currentWord = lastWord;
+      showSuggestionsForWord(lastWord);
+    }
+  });
+
+  // ============ Common phrases ============
+  const phrases = [
+    { en: 'ami bangla shikhi', bn: '??? ????? ????', enTrans: 'I learn Bengali' },
+    { en: 'tomar nam ki', bn: '????? ??? ??', enTrans: 'What is your name' },
+    { en: 'apni kemon achen', bn: '???? ???? ????', enTrans: 'How are you (formal)' },
+    { en: 'khub bhalo', bn: '??? ????', enTrans: 'Very good' },
+    { en: 'dhonnobad', bn: '???????', enTrans: 'Thank you' },
+    { en: 'ami tomake bhalobashi', bn: '??? ?????? ????????', enTrans: 'I love you' },
+    { en: 'shuvo shokal', bn: '??? ????', enTrans: 'Good morning' },
+    { en: 'shuvo ratri', bn: '??? ??????', enTrans: 'Good night' },
+    { en: 'ekhon ki korbe', bn: '??? ?? ????', enTrans: 'What will you do now' },
+  ];
+
+  function renderPhrases() {
+    const grid = document.getElementById('phraseGrid');
+    grid.innerHTML = '';
+    phrases.forEach(p => {
+      const card = document.createElement('div');
+      card.className = 'phrase-card';
+      card.innerHTML = `
+        <div class="text-xs mb-1.5 font-medium" style="color: var(--text-muted);">${p.en}</div>
+        <div class="bn text-lg font-medium" style="color: var(--text);">${p.bn}</div>
+        <div class="text-[11px] mt-2" style="color: var(--text-dim);">${p.enTrans}</div>
+      `;
+      card.addEventListener('click', () => {
+        enInput.value = p.en;
+        state.inputText = p.en;
+        state.appliedVariants = {};
+        state.activeWord = null;
+        renderOutput();
+        updateStats();
+        const lastWord = p.en.trim().split(/\s+/).pop().replace(/[^\w]/g, '');
+        if (lastWord) {
+          state.currentWord = lastWord;
+          showSuggestionsForWord(lastWord);
+        }
+        enInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        enInput.focus();
+        enInput.setSelectionRange(p.en.length, p.en.length);
+      });
+      grid.appendChild(card);
+    });
+  }
+
+  // ============ Toast ============
+  let toastTimer = null;
+  function showToast(message) {
+    const toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.style.opacity = '1';
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => {
+      toast.style.opacity = '0';
+    }, 1800);
+  }
+
+  // ============ Init ============
+  renderPhrases();
+  renderOutput();
+  updateStats();
+  // Focus input on load
+  setTimeout(() => enInput.focus(), 100);
+</script>
+</body>
+</html>
