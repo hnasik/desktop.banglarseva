@@ -5,8 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Bindu — English to Bangla Typing</title>
 <script src="https://cdn.tailwindcss.com"></script>
-<!-- html2pdf for PDF export -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..700&family=Manrope:wght@300..700&family=Hind+Siliguri:wght@300..700&family=Noto+Serif+Bengali:wght@400..700&family=Baloo+Da+2:wght@400..700&family=Atma:wght@400..700&display=swap" rel="stylesheet">
@@ -303,15 +301,6 @@
   body.dark .modal-close { background: rgba(255,255,255,0.05); }
   .modal-close:hover { background: rgba(181, 70, 32, 0.1); color: var(--accent); transform: rotate(90deg); }
 
-  /* Hidden Print Area for Perfect PDFs */
-  #pdfPrintArea {
-    position: fixed; left: -9999px; top: 0;
-    width: 800px; padding: 40px;
-    background: #ffffff; color: #1a1410;
-    font-family: 'Hind Siliguri', sans-serif;
-    z-index: -1;
-  }
-
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
   }
@@ -423,16 +412,6 @@
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                 </button>
               </div>
-
-              <!-- Export PDF -->
-              <button id="pdfBtn" class="btn btn-secondary" style="padding: 5px 12px; font-size: 11px;">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                  <polyline points="7 10 12 15 17 10"/>
-                  <line x1="12" y1="15" x2="12" y2="3"/>
-                </svg>
-                PDF
-              </button>
 
               <!-- Copy -->
               <button id="copyBtn" class="btn btn-secondary" style="padding: 5px 12px; font-size: 11px;">
@@ -588,9 +567,6 @@
       <button class="btn w-full justify-center" id="insertImageBtn">Insert into Text</button>
     </div>
   </div>
-
-  <!-- Hidden Print Area for Perfect PDFs -->
-  <div id="pdfPrintArea"></div>
 
   <!-- Toast -->
   <div id="toast"
@@ -1153,66 +1129,6 @@
       ta.select();
       try { document.execCommand('copy'); showToast('Copied to clipboard'); } catch (e) { showToast('Copy failed'); }
       document.body.removeChild(ta);
-    });
-  });
-
-  // ============ Feature: Export to PDF (Isolated Container Fix) ============
-  document.getElementById('pdfBtn').addEventListener('click', () => {
-    const text = document.getElementById('bnOutput').innerText;
-    if (!text.trim() || text.startsWith('আপনার লেখা')) {
-      showToast('Nothing to export yet');
-      return;
-    }
-
-    const printArea = document.getElementById('pdfPrintArea');
-    const bnOutput = document.getElementById('bnOutput');
-
-    // Copy HTML to isolated container
-    printArea.innerHTML = bnOutput.innerHTML;
-
-    // Force light mode styles for PDF printing
-    printArea.style.fontFamily = bnOutput.style.fontFamily || "'Hind Siliguri', sans-serif";
-    printArea.style.fontSize = bnOutput.style.fontSize || "22px";
-    printArea.style.lineHeight = '1.75';
-    printArea.style.backgroundColor = '#ffffff';
-    printArea.style.color = '#1a1410'; // Dark text
-
-    // Explicitly set color on all word spans to fix html2canvas CSS variable bug
-    const wordSpans = printArea.querySelectorAll('.word span');
-    wordSpans.forEach(span => {
-      // If it doesn't have an explicit custom color from the color picker, force dark text
-      if (!span.style.color) {
-        span.style.color = '#1a1410';
-      }
-    });
-
-    // Remove active highlight boxes from PDF
-    const activeWords = printArea.querySelectorAll('.word.active');
-    activeWords.forEach(w => w.classList.remove('active'));
-
-    const opt = {
-      margin: 10,
-      filename: 'bindu-bangla.pdf',
-      image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { 
-        scale: 2, 
-        backgroundColor: '#ffffff', 
-        useCORS: true,
-        windowWidth: 880 // 800px width + 40px padding * 2
-      },
-      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-      pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
-    };
-
-    showToast('Generating PDF...');
-
-    html2pdf().set(opt).from(printArea).save().then(() => {
-      printArea.innerHTML = ''; // Clear it out
-      showToast('PDF saved');
-    }).catch(err => {
-      printArea.innerHTML = '';
-      showToast('PDF failed');
-      console.error(err);
     });
   });
 
