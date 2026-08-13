@@ -303,9 +303,9 @@
   body.dark .modal-close { background: rgba(255,255,255,0.05); }
   .modal-close:hover { background: rgba(181, 70, 32, 0.1); color: var(--accent); transform: rotate(90deg); }
 
-  /* PDF Print Container (Isolated for perfect PDFs) */
-  #pdfContainer {
-    position: fixed; left: -10000px; top: 0;
+  /* Hidden Print Area for Perfect PDFs */
+  #pdfPrintArea {
+    position: fixed; left: -9999px; top: 0;
     width: 800px; padding: 40px;
     background: #ffffff; color: #1a1410;
     font-family: 'Hind Siliguri', sans-serif;
@@ -589,8 +589,8 @@
     </div>
   </div>
 
-  <!-- Isolated PDF Print Container -->
-  <div id="pdfContainer"></div>
+  <!-- Hidden Print Area for Perfect PDFs -->
+  <div id="pdfPrintArea"></div>
 
   <!-- Toast -->
   <div id="toast"
@@ -704,9 +704,6 @@
 
   function transliterateWord(word) {
     if (!word) return '';
-    if (word.length > 1 && word === word.toUpperCase() && /[A-Z]/.test(word) && !/[a-z]/.test(word) && !/[0-9]/.test(word)) {
-      return word;
-    }
 
     let result = '';
     let i = 0;
@@ -733,6 +730,8 @@
       }
 
       let matched = false;
+      
+      // Pass 1: Exact match (for case-sensitive rules like T/t, S/s)
       for (const [eng, ben] of consRules) {
         if (word.substr(i, eng.length) === eng) {
           if (eng === 'ng') {
@@ -753,8 +752,46 @@
       }
       if (matched) continue;
 
+      // Pass 2: Case-insensitive match (for uppercase letters without specific rules, like M -> m)
+      for (const [eng, ben] of consRules) {
+        if (word.substr(i, eng.length).toLowerCase() === eng.toLowerCase()) {
+          if (eng.toLowerCase() === 'ng') {
+            const next = word.substr(i + 2, 2).toLowerCase();
+            if (next === 'kh' || next === 'gh' || next === 'k' || next === 'g') {
+              result += 'ঙ';
+            } else {
+              result += 'ং';
+            }
+          } else {
+            result += ben;
+          }
+          i += eng.length;
+          lastWasConsonant = true;
+          matched = true;
+          break;
+        }
+      }
+      if (matched) continue;
+
+      // Pass 1 for vowels: Exact match
       for (const [eng, ind, kar] of vowelRules) {
         if (word.substr(i, eng.length) === eng) {
+          if (lastWasConsonant) {
+            result += kar;
+          } else {
+            result += ind;
+          }
+          i += eng.length;
+          lastWasConsonant = false;
+          matched = true;
+          break;
+        }
+      }
+      if (matched) continue;
+
+      // Pass 2 for vowels: Case-insensitive match
+      for (const [eng, ind, kar] of vowelRules) {
+        if (word.substr(i, eng.length).toLowerCase() === eng.toLowerCase()) {
           if (lastWasConsonant) {
             result += kar;
           } else {
@@ -822,20 +859,18 @@
   const state = {
     inputText: '',
     appliedVariants: {},
-    appliedColors: {}, // Store custom word colors
+    appliedColors: {},
     currentWord: '',
     activeWord: null,
-    images: [], // Store uploaded images { id: 1, url: '...', size: 80 }
+    images: [],
     imageIdCounter: 1,
   };
 
   function processInput(text) {
-    // Split by spaces OR image tags
     const tokens = text.split(/(\s+|\[img:\d+\])/);
     return tokens.map((token, idx) => {
       if ((/^\s+$/.test(token) || !token)) return { type: 'space', text: token };
       
-      // Check if it's an image token
       const imgMatch = token.match(/^\[img:(\d+)\]$/);
       if (imgMatch) {
         const id = parseInt(imgMatch[1]);
@@ -898,7 +933,6 @@
       bnSpan.className = 'bn';
       bnSpan.textContent = item.bn;
       
-      // Apply custom color if exists
       const lower = item.en.toLowerCase();
       if (state.appliedColors[lower]) {
         bnSpan.style.color = state.appliedColors[lower];
@@ -952,13 +986,11 @@
     bar.classList.remove('hidden');
     renderSuggestions(suggestions, word);
 
-    // Sync color picker with current word's color
     const lower = word.toLowerCase();
     const colorPicker = document.getElementById('wordColorPicker');
     if (state.appliedColors[lower]) {
       colorPicker.value = state.appliedColors[lower];
     } else {
-      // Default to current text color
       const textColor = getComputedStyle(document.body).getPropertyValue('--text').trim();
       colorPicker.value = rgbToHex(textColor);
     }
@@ -977,7 +1009,6 @@
   }
 
   function updateStats() {
-    // Count words, ignoring image tags
     const words = state.inputText.trim().split(/\s+/).filter(w => w && !w.match(/^\[img:\d+\]$/));
     document.getElementById('enWordCount').textContent = `${words.length} words`;
     document.getElementById('totalWords').textContent = words.length;
@@ -1050,7 +1081,6 @@
     if (state.activeWord) {
       delete state.appliedColors[state.activeWord];
       renderOutput();
-      // Reset picker to default
       const textColor = getComputedStyle(document.body).getPropertyValue('--text').trim();
       colorPicker.value = rgbToHex(textColor);
     }
@@ -1076,7 +1106,6 @@
       imageModal.classList.add('active');
     };
     reader.readAsDataURL(file);
-    // Reset input so same file can be uploaded again
     imageInput.value = '';
   });
 
@@ -1090,7 +1119,6 @@
     const id = state.imageIdCounter++;
     state.images.push({ id, url: pendingImageUrl, size });
 
-    // Insert token at caret position
     const caretPos = enInput.selectionStart;
     const textBefore = state.inputText.substring(0, caretPos);
     const textAfter = state.inputText.substring(caretPos);
@@ -1099,7 +1127,6 @@
     state.inputText = textBefore + imgTag + textAfter;
     enInput.value = state.inputText;
     
-    // Move caret after the image tag
     const newPos = caretPos + imgTag.length;
     enInput.focus();
     enInput.setSelectionRange(newPos, newPos);
@@ -1137,48 +1164,53 @@
       return;
     }
 
-    const pdfEl = document.getElementById('pdfContainer');
+    const printArea = document.getElementById('pdfPrintArea');
     const bnOutput = document.getElementById('bnOutput');
 
     // Copy HTML to isolated container
-    pdfEl.innerHTML = bnOutput.innerHTML;
+    printArea.innerHTML = bnOutput.innerHTML;
 
-    // Force light mode styles for PDF printing (fixes dark mode blank PDF)
-    pdfEl.style.fontFamily = bnOutput.style.fontFamily || "'Hind Siliguri', sans-serif";
-    pdfEl.style.fontSize = fontSize + 'px';
-    pdfEl.style.lineHeight = '1.75';
-    pdfEl.style.backgroundColor = '#ffffff';
-    pdfEl.style.color = '#1a1410'; // Dark text
+    // Force light mode styles for PDF printing
+    printArea.style.fontFamily = bnOutput.style.fontFamily || "'Hind Siliguri', sans-serif";
+    printArea.style.fontSize = bnOutput.style.fontSize || "22px";
+    printArea.style.lineHeight = '1.75';
+    printArea.style.backgroundColor = '#ffffff';
+    printArea.style.color = '#1a1410'; // Dark text
 
-    // Ensure all child words inherit dark text if no custom color was applied
-    const wordSpans = pdfEl.querySelectorAll('.word span');
+    // Explicitly set color on all word spans to fix html2canvas CSS variable bug
+    const wordSpans = printArea.querySelectorAll('.word span');
     wordSpans.forEach(span => {
-      // If it doesn't have an explicit custom color, clear it so it inherits #1a1410
+      // If it doesn't have an explicit custom color from the color picker, force dark text
       if (!span.style.color) {
         span.style.color = '#1a1410';
       }
     });
 
     // Remove active highlight boxes from PDF
-    const activeWords = pdfEl.querySelectorAll('.word.active');
+    const activeWords = printArea.querySelectorAll('.word.active');
     activeWords.forEach(w => w.classList.remove('active'));
 
     const opt = {
-      margin: 1,
+      margin: 10,
       filename: 'bindu-bangla.pdf',
       image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 2, backgroundColor: '#ffffff', useCORS: true },
-      jsPDF: { unit: 'cm', format: 'a4', orientation: 'portrait' },
+      html2canvas: { 
+        scale: 2, 
+        backgroundColor: '#ffffff', 
+        useCORS: true,
+        windowWidth: 880 // 800px width + 40px padding * 2
+      },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
       pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
     };
 
     showToast('Generating PDF...');
 
-    html2pdf().set(opt).from(pdfEl).save().then(() => {
-      pdfEl.innerHTML = ''; // Clear it out
+    html2pdf().set(opt).from(printArea).save().then(() => {
+      printArea.innerHTML = ''; // Clear it out
       showToast('PDF saved');
     }).catch(err => {
-      pdfEl.innerHTML = '';
+      printArea.innerHTML = '';
       showToast('PDF failed');
       console.error(err);
     });
@@ -1273,7 +1305,7 @@
     enInput.value = sample;
     state.inputText = sample;
     state.appliedVariants = {};
-    state.images = []; // Clear images on sample load
+    state.images = [];
     state.activeWord = null;
     renderOutput();
     updateStats();
