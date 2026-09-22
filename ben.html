@@ -10,300 +10,96 @@
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..700&family=Manrope:wght@300..700&family=Hind+Siliguri:wght@300..700&family=Noto+Serif+Bengali:wght@400..700&family=Baloo+Da+2:wght@400..700&family=Atma:wght@400..700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #f3ead7;
-    --bg-2: #fbf6ec;
-    --surface: rgba(255, 255, 255, 0.55);
-    --surface-2: rgba(255, 255, 255, 0.85);
-    --border: #d4c4a8;
-    --border-strong: #b8a784;
-    --text: #1a1410;
-    --text-muted: #6b5d50;
-    --text-dim: #9c8f7e;
-    --accent: #b54620;
-    --accent-2: #0d6e54;
-    --highlight: #fcd34d;
+    --bg: #f3ead7; --bg-2: #fbf6ec;
+    --surface: rgba(255,255,255,0.55);
+    --surface-2: rgba(255,255,255,0.85);
+    --border: #d4c4a8; --border-strong: #b8a784;
+    --text: #1a1410; --text-muted: #6b5d50; --text-dim: #9c8f7e;
+    --accent: #b54620; --accent-2: #0d6e54; --highlight: #fcd34d;
   }
   body.dark {
-    --bg: #12100e;
-    --bg-2: #1f1a15;
-    --surface: rgba(255, 255, 255, 0.04);
-    --surface-2: rgba(255, 255, 255, 0.08);
-    --border: #2e2924;
-    --border-strong: #423a32;
-    --text: #f3ead7;
-    --text-muted: #a89e8f;
-    --text-dim: #6e655a;
-    --accent: #e76f51;
-    --accent-2: #2a9d8f;
-    --highlight: #d97706;
+    --bg: #12100e; --bg-2: #1f1a15;
+    --surface: rgba(255,255,255,0.04);
+    --surface-2: rgba(255,255,255,0.08);
+    --border: #2e2924; --border-strong: #423a32;
+    --text: #f3ead7; --text-muted: #a89e8f; --text-dim: #6e655a;
+    --accent: #e76f51; --accent-2: #2a9d8f; --highlight: #d97706;
   }
   * { box-sizing: border-box; }
   body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Manrope', sans-serif;
-    min-height: 100vh;
-    -webkit-font-smoothing: antialiased;
-    position: relative;
-    overflow-x: hidden;
-    transition: background 0.3s ease, color 0.3s ease;
+    background: var(--bg); color: var(--text);
+    font-family: 'Manrope', sans-serif; min-height: 100vh;
+    -webkit-font-smoothing: antialiased; position: relative;
+    overflow-x: hidden; transition: background .3s, color .3s;
   }
   .display { font-family: 'Newsreader', serif; }
   .bn { font-family: 'Hind Siliguri', sans-serif; }
   .bn-serif { font-family: 'Noto Serif Bengali', serif; }
-
   body::before {
-    content: '';
-    position: fixed; inset: 0;
-    background-image: radial-gradient(circle at 1px 1px, rgba(26, 20, 16, 0.05) 1px, transparent 0);
-    background-size: 22px 22px;
-    pointer-events: none;
-    z-index: 0;
+    content: ''; position: fixed; inset: 0;
+    background-image: radial-gradient(circle at 1px 1px, rgba(26,20,16,0.05) 1px, transparent 0);
+    background-size: 22px 22px; pointer-events: none; z-index: 0;
   }
-  body.dark::before {
-    background-image: radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.03) 1px, transparent 0);
-  }
-  .blob {
-    position: fixed;
-    border-radius: 50%;
-    filter: blur(90px);
-    pointer-events: none;
-    z-index: 0;
-  }
-  .blob-1 { width: 480px; height: 480px; background: radial-gradient(circle, rgba(181, 70, 32, 0.18), transparent 70%); top: -140px; right: -100px; animation: float1 20s ease-in-out infinite; }
-  .blob-2 { width: 380px; height: 380px; background: radial-gradient(circle, rgba(13, 110, 84, 0.12), transparent 70%); bottom: -120px; left: -80px; animation: float2 24s ease-in-out infinite; }
-  body.dark .blob-1 { background: radial-gradient(circle, rgba(231, 111, 81, 0.15), transparent 70%); }
-  body.dark .blob-2 { background: radial-gradient(circle, rgba(42, 157, 143, 0.1), transparent 70%); }
+  body.dark::before { background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.03) 1px, transparent 0); }
+  .blob { position: fixed; border-radius: 50%; filter: blur(90px); pointer-events: none; z-index: 0; }
+  .blob-1 { width: 480px; height: 480px; background: radial-gradient(circle, rgba(181,70,32,0.18), transparent 70%); top: -140px; right: -100px; animation: float1 20s ease-in-out infinite; }
+  .blob-2 { width: 380px; height: 380px; background: radial-gradient(circle, rgba(13,110,84,0.12), transparent 70%); bottom: -120px; left: -80px; animation: float2 24s ease-in-out infinite; }
+  body.dark .blob-1 { background: radial-gradient(circle, rgba(231,111,81,0.15), transparent 70%); }
+  body.dark .blob-2 { background: radial-gradient(circle, rgba(42,157,143,0.1), transparent 70%); }
   @keyframes float1 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-60px,80px)} }
   @keyframes float2 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(80px,-60px)} }
-
-  .card {
-    background: var(--surface);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid var(--border);
-    border-radius: 22px;
-    position: relative;
-    z-index: 1;
-  }
+  .card { background: var(--surface); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--border); border-radius: 22px; position: relative; z-index: 1; }
   textarea { font-family: 'Manrope', sans-serif; color: var(--text); }
   textarea::placeholder { color: var(--text-dim); }
   textarea::selection { background: var(--highlight); }
-
-  .word {
-    cursor: pointer;
-    border-radius: 6px;
-    padding: 1px 3px;
-    margin: 0 -1px;
-    transition: background 0.15s, box-shadow 0.15s;
-    display: inline-block;
-  }
-  .word:hover { background: rgba(181, 70, 32, 0.10); }
-  body.dark .word:hover { background: rgba(231, 111, 81, 0.15); }
-  .word.active {
-    background: rgba(252, 211, 77, 0.4);
-    box-shadow: 0 0 0 1.5px var(--accent);
-  }
-
-  .chip {
-    background: var(--surface-2);
-    border: 1px solid var(--border);
-    color: var(--text);
-    font-family: 'Hind Siliguri', sans-serif;
-    font-size: 18px;
-    padding: 8px 14px;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: all 0.15s;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    line-height: 1;
-  }
-  .chip:hover {
-    background: var(--bg-2);
-    border-color: var(--accent);
-    color: var(--accent);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(181, 70, 32, 0.12);
-  }
-  .chip.active {
-    background: var(--accent);
-    color: var(--bg-2);
-    border-color: var(--accent);
-  }
-  .chip-key {
-    font-size: 10px;
-    font-family: 'Manrope', sans-serif;
-    font-weight: 700;
-    opacity: 0.55;
-    background: rgba(0,0,0,0.06);
-    padding: 2px 5px;
-    border-radius: 4px;
-    line-height: 1;
-  }
-  body.dark .chip-key { background: rgba(255,255,255,0.1); }
-  .chip.active .chip-key { background: rgba(255,255,255,0.18); opacity: 0.85; }
-
-  .btn {
-    background: var(--text);
-    color: var(--bg);
-    padding: 10px 18px;
-    border-radius: 999px;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    border: none;
-    transition: all 0.2s;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .btn:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
+  .word { cursor: pointer; border-radius: 6px; padding: 1px 3px; margin: 0 -1px; transition: background .15s; display: inline-block; }
+  .word:hover { background: rgba(181,70,32,0.10); }
+  body.dark .word:hover { background: rgba(231,111,81,0.15); }
+  .word.active { background: rgba(252,211,77,0.4); box-shadow: 0 0 0 1.5px var(--accent); }
+  .chip { background: var(--surface-2); border: 1px solid var(--border); color: var(--text); font-family: 'Hind Siliguri', sans-serif; font-size: 18px; padding: 8px 14px; border-radius: 12px; cursor: pointer; transition: all .15s; display: inline-flex; align-items: center; gap: 8px; line-height: 1; }
+  .chip:hover { background: var(--bg-2); border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
+  .chip.active { background: var(--accent); color: var(--bg-2); border-color: var(--accent); }
+  .chip-key { font-size: 10px; font-family: 'Manrope', sans-serif; font-weight: 700; opacity: .55; background: rgba(0,0,0,.06); padding: 2px 5px; border-radius: 4px; line-height: 1; }
+  body.dark .chip-key { background: rgba(255,255,255,.1); }
+  .chip.active .chip-key { background: rgba(255,255,255,.18); opacity: .85; }
+  .btn { background: var(--text); color: var(--bg); padding: 10px 18px; border-radius: 999px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; transition: all .2s; display: inline-flex; align-items: center; gap: 6px; }
+  .btn:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(0,0,0,.2); }
   .btn:active { transform: translateY(0); }
-  .btn-secondary {
-    background: transparent;
-    color: var(--text);
-    border: 1px solid var(--border);
-  }
-  .btn-secondary:hover { background: var(--surface-2); border-color: var(--border-strong); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
-
-  .icon-btn {
-    background: transparent;
-    color: var(--text);
-    padding: 8px;
-    border-radius: 999px;
-    cursor: pointer;
-    border: 1px solid var(--border);
-    transition: all 0.2s;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-  }
+  .btn-secondary { background: transparent; color: var(--text); border: 1px solid var(--border); }
+  .btn-secondary:hover { background: var(--surface-2); border-color: var(--border-strong); }
+  .icon-btn { background: transparent; color: var(--text); padding: 8px; border-radius: 999px; cursor: pointer; border: 1px solid var(--border); transition: all .2s; display: inline-flex; align-items: center; justify-content: center; }
   .icon-btn:hover { background: var(--surface-2); border-color: var(--border-strong); }
-
-  .phrase-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 14px 16px;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  .phrase-card:hover {
-    background: var(--surface-2);
-    border-color: var(--accent);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 22px rgba(181, 70, 32, 0.12);
-  }
-
-  @keyframes pulse {
-    0%, 100% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(0.8); opacity: 0.5; }
-  }
-  .pulse-dot {
-    display: inline-block;
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: var(--accent-2);
-    animation: pulse 2s infinite;
-  }
-
-  @keyframes slideUp {
-    from { opacity: 0; transform: translateY(-8px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  .suggestion-bar { transition: opacity 0.25s, transform 0.25s, max-height 0.3s; max-height: 250px; overflow: hidden; }
+  .phrase-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 14px 16px; cursor: pointer; transition: all .2s; }
+  .phrase-card:hover { background: var(--surface-2); border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 8px 22px rgba(181,70,32,.12); }
+  @keyframes pulse { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(.8);opacity:.5} }
+  .pulse-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--accent-2); animation: pulse 2s infinite; }
+  @keyframes slideUp { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+  .suggestion-bar { transition: opacity .25s, transform .25s, max-height .3s; max-height: 250px; overflow: hidden; }
   .suggestion-bar.hidden { opacity: 0; transform: translateY(-8px); pointer-events: none; max-height: 0; }
-  .suggestion-bar:not(.hidden) { animation: slideUp 0.3s ease-out; }
-
+  .suggestion-bar:not(.hidden) { animation: slideUp .3s ease-out; }
   ::-webkit-scrollbar { width: 8px; height: 8px; }
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 999px; }
   ::-webkit-scrollbar-thumb:hover { background: var(--border-strong); }
-
   ::selection { background: var(--highlight); color: var(--text); }
-
-  .deco-char {
-    position: absolute;
-    font-family: 'Noto Serif Bengali', serif;
-    color: var(--accent);
-    opacity: 0.06;
-    pointer-events: none;
-    user-select: none;
-    line-height: 0.8;
-    font-weight: 700;
-  }
-
-  .phonetics-tag {
-    display: inline-block;
-    padding: 3px 8px;
-    background: rgba(181, 70, 32, 0.1);
-    color: var(--accent);
-    border-radius: 5px;
-    font-family: 'Manrope', sans-serif;
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 0.02em;
-  }
-
+  .deco-char { position: absolute; font-family: 'Noto Serif Bengali', serif; color: var(--accent); opacity: .06; pointer-events: none; user-select: none; line-height: .8; font-weight: 700; }
+  .phonetics-tag { display: inline-block; padding: 3px 8px; background: rgba(181,70,32,.1); color: var(--accent); border-radius: 5px; font-family: 'Manrope', sans-serif; font-size: 13px; font-weight: 700; }
   .guide-row { display: flex; align-items: baseline; gap: 12px; padding: 6px 0; border-bottom: 1px dashed var(--border); }
   .guide-row:last-child { border-bottom: none; }
-  .guide-key { font-family: 'Manrope', monospace; font-size: 12px; color: var(--text-muted); min-width: 70px; }
+  .guide-key { font-family: 'Manrope', monospace; font-size: 12px; color: var(--text-muted); min-width: 90px; }
   .guide-val { font-family: 'Hind Siliguri', sans-serif; font-size: 18px; color: var(--text); }
-
-  /* Custom Select */
-  .custom-select {
-    background: transparent;
-    color: var(--text);
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    padding: 5px 12px;
-    font-size: 11px;
-    font-weight: 600;
-    outline: none;
-    cursor: pointer;
-  }
-  .custom-select option {
-    background: var(--bg-2);
-    color: var(--text);
-  }
-
-  /* Modal Styles */
-  .modal-overlay {
-    position: fixed; inset: 0;
-    background: rgba(26, 20, 16, 0.65);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    z-index: 50;
-    display: flex; align-items: center; justify-content: center;
-    padding: 1rem; opacity: 0; pointer-events: none;
-    transition: opacity 0.3s ease;
-  }
+  .custom-select { background: transparent; color: var(--text); border: 1px solid var(--border); border-radius: 999px; padding: 5px 12px; font-size: 11px; font-weight: 600; outline: none; cursor: pointer; }
+  .custom-select option { background: var(--bg-2); color: var(--text); }
+  .modal-overlay { position: fixed; inset: 0; background: rgba(26,20,16,.65); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 50; display: flex; align-items: center; justify-content: center; padding: 1rem; opacity: 0; pointer-events: none; transition: opacity .3s; }
   .modal-overlay.active { opacity: 1; pointer-events: auto; }
-  .modal-content {
-    background: var(--bg-2);
-    border: 1px solid var(--border-strong);
-    border-radius: 24px; max-width: 800px; width: 100%;
-    max-height: 90vh; overflow-y: auto; padding: 2rem;
-    transform: scale(0.95) translateY(10px);
-    transition: transform 0.3s ease; position: relative;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-  }
+  .modal-content { background: var(--bg-2); border: 1px solid var(--border-strong); border-radius: 24px; max-width: 800px; width: 100%; max-height: 90vh; overflow-y: auto; padding: 2rem; transform: scale(.95) translateY(10px); transition: transform .3s; position: relative; box-shadow: 0 20px 60px rgba(0,0,0,.3); }
   .modal-overlay.active .modal-content { transform: scale(1) translateY(0); }
-  .modal-close {
-    position: absolute; top: 1.2rem; right: 1.2rem;
-    width: 36px; height: 36px; border-radius: 50%;
-    background: rgba(0,0,0,0.05); border: none; cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    color: var(--text-muted); transition: all 0.2s;
-  }
-  body.dark .modal-close { background: rgba(255,255,255,0.05); }
-  .modal-close:hover { background: rgba(181, 70, 32, 0.1); color: var(--accent); transform: rotate(90deg); }
-
-  @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
-  }
+  .modal-close { position: absolute; top: 1.2rem; right: 1.2rem; width: 36px; height: 36px; border-radius: 50%; background: rgba(0,0,0,.05); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--text-muted); transition: all .2s; }
+  body.dark .modal-close { background: rgba(255,255,255,.05); }
+  .modal-close:hover { background: rgba(181,70,32,.1); color: var(--accent); transform: rotate(90deg); }
+  .dia-btn { background: var(--surface-2); border: 1px solid var(--border); color: var(--text); padding: 5px 10px; border-radius: 8px; cursor: pointer; font-family: 'Hind Siliguri', sans-serif; font-size: 14px; transition: all .15s; }
+  .dia-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--bg-2); }
+  .dia-btn span { font-family: 'Manrope', monospace; font-size: 10px; }
 </style>
 </head>
 <body>
@@ -312,64 +108,43 @@
 
   <div class="relative max-w-6xl mx-auto px-5 sm:px-8 py-8 md:py-14">
 
-    <!-- Header -->
     <header class="flex items-center justify-between mb-12 md:mb-16 relative gap-4 flex-wrap">
       <div class="flex items-center gap-3">
         <div class="w-11 h-11 rounded-xl flex items-center justify-center bn-serif"
-             style="background: linear-gradient(135deg, var(--accent), #d97706); color: var(--bg-2); font-weight: 700; font-size: 24px; box-shadow: 0 6px 18px rgba(181, 70, 32, 0.35);">
-          ব
-        </div>
+             style="background: linear-gradient(135deg, var(--accent), #d97706); color: var(--bg-2); font-weight: 700; font-size: 24px; box-shadow: 0 6px 18px rgba(181,70,32,.35);">বি</div>
         <div>
           <div class="display font-bold text-lg leading-none">Bindu</div>
           <div class="text-[11px] mt-1" style="color: var(--text-muted);">English → Bangla typing</div>
         </div>
       </div>
-      
-      <!-- Header Right Side -->
       <div class="flex items-center gap-3 flex-wrap">
         <div class="hidden lg:flex items-center gap-2 text-xs" style="color: var(--text-muted);">
-          <span class="pulse-dot"></span>
-          <span>Phonetic engine · live</span>
+          <span class="pulse-dot"></span><span>Phonetic engine · live</span>
         </div>
-        
-        <!-- Dark Mode Toggle -->
         <button id="darkModeBtn" class="icon-btn" aria-label="Toggle dark mode">
           <svg id="moonIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
           <svg id="sunIcon" class="hidden" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
         </button>
-
         <button class="btn btn-secondary" id="helpBtn">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10"/>
-            <path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/>
-            <line x1="12" y1="17" x2="12.01" y2="17"/>
-          </svg>
-          <span class="hidden md:inline">Help / টাইপিংয়ের জন্য সহায়তা</span>
-          <span class="md:hidden">Help</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <span class="hidden md:inline">Help / টাইপিং গাইড</span><span class="md:hidden">Help</span>
         </button>
       </div>
     </header>
 
-    <!-- Hero -->
     <section class="mb-12 md:mb-14 relative">
-      <div class="deco-char hidden md:block" style="font-size: 280px; top: -50px; right: -30px;">াং</div>
-      <div class="text-[11px] uppercase tracking-[0.2em] mb-4 font-semibold" style="color: var(--accent);">
-        Phonetic transliteration
-      </div>
+      <div class="deco-char hidden md:block" style="font-size: 280px; top: -50px; right: -30px;">অ</div>
+      <div class="text-[11px] uppercase tracking-[0.2em] mb-4 font-semibold" style="color: var(--accent);">Phonetic transliteration</div>
       <h1 class="display font-bold leading-[0.95] relative" style="font-size: clamp(2.4rem, 6.5vw, 4.8rem); letter-spacing: -0.025em;">
-        Type in English.<br/>
-        Read in <span class="bn-serif italic" style="color: var(--accent); font-style: italic;">বাংলা</span>.
+        Type in English.<br/>Read in <span class="bn-serif" style="color: var(--accent); font-style: italic;">বাংলা</span>.
       </h1>
       <p class="mt-5 text-base md:text-lg max-w-xl leading-relaxed" style="color: var(--text-muted);">
-        Just type how it sounds. <span class="bn">"ami bhalo achi"</span> becomes <span class="bn">"আমি ভালো আছি"</span>. Pick from live suggestions to get the exact Bengali you want.
+        Just type how it sounds. <span class="bn">"ami bhalo achi"</span> becomes <span class="bn">"আমি ভালো আছি"</span>. Now supports reph, ja-phala, anusvara, visarga &amp; chandrabindu.
       </p>
     </section>
 
-    <!-- Editor -->
     <section class="mb-5">
       <div class="grid lg:grid-cols-2 gap-4">
-
-        <!-- English input -->
         <div class="card p-5">
           <div class="flex items-center justify-between mb-3">
             <div class="flex items-center gap-2">
@@ -379,71 +154,53 @@
             </div>
             <div class="text-[11px] font-medium" style="color: var(--text-dim);" id="enWordCount">0 words</div>
           </div>
-          <textarea id="enInput"
-                    class="w-full h-56 bg-transparent outline-none resize-none text-lg leading-relaxed"
-                    placeholder="ami bangla bhasha shikhi..."
-                    spellcheck="false"
-                    autocomplete="off"></textarea>
+          <textarea id="enInput" class="w-full h-56 bg-transparent outline-none resize-none text-lg leading-relaxed" placeholder="ami bangla bhasha shikhi..." spellcheck="false" autocomplete="off"></textarea>
+
+          <div class="mt-3 pt-3 flex items-center gap-2 flex-wrap text-[11px]" style="border-top: 1px dashed var(--border); color: var(--text-muted);">
+            <span class="font-bold">Insert:</span>
+            <button type="button" class="dia-btn" data-ins="~" title="Chandrabindu">ঁ <span>~</span></button>
+            <button type="button" class="dia-btn" data-ins=":" title="Visarga">ঃ <span>:</span></button>
+            <button type="button" class="dia-btn" data-ins="M" title="Anusvara">ং <span>M</span></button>
+            <span style="color: var(--text-dim);margin-left:6px;">Reph: r+cons · Ja-phala: cons+y</span>
+          </div>
         </div>
 
-        <!-- Bengali output -->
         <div class="card p-5" style="background: var(--surface-2);">
           <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
-            <div class="flex items-center gap-2">
-              <div class="text-[11px] uppercase tracking-[0.18em] font-bold bn-serif" style="color: var(--accent);">বাংলা</div>
-            </div>
-            
+            <div class="text-[11px] uppercase tracking-[0.18em] font-bold bn-serif" style="color: var(--accent);">বাংলা</div>
             <div class="flex items-center gap-2 flex-wrap">
-              <!-- Font Selection -->
               <select id="fontSelect" class="custom-select">
                 <option value="'Hind Siliguri', sans-serif">Hind Siliguri</option>
                 <option value="'Noto Serif Bengali', serif">Noto Serif</option>
                 <option value="'Baloo Da 2', cursive">Baloo Da 2</option>
                 <option value="'Atma', sans-serif">Atma</option>
               </select>
-
-              <!-- Font Size Controls -->
               <div class="flex items-center gap-1 border rounded-full px-1 py-1" style="border-color: var(--border);">
-                <button id="fontDec" class="icon-btn" style="border: none; padding: 2px 6px;">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                </button>
+                <button id="fontDec" class="icon-btn" style="border:none;padding:2px 6px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
                 <span id="fontSizeVal" class="text-xs font-bold w-5 text-center" style="color: var(--text);">22</span>
-                <button id="fontInc" class="icon-btn" style="border: none; padding: 2px 6px;">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                </button>
+                <button id="fontInc" class="icon-btn" style="border:none;padding:2px 6px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
               </div>
-
-              <!-- Copy -->
-              <button id="copyBtn" class="btn btn-secondary" style="padding: 5px 12px; font-size: 11px;">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="9" y="9" width="13" height="13" rx="2"/>
-                  <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
-                </svg>
+              <button id="copyBtn" class="btn btn-secondary" style="padding:5px 12px;font-size:11px;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
                 Copy
               </button>
             </div>
           </div>
-          <div id="bnOutput"
-               class="bn w-full h-56 overflow-auto"
-               style="font-size: 22px; line-height: 1.75;"></div>
+          <div id="bnOutput" class="bn w-full h-56 overflow-auto" style="font-size: 22px; line-height: 1.75;"></div>
         </div>
-
       </div>
 
-      <!-- Suggestion bar -->
       <div id="suggestionBar" class="card p-4 mt-4 suggestion-bar hidden">
         <div class="flex items-center justify-between flex-wrap gap-3 mb-3">
           <div class="flex items-baseline gap-2 flex-wrap">
             <div class="text-[11px] uppercase tracking-[0.18em] font-bold" style="color: var(--text-muted);">Suggestions for</div>
             <div class="phonetics-tag" id="currentWordDisplay">—</div>
           </div>
-          
           <div class="flex items-center gap-3">
-            <!-- Color Picker for Selected Word -->
             <div class="flex items-center gap-2 border rounded-full px-2 py-1" style="border-color: var(--border);">
               <span class="text-[11px] font-bold" style="color: var(--text-muted);">Color</span>
-              <input type="color" id="wordColorPicker" value="#1a1410" style="width: 24px; height: 24px; border: none; background: transparent; cursor: pointer; padding: 0;">
-              <button id="resetColorBtn" class="icon-btn" style="border: none; padding: 2px 6px;" title="Reset color">
+              <input type="color" id="wordColorPicker" value="#1a1410" style="width:24px;height:24px;border:none;background:transparent;cursor:pointer;padding:0;">
+              <button id="resetColorBtn" class="icon-btn" style="border:none;padding:2px 6px;" title="Reset color">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
               </button>
             </div>
@@ -452,36 +209,25 @@
         </div>
         <div id="suggestions" class="flex flex-wrap gap-2"></div>
       </div>
-
     </section>
 
-    <!-- Action row -->
     <section class="flex flex-wrap items-center gap-2 mb-12 md:mb-16">
       <button class="btn" id="clearBtn">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z"/>
-        </svg>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z"/></svg>
         Clear
       </button>
-      <button class="btn btn-secondary" id="sampleBtn">
-        Try a sample
-      </button>
+      <button class="btn btn-secondary" id="sampleBtn">Try a sample</button>
       <button class="btn btn-secondary" id="uploadBtn">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-          <circle cx="8.5" cy="8.5" r="1.5"/>
-          <polyline points="21 15 16 10 5 21"/>
-        </svg>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
         Upload Image
       </button>
-      <input type="file" id="imageInput" accept="image/*" style="display: none;">
+      <input type="file" id="imageInput" accept="image/*" style="display:none;">
       <div class="ml-auto flex items-center gap-5 text-xs font-medium" style="color: var(--text-muted);">
         <div><span id="totalWords" style="color: var(--text);">0</span> words</div>
         <div><span id="totalChars" style="color: var(--text);">0</span> chars</div>
       </div>
     </section>
 
-    <!-- Common phrases -->
     <section class="mb-12 md:mb-16">
       <div class="flex items-baseline justify-between mb-5 flex-wrap gap-2">
         <h2 class="display font-semibold text-2xl">Try these phrases</h2>
@@ -490,9 +236,8 @@
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3" id="phraseGrid"></div>
     </section>
 
-    <!-- Footer -->
     <footer class="pt-6 text-center text-xs leading-relaxed" style="border-top: 1px solid var(--border); color: var(--text-dim);">
-      Phonetic transliteration · <span class="bn" style="color: var(--text-muted);">বাংলা ভাষা চিরজীবী হোক</span>
+      Phonetic transliteration · <span class="bn" style="color: var(--text-muted);">বাংলা ভাষা শেখার সরঞ্জাম</span>
     </footer>
   </div>
 
@@ -500,15 +245,12 @@
   <div id="helpModal" class="modal-overlay">
     <div class="modal-content">
       <button class="modal-close" id="closeModalBtn">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="18" y1="6" x2="6" y2="18"/>
-          <line x1="6" y1="6" x2="18" y2="18"/>
-        </svg>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
       <div class="text-[11px] uppercase tracking-[0.2em] mb-3 font-semibold" style="color: var(--accent);">Typing Guide</div>
-      <h2 class="display font-bold text-3xl mb-2">টাইপিংয়ের জন্য সহায়তা</h2>
+      <h2 class="display font-bold text-3xl mb-2">টাইপিং গাইড</h2>
       <p class="text-sm mb-8" style="color: var(--text-muted);">Type Bengali phonetically using English letters. Here is the mapping of English keys to Bengali letters.</p>
-      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-1 mb-8">
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-1 mb-6">
         <div>
           <div class="text-[11px] uppercase tracking-widest font-bold mb-2" style="color: var(--accent);">Vowels</div>
           <div class="guide-row"><span class="guide-key">a / aa</span><span class="guide-val">অ / আ</span></div>
@@ -534,799 +276,797 @@
           <div class="guide-row"><span class="guide-key">b / bh</span><span class="guide-val">ব / ভ</span></div>
         </div>
         <div>
-          <div class="text-[11px] uppercase tracking-widest font-bold mb-2" style="color: var(--accent);">Sibilants & more</div>
+          <div class="text-[11px] uppercase tracking-widest font-bold mb-2" style="color: var(--accent);">Sibilants &amp; more</div>
           <div class="guide-row"><span class="guide-key">sh / Sh</span><span class="guide-val">শ / ষ</span></div>
           <div class="guide-row"><span class="guide-key">s / h</span><span class="guide-val">স / হ</span></div>
           <div class="guide-row"><span class="guide-key">n / N</span><span class="guide-val">ন / ণ</span></div>
           <div class="guide-row"><span class="guide-key">m / r</span><span class="guide-val">ম / র</span></div>
-          <div class="guide-row"><span class="guide-key">y / w</span><span class="guide-val">য় / ও</span></div>
+          <div class="guide-row"><span class="guide-key">y / w</span><span class="guide-val">য / ৱ</span></div>
         </div>
       </div>
+
+      <div style="border-top: 1px dashed var(--border); padding-top: 16px; margin-bottom: 16px;">
+        <div class="text-[11px] uppercase tracking-widest font-bold mb-3" style="color: var(--accent);">Special marks (NEW)</div>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-1">
+          <div class="guide-row"><span class="guide-key">r + consonant</span><span class="guide-val">র্ক (reph)</span></div>
+          <div class="guide-row"><span class="guide-key">consonant + y</span><span class="guide-val">ক্য (ja-phala)</span></div>
+          <div class="guide-row"><span class="guide-key">ng / M</span><span class="guide-val">ং (anusvara)</span></div>
+          <div class="guide-row"><span class="guide-key">: / H</span><span class="guide-val">ঃ (visarga)</span></div>
+          <div class="guide-row"><span class="guide-key">~ / ` / ^</span><span class="guide-val">ঁ (chandrabindu)</span></div>
+          <div class="guide-row"><span class="guide-key">.</span><span class="guide-val">। (dari)</span></div>
+        </div>
+      </div>
+
       <div class="mt-6 pt-5 text-xs leading-relaxed" style="border-top: 1px dashed var(--border); color: var(--text-muted);">
-        <strong style="color: var(--text);">Tip:</strong> Use <code style="background: rgba(0,0,0,0.05); padding: 1px 5px; border-radius: 3px; font-family: monospace;">aa</code> for long আ sounds (Aam → আম), <code style="background: rgba(0,0,0,0.05); padding: 1px 5px; border-radius: 3px; font-family: monospace;">T</code>/<code style="background: rgba(0,0,0,0.05); padding: 1px 5px; border-radius: 3px; font-family: monospace;">D</code> for retroflex ট/ড, and <code style="background: rgba(0,0,0,0.05); padding: 1px 5px; border-radius: 3px; font-family: monospace;">N</code> for ণ. End a sentence with <code style="background: rgba(0,0,0,0.05); padding: 1px 5px; border-radius: 3px; font-family: monospace;">.</code> for Bengali দাঁড়ি।
+        <strong style="color: var(--text);">Examples:</strong>
+        <code style="background: rgba(0,0,0,.05); padding:1px 5px; border-radius:3px; font-family:monospace;">karma</code> → কর্ম ·
+        <code style="background: rgba(0,0,0,.05); padding:1px 5px; border-radius:3px; font-family:monospace;">shri</code> → শ্রী ·
+        <code style="background: rgba(0,0,0,.05); padding:1px 5px; border-radius:3px; font-family:monospace;">kya</code> → ক্যা ·
+        <code style="background: rgba(0,0,0,.05); padding:1px 5px; border-radius:3px; font-family:monospace;">rong</code> → রং ·
+        <code style="background: rgba(0,0,0,.05); padding:1px 5px; border-radius:3px; font-family:monospace;">dukkho:</code> → দুঃখ ·
+        <code style="background: rgba(0,0,0,.05); padding:1px 5px; border-radius:3px; font-family:monospace;">chaa~d</code> → চাঁদ
       </div>
     </div>
   </div>
 
-  <!-- Image Upload Modal -->
+  <!-- Image Modal -->
   <div id="imageModal" class="modal-overlay">
-    <div class="modal-content" style="max-width: 400px; text-align: center;">
+    <div class="modal-content" style="max-width:400px;text-align:center;">
       <button class="modal-close" id="closeImageModalBtn">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="18" y1="6" x2="6" y2="18"/>
-          <line x1="6" y1="6" x2="18" y2="18"/>
-        </svg>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
       <div class="text-[11px] uppercase tracking-[0.2em] mb-3 font-semibold" style="color: var(--accent);">Insert Image</div>
       <h3 class="display font-bold text-2xl mb-4">Custom Size</h3>
-      <img id="imagePreview" src="" style="max-height: 150px; border-radius: 8px; margin: 0 auto 20px; display: block; max-width: 100%;">
+      <img id="imagePreview" src="" style="max-height:150px;border-radius:8px;margin:0 auto 20px;display:block;max-width:100%;">
       <div class="flex items-center justify-center gap-3 mb-6">
         <label class="text-sm font-semibold" style="color: var(--text-muted);">Height (px)</label>
-        <input type="number" id="imageSizeInput" value="80" min="20" max="500" class="custom-select" style="width: 80px; text-align: center; padding: 8px;">
+        <input type="number" id="imageSizeInput" value="80" min="20" max="500" class="custom-select" style="width:80px;text-align:center;padding:8px;">
       </div>
       <button class="btn w-full justify-center" id="insertImageBtn">Insert into Text</button>
     </div>
   </div>
 
-  <!-- Toast -->
-  <div id="toast"
-       class="fixed bottom-6 left-1/2 -translate-x-1/2 px-5 py-2.5 rounded-full text-sm font-medium pointer-events-none opacity-0 transition-opacity"
-       style="background: var(--text); color: var(--bg); z-index: 100; box-shadow: 0 8px 24px rgba(0,0,0,0.2);">
-    Copied to clipboard
-  </div>
+  <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 px-5 py-2.5 rounded-full text-sm font-medium pointer-events-none opacity-0 transition-opacity" style="background: var(--text); color: var(--bg); z-index: 100; box-shadow: 0 8px 24px rgba(0,0,0,.2);">Copied to clipboard</div>
 
 <script>
-  // ============ Dictionary (common words) ============
-  const dictionary = {
-    'ami': 'আমি', 'amra': 'আমরা', 'tumi': 'তুমি', 'tomra': 'তোমরা',
-    'apni': 'আপনি', 'apnara': 'আপনারা', 'se': 'সে', 'tara': 'তারা',
-    'ta': 'টা', 'eta': 'এটা', 'ota': 'ওটা', 'egulo': 'এগুলো', 'ogulo': 'ওগুলো',
-    'amake': 'আমাকে', 'tomake': 'তোমাকে', 'apnake': 'আপনাকে',
-    'amar': 'আমার', 'tomar': 'তোমার', 'apnar': 'আপনার', 'tar': 'তার',
-    'amader': 'আমাদের', 'tomader': 'তোমাদের', 'apnader': 'আপনাদের', 'tader': 'তাদের',
-    'kori': 'করি', 'koro': 'করো', 'koren': 'করেন', 'korbo': 'করব', 'korbe': 'করবে',
-    'korchi': 'করছি', 'korcho': 'করছ', 'korchen': 'করছেন',
-    'kore': 'করে', 'korechilo': 'করেছিল',
-    'korlam': 'করলাম', 'korlen': 'করলেন', 'korlo': 'করল',
-    'korechi': 'করেছি', 'korecho': 'করেছ', 'korechen': 'করেছেন',
-    'korechilam': 'করেছিলাম', 'korechilen': 'করেছিলেন',
-    'korchilam': 'করছিলাম', 'korchilen': 'করছিলেন',
-    'kortam': 'করতাম', 'korten': 'করতেন',
-    'hoy': 'হয়', 'hobe': 'হবে', 'hole': 'হলে', 'hoyni': 'হয়নি',
-    'hoyeche': 'হয়েছে', 'hochhe': 'হচ্ছে', 'hoise': 'হয়েছে', 'holo': 'হলো',
-    'hoyechilo': 'হয়েছিল',
-    'boli': 'বলি', 'bolo': 'বলো', 'bolen': 'বলেন', 'bolbo': 'বলব',
-    'bolam': 'বললাম', 'bollen': 'বললেন', 'bole': 'বলে',
-    'achi': 'আছি', 'acho': 'আছ', 'achen': 'আছেন', 'ache': 'আছে', 'achilo': 'ছিল',
-    'chilo': 'ছিল', 'chilam': 'ছিলাম', 'chilen': 'ছিলেন',
-    'thaki': 'থাকি', 'thako': 'থাকো', 'thaken': 'থাকেন', 'thakbo': 'থাকব',
-    'thaklam': 'থাকলাম',
-    'jani': 'জানি', 'jano': 'জানো', 'janen': 'জানেন', 'janbo': 'জানব',
-    'jantam': 'জানতাম', 'janlam': 'জানলাম', 'jane': 'জানে',
-    'dekhi': 'দেখি', 'dekho': 'দেখো', 'dekhen': 'দেখেন', 'dekhabo': 'দেখাব',
-    'deklam': 'দেখলাম', 'dekhechi': 'দেখেছি', 'dekhechilam': 'দেখেছিলাম',
-    'dekhe': 'দেখে',
-    'shunlam': 'শুনলাম', 'shunbo': 'শুনব', 'shunchi': 'শুনছি', 'shunen': 'শুনেন',
-    'shunsi': 'শুনেছি', 'shunechi': 'শুনেছি',
-    'asi': 'আসি', 'aso': 'এসো', 'ashen': 'আসেন', 'asbo': 'আসব',
-    'echi': 'এসেছি', 'echo': 'এসেছ', 'echen': 'এসেছেন', 'elam': 'এলাম', 'echilam': 'এসেছিলাম',
-    'jai': 'যাই', 'jao': 'যাও', 'jan': 'যান', 'jabo': 'যাব', 'gelam': 'গেলাম',
-    'gechi': 'গেছি', 'gechilam': 'গেছিলাম', 'gelen': 'গেলেন',
-    'khai': 'খাই', 'khao': 'খাও', 'khan': 'খান', 'khabo': 'খাব',
-    'khelam': 'খেলাম', 'kheyechi': 'খেয়েছি', 'kheyechilam': 'খেয়েছিলাম',
-    'di': 'দি', 'dao': 'দাও', 'den': 'দেন', 'dibo': 'দিব', 'diyechi': 'দিয়েছি',
-    'nilam': 'নিলাম', 'nibo': 'নিব', 'nite': 'নিতে', 'niyechi': 'নিয়েছি',
-    'ki': 'কী', 'ke': 'কে', 'kothay': 'কোথায়', 'kobe': 'কবে', 'kemon': 'কেমন',
-    'keno': 'কেন', 'kivabe': 'কীভাবে', 'koto': 'কত', 'kotha': 'কথা',
-    'kar': 'কার', 'kake': 'কাকে', 'karon': 'কারণ', 'kache': 'কাছে',
-    'bhalo': 'ভালো', 'kharap': 'খারাপ', 'boro': 'বড়', 'choto': 'ছোট',
-    'sundor': 'সুন্দর', 'notun': 'নতুন', 'purono': 'পুরোনো', 'shada': 'সাদা',
-    'kalo': 'কালো', 'lal': 'লাল', 'sobuj': 'সবুজ', 'holud': 'হলুদ', 'nil': 'নীল',
-    'shanto': 'শান্ত', 'shottik': 'সত্যি', 'shotti': 'সত্যি', 'sotti': 'সত্যি',
-    'ekhon': 'এখন', 'tokhon': 'তখন', 'age': 'আগে', 'pore': 'পরে',
-    'khub': 'খুব', 'ektu': 'একটু', 'onek': 'অনেক', 'beshi': 'বেশি', 'kom': 'কম',
-    'sob': 'সব', 'sobai': 'সবাই', 'mone': 'মনে', 'theke': 'থেকে',
-    'kintu': 'কিন্তু', 'tobe': 'তবে', 'ebong': 'এবং', 'othoba': 'অথবা',
-    'tai': 'তাই', 'tarpor': 'তারপর', 'tahole': 'তাহলে',
-    'manush': 'মানুষ', 'chele': 'ছেলে', 'meye': 'মেয়ে', 'baba': 'বাবা',
-    'ma': 'মা', 'bon': 'বোন', 'vai': 'ভাই', 'didi': 'দিদি', 'dada': 'দাদা',
-    'nana': 'নানা', 'nani': 'নানী', 'dadu': 'দাদু', 'dida': 'দিদা',
-    'chacha': 'চাচা', 'chachi': 'চাচি', 'mama': 'মামা', 'mami': 'মামি',
-    'din': 'দিন', 'rat': 'রাত', 'ratri': 'রাত্রি', 'shokal': 'সকাল', 'belaa': 'বেলা',
-    'bikal': 'বিকেল', 'boi': 'বই', 'kolom': 'কলম', 'ghor': 'ঘর',
-    'jibon': 'জীবন', 'mon': 'মন', 'vasha': 'ভাষা', 'desh': 'দেশ',
-    'shehar': 'শহর', 'gram': 'গ্রাম', 'rong': 'রঙ', 'khabar': 'খাবার',
-    'pani': 'পানি', 'batash': 'বাতাস', 'alo': 'আলো', 'rasta': 'রাস্তা',
-    'ek': 'এক', 'dui': 'দুই', 'tin': 'তিন', 'char': 'চার', 'pach': 'পাঁচ',
-    'chhoy': 'ছয়', 'sat': 'সাত', 'at': 'আট', 'noy': 'নয়', 'dosh': 'দশ',
-    'nomoskar': 'নমস্কার', 'suprobhat': 'সুপ্রভাত', 'shuvoratri': 'শুভরাত্রি',
-    'dhonnobad': 'ধন্যবাদ', 'dhonnavad': 'ধন্যবাদ',
-    'ha': 'হ্যাঁ', 'na': 'না', 'hai': 'হ্যাঁ',
-    'bangla': 'বাংলা', 'bangladesh': 'বাংলাদেশ', 'bhasha': 'ভাষা',
-    'shikhi': 'শিখি', 'shikho': 'শিখো', 'shikhen': 'শিখেন', 'shikhbo': 'শিখব',
-    'shikhlam': 'শিখলাম', 'shikhechi': 'শিখেছি',
-    'likhi': 'লিখি', 'likho': 'লিখো', 'likhen': 'লিখেন', 'likhbo': 'লিখব',
-    'pori': 'পড়ি', 'poro': 'পড়ো', 'poren': 'পড়েন', 'porbo': 'পড়ব',
-    'khuji': 'খুঁজি', 'khujo': 'খুঁজো', 'khujen': 'খুঁজেন', 'khujechi': 'খুঁজেছি',
-    'bhalobashi': 'ভালোবাসি', 'bhalobashbo': 'ভালোবাসব',
-    'shuno': 'শোনো', 'shunen': 'শুনুন',
-  };
+// ============ Bengali special chars ============
+const CHANDRA = '\u0981';  // ঁ
+const ANUSVARA = '\u0982'; // ং
+const VISARGA = '\u0983';  // ঃ
+const HASANT = '\u09CD';   // ্
+const DARI = '\u0964';     // ।
+const YA = '\u09AF';       // য
 
-  // ============ Transliteration rules ============
-  const consRules = [
-    // Conjuncts (যুক্তাক্ষর) - MUST BE AT THE TOP
-    ['ksh','ক্ষ'],
-    ['kkh','ক্খ'],
-    ['kk','ক্ক'],
-    ['gg','গ্গ'],
-    ['cc','চ্চ'],
-    ['jj','জ্জ'],
-    ['tt','ত্ত'],
-    ['dd','দ্দ'],
-    ['nn','ন্ন'],
-    ['pp','প্প'],
-    ['bb','ব্ব'],
-    ['mm','ম্ম'],
-    ['ll','ল্ল'],
-    ['ss','স্স'],
-    ['ng','ং'],
-    // Standard Consonants
-    ['chh','ছ'], ['kh','খ'], ['gh','ঘ'], ['ch','ছ'],
-    ['jh','ঝ'], ['th','থ'], ['dh','ধ'], ['ph','ফ'],
-    ['bh','ভ'], ['sh','শ'], ['Sh','ষ'], ['Th','ঠ'],
-    ['Dh','ঢ'], ['Rh','ঢ়'],
-    ['k','ক'], ['g','গ'], ['c','চ'], ['j','জ'],
-    ['T','ট'], ['D','ড'], ['N','ণ'], ['t','ত'],
-    ['d','দ'], ['n','ন'], ['p','প'], ['f','ফ'],
-    ['b','ব'], ['v','ভ'], ['m','ম'], ['z','য'],
-    ['y','য়'], ['r','র'], ['l','ল'], ['S','ষ'],
-    ['s','স'], ['h','হ'], ['R','ড়'], ['Y','য'],
-    ['w','ও'],
-  ];
+// ============ Dictionary ============
+const dictionary = {
+  'ami':'আমি','amra':'আমরা','tumi':'তুমি','tomra':'তোমরা','apni':'আপনি','apnara':'আপনারা',
+  'se':'সে','tara':'তারা','ta':'তা','eta':'এটা','ota':'ওটা','egulo':'এগুলো','ogulo':'ওগুলো',
+  'amake':'আমাকে','tomake':'তোমাকে','apnake':'আপনাকে','amar':'আমার','tomar':'তোমার','apnar':'আপনার',
+  'tar':'তার','amader':'আমাদের','tomader':'তোমাদের','apnader':'আপনাদের','tader':'তাদের',
+  'kori':'করি','koro':'করো','koren':'করেন','korbo':'করব','korbe':'করবে','korchi':'করছি',
+  'korcho':'করছ','korchen':'করছেন','kore':'করে','korlam':'করলাম','korlen':'করলেন','korlo':'করলো',
+  'korechi':'করেছি','korecho':'করেছ','korechen':'করেছেন','kortam':'করতাম','korten':'করতেন',
+  'hoy':'হয়','hobe':'হবে','hole':'হলে','hoyni':'হয়নি','hoyeche':'হয়েছে','hochhe':'হচ্ছে',
+  'hoise':'হইছে','holo':'হলো','hoyechilo':'হয়েছিলো',
+  'boli':'বলি','bolo':'বলো','bolen':'বলেন','bolbo':'বলব','bolam':'বললাম','bollen':'বললেন','bole':'বলে',
+  'achi':'আছি','acho':'আছ','achen':'আছেন','ache':'আছে','achilo':'আছিল',
+  'chilo':'ছিল','chilam':'ছিলাম','chilen':'ছিলেন',
+  'thaki':'থাকি','thako':'থাকো','thaken':'থাকেন','thakbo':'থাকব','thaklam':'থাকলাম',
+  'jani':'জানি','jano':'জানো','janen':'জানেন','janbo':'জানব','jantam':'জানতাম','janlam':'জানলাম','jane':'জানে',
+  'dekhi':'দেখি','dekho':'দেখো','dekhen':'দেখেন','dekhabo':'দেখাব','deklam':'দেখলাম',
+  'dekhechi':'দেখেছি','dekhe':'দেখে',
+  'shunlam':'শুনলাম','shunbo':'শুনব','shunchi':'শুনছি','shunen':'শুনেন','shunechi':'শুনেছি',
+  'asi':'আসি','aso':'আসো','ashen':'আসেন','asbo':'আসব','elam':'এলাম','echi':'এসেছি',
+  'jai':'যাই','jao':'যাও','jan':'যান','jabo':'যাব','gelam':'গেলাম','gechi':'গেছি',
+  'khai':'খাই','khao':'খাও','khan':'খান','khabo':'খাব','khelam':'খেলাম','kheyechi':'খেয়েছি',
+  'di':'দি','dao':'দাও','den':'দেন','dibo':'দিব','diyechi':'দিয়েছি',
+  'nilam':'নিলাম','nibo':'নিব','nite':'নিতে','niyechi':'নিয়েছি',
+  'ki':'কি','ke':'কে','kothay':'কোথায়','kobe':'কবে','kemon':'কেমন','keno':'কেন',
+  'kivabe':'কিভাবে','koto':'কত','kotha':'কথা','kar':'কার','kake':'কাকে','karon':'কারণ','kache':'কাছে',
+  'bhalo':'ভালো','kharap':'খারাপ','boro':'বড়','choto':'ছোট','sundor':'সুন্দর','notun':'নতুন',
+  'purono':'পুরনো','shada':'সাদা','kalo':'কালো','lal':'লাল','sobuj':'সবুজ','holud':'হলুদ','nil':'নীল',
+  'shanto':'শান্ত','shotti':'সত্যি','sotti':'সত্যি',
+  'ekhon':'এখন','tokhon':'তখন','age':'আগে','pore':'পরে',
+  'khub':'খুব','ektu':'একটু','onek':'অনেক','beshi':'বেশি','kom':'কম',
+  'sob':'সব','sobai':'সবাই','mone':'মনে','theke':'থেকে','kintu':'কিন্তু','tobe':'তবে',
+  'ebong':'এবং','othoba':'অথবা','tai':'তাই','tarpor':'তারপর','tahole':'তাহলে',
+  'manush':'মানুষ','chele':'ছেলে','meye':'মেয়ে','baba':'বাবা','ma':'মা','bon':'বোন','vai':'ভাই',
+  'didi':'দিদি','dada':'দাদা','nana':'নানা','nani':'নানী','dadu':'দাদু','dida':'দিদা',
+  'din':'দিন','rat':'রাত','shokal':'সকাল','bikal':'বিকাল','boi':'বই','kolom':'কলম','ghor':'ঘর',
+  'jibon':'জীবন','mon':'মন','vasha':'ভাষা','bhasha':'ভাষা','desh':'দেশ','gram':'গ্রাম',
+  'rong':'রং','khabar':'খাবার','pani':'পানি','batash':'বাতাস','alo':'আলো','rasta':'রাস্তা',
+  'ek':'এক','dui':'দুই','tin':'তিন','char':'চার','pach':'পাঁচ','chhoy':'ছয়','sat':'সাত','at':'আট','noy':'নয়','dosh':'দশ',
+  'nomoskar':'নমস্কার','suprobhat':'সুপ্রভাত','shuvoratri':'শুভরাত্রি',
+  'dhonnobad':'ধন্যবাদ','dhonnabad':'ধন্যবাদ','bangla':'বাংলা','bangladesh':'বাংলাদেশ',
+  'shikhi':'শিখি','shikho':'শিখো','shikhen':'শিখেন','shikhbo':'শিখব','shikhlam':'শিখলাম',
+  'bhalobashi':'ভালোবাসি','shuvo':'শুভ','shubho':'শুভ','shathe':'সাথে','jonno':'জন্য',
+  'karma':'কর্ম','dharma':'ধর্ম','shri':'শ্রী','shriman':'শ্রীমান','shrimoti':'শ্রীমতী',
+  'dukkho':'দুঃখ','shongshar':'সংসার','songsar':'সংসার','ongko':'অঙ্ক','rongin':'রঙিন',
+  'chand':'চাঁদ','chad':'চাঁদ','ga':'গা','gaa':'গা','haat':'হাত','haath':'হাত',
+};
 
-  const vowelRules = [
-    ['aa','আ','া'], ['ii','ঈ','ী'], ['uu','ঊ','ূ'],
-    ['oi','ঐ','ৈ'], ['ou','ঔ','ৌ'], ['au','ঔ','ৌ'],
-    ['a','অ',''], ['i','ই','ি'], ['u','উ','ু'],
-    ['e','এ','ে'], ['o','ও','ো'],
-    ['A','আ','া'], ['I','ঈ','ী'], ['U','ঊ','ূ'],
-    ['E','এ','ে'], ['O','ও','ো'],
-  ];
+// ============ Transliteration rules ============
+// Order matters: longest first
+const consRules = [
+  ['chh','ছ'],['kh','খ'],['gh','ঘ'],['ch','চ'],
+  ['jh','ঝ'],['th','থ'],['dh','ধ'],['ph','ফ'],
+  ['bh','ভ'],['sh','শ'],['Sh','ষ'],['Th','ঠ'],
+  ['Dh','ঢ'],['Rh','ঢ়'],
+  ['k','ক'],['g','গ'],['c','চ'],['j','জ'],
+  ['T','ট'],['D','ড'],['N','ণ'],['t','ত'],
+  ['d','দ'],['n','ন'],['p','প'],['f','ফ'],
+  ['b','ব'],['v','ভ'],['m','ম'],['z','জ'],
+  ['y','য'],['r','র'],['l','ল'],['S','শ'],
+  ['s','স'],['h','হ'],['R','ড়'],['Y','য়'],
+  ['w','ও'],['q','ক'],
+];
 
-  const bnDigits = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
+const vowelRules = [
+  ['aa','আ','া'],['ii','ঈ','ী'],['uu','ঊ','ূ'],
+  ['oi','ঐ','ৈ'],['ou','ঔ','ৌ'],['au','ঔ','ৌ'],
+  ['a','অ',''],['i','ই','ি'],['u','উ','ু'],
+  ['e','এ','ে'],['o','ও','ো'],
+  ['A','আ','া'],['I','ঈ','ী'],['U','ঊ','ূ'],
+  ['E','এ','ে'],['O','ও','ো'],
+];
 
-  function transliterateWord(word) {
-    if (!word) return '';
+const bnDigits = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
 
-    let result = '';
-    let i = 0;
-    let lastWasConsonant = false;
+// Helper: is next input char a consonant (or consonant cluster)?
+function nextIsConsonant(word, i) {
+  if (i >= word.length) return false;
+  // Check if the substring at i matches any consonant rule
+  for (const [eng] of consRules) {
+    if (word.substr(i, eng.length) === eng) return true;
+  }
+  // Check case-insensitive
+  for (const [eng] of consRules) {
+    if (word.substr(i, eng.length).toLowerCase() === eng.toLowerCase()) return true;
+  }
+  return false;
+}
 
-    while (i < word.length) {
-      const ch = word[i];
+function transliterateWord(word) {
+  if (!word) return '';
+  let result = '';
+  let i = 0;
+  let lastWasConsonant = false;
 
-      if (/[0-9]/.test(ch)) {
-        result += bnDigits[parseInt(ch)];
-        i++;
-        lastWasConsonant = false;
-        continue;
-      }
+  while (i < word.length) {
+    const ch = word[i];
 
-      if (ch === '~' || ch === '`' || ch === '^') { result += 'ঁ'; i++; continue; }
-      if (ch === ':') { result += 'ঃ'; i++; continue; }
-      if (ch === '+') { result += 'ৎ'; i++; continue; }
-      if (ch === '.') {
-        if (i === word.length - 1) { result += '।'; i++; lastWasConsonant = false; continue; }
-      }
-      if (ch === '-' || ch === "'" || ch === '"' || ch === ',' || ch === ';' || ch === '!' || ch === '?' || ch === '(' || ch === ')' || ch === '/' || ch === '@' || ch === '#' || ch === '$' || ch === '%') {
-        result += ch; i++; lastWasConsonant = false; continue;
-      }
+    // Bengali digits
+    if (/[0-9]/.test(ch)) {
+      result += bnDigits[parseInt(ch)];
+      i++;
+      lastWasConsonant = false;
+      continue;
+    }
 
-      let matched = false;
-      
-      // Pass 1: Exact match (for case-sensitive rules like T/t, S/s)
-      for (const [eng, ben] of consRules) {
-        if (word.substr(i, eng.length) === eng) {
-          if (eng === 'ng') {
-            const next = word.substr(i + 2, 2);
-            if (next === 'kh' || next === 'gh' || next === 'k' || next === 'g') {
-              result += 'ঙ';
-            } else {
-              result += 'ং';
-            }
-          } else {
-            result += ben;
-          }
-          i += eng.length;
-          lastWasConsonant = true;
-          matched = true;
-          break;
-        }
-      }
-      if (matched) continue;
+    // Chandrabindu
+    if (ch === '~' || ch === '`' || ch === '^') {
+      result += CHANDRA;
+      i++;
+      lastWasConsonant = false;
+      continue;
+    }
+    // Visarga
+    if (ch === ':' || ch === 'H') {
+      result += VISARGA;
+      i++;
+      lastWasConsonant = false;
+      continue;
+    }
+    // Anusvara via M
+    if (ch === 'M') {
+      result += ANUSVARA;
+      i++;
+      lastWasConsonant = false;
+      continue;
+    }
 
-      // Pass 2: Case-insensitive match (for uppercase letters without specific rules, like M -> m)
-      for (const [eng, ben] of consRules) {
-        if (word.substr(i, eng.length).toLowerCase() === eng.toLowerCase()) {
-          if (eng.toLowerCase() === 'ng') {
-            const next = word.substr(i + 2, 2).toLowerCase();
-            if (next === 'kh' || next === 'gh' || next === 'k' || next === 'g') {
-              result += 'ঙ';
-            } else {
-              result += 'ং';
-            }
-          } else {
-            result += ben;
-          }
-          i += eng.length;
-          lastWasConsonant = true;
-          matched = true;
-          break;
-        }
-      }
-      if (matched) continue;
-
-      // Pass 1 for vowels: Exact match
-      for (const [eng, ind, kar] of vowelRules) {
-        if (word.substr(i, eng.length) === eng) {
-          if (lastWasConsonant) {
-            result += kar;
-          } else {
-            result += ind;
-          }
-          i += eng.length;
-          lastWasConsonant = false;
-          matched = true;
-          break;
-        }
-      }
-      if (matched) continue;
-
-      // Pass 2 for vowels: Case-insensitive match
-      for (const [eng, ind, kar] of vowelRules) {
-        if (word.substr(i, eng.length).toLowerCase() === eng.toLowerCase()) {
-          if (lastWasConsonant) {
-            result += kar;
-          } else {
-            result += ind;
-          }
-          i += eng.length;
-          lastWasConsonant = false;
-          matched = true;
-          break;
-        }
-      }
-      if (matched) continue;
-
+    // Period at end → dari
+    if (ch === '.' && i === word.length - 1) {
+      result += DARI;
+      i++;
+      lastWasConsonant = false;
+      continue;
+    }
+    // Punctuation passthrough
+    if ('!?,;()[]{}"\'-/@#$%&*+=<>|\\'.includes(ch)) {
       result += ch;
       i++;
       lastWasConsonant = false;
+      continue;
     }
 
-    return result;
+    // --- Special: r handling (reph / rakar) ---
+    if (ch === 'r') {
+      // Rakar: r right after a consonant → ্ + র
+      if (lastWasConsonant) {
+        result += HASANT + 'র';
+        i++;
+        lastWasConsonant = true;
+        continue;
+      }
+      // Reph: r followed by a consonant → র + ্
+      if (nextIsConsonant(word, i + 1)) {
+        result += 'র' + HASANT;
+        i++;
+        lastWasConsonant = true;
+        continue;
+      }
+      // Plain র
+      result += 'র';
+      i++;
+      lastWasConsonant = true;
+      continue;
+    }
+
+    // --- Special: y handling (ja-phala) ---
+    if (ch === 'y') {
+      // Ja-phala: y right after a consonant → ্ + য
+      if (lastWasConsonant) {
+        result += HASANT + YA;
+        i++;
+        lastWasConsonant = true;
+        continue;
+      }
+      // Plain য
+      result += YA;
+      i++;
+      lastWasConsonant = true;
+      continue;
+    }
+
+    // --- ng → anusvara ---
+    if (word.substr(i, 2).toLowerCase() === 'ng') {
+      // Special: ngk/ngg → ঙ্ক/ঙ্গ
+      const after = word.substr(i + 2, 1).toLowerCase();
+      if (after === 'k') { result += 'ঙ' + HASANT + 'ক'; i += 3; lastWasConsonant = true; continue; }
+      if (after === 'g') { result += 'ঙ' + HASANT + 'গ'; i += 3; lastWasConsonant = true; continue; }
+      result += ANUSVARA;
+      i += 2;
+      lastWasConsonant = false;
+      continue;
+    }
+
+    // --- Consonant match (exact case first) ---
+    let matched = false;
+    for (const [eng, ben] of consRules) {
+      if (word.substr(i, eng.length) === eng) {
+        result += ben;
+        i += eng.length;
+        lastWasConsonant = true;
+        matched = true;
+        break;
+      }
+    }
+    if (matched) continue;
+
+    // --- Consonant match (case-insensitive) ---
+    for (const [eng, ben] of consRules) {
+      if (word.substr(i, eng.length).toLowerCase() === eng.toLowerCase()) {
+        result += ben;
+        i += eng.length;
+        lastWasConsonant = true;
+        matched = true;
+        break;
+      }
+    }
+    if (matched) continue;
+
+    // --- Vowel match (exact case first) ---
+    for (const [eng, ind, kar] of vowelRules) {
+      if (word.substr(i, eng.length) === eng) {
+        result += lastWasConsonant ? kar : ind;
+        i += eng.length;
+        lastWasConsonant = false;
+        matched = true;
+        break;
+      }
+    }
+    if (matched) continue;
+
+    // --- Vowel match (case-insensitive) ---
+    for (const [eng, ind, kar] of vowelRules) {
+      if (word.substr(i, eng.length).toLowerCase() === eng.toLowerCase()) {
+        result += lastWasConsonant ? kar : ind;
+        i += eng.length;
+        lastWasConsonant = false;
+        matched = true;
+        break;
+      }
+    }
+    if (matched) continue;
+
+    // Fallback
+    result += ch;
+    i++;
+    lastWasConsonant = false;
   }
 
-  function generateVariants(word) {
-    if (!word) return [];
-    const variants = [];
-    const seen = new Set();
-    function add(v) { if (v && !seen.has(v) && v !== word) { seen.add(v); variants.push(v); } }
+  return result;
+}
 
+function generateVariants(word) {
+  if (!word) return [];
+  const variants = [];
+  const seen = new Set();
+  const add = v => { if (v && !seen.has(v) && v !== word) { seen.add(v); variants.push(v); } };
+
+  const lower = word.toLowerCase();
+  if (dictionary[lower]) { variants.push(dictionary[lower]); seen.add(dictionary[lower]); }
+
+  const def = transliterateWord(word);
+  if (!seen.has(def)) { seen.add(def); variants.push(def); }
+
+  // Try long aa
+  add(transliterateWord(word.replace(/a(?!a)/g, 'aa')));
+  // Try T/D/N retroflex
+  add(transliterateWord(word.replace(/t/g, 'T')));
+  add(transliterateWord(word.replace(/d/g, 'D')));
+  add(transliterateWord(word.replace(/n/g, 'N')));
+  // Try sh
+  add(transliterateWord(word.replace(/s/g, 'sh')));
+  // Try b/v
+  add(transliterateWord(word.replace(/b/g, 'v')));
+  // Try chandrabindu on last vowel
+  add(transliterateWord(word + '~'));
+
+  return variants.slice(0, 6);
+}
+
+// ============ App State ============
+const state = {
+  inputText: '',
+  appliedVariants: {},
+  appliedColors: {},
+  currentWord: '',
+  activeWord: null,
+  images: [],
+  imageIdCounter: 1,
+};
+
+// ============ Rendering ============
+function processInput(text) {
+  const tokens = text.split(/(\s+|\[img:\d+\])/);
+  return tokens.map((token, idx) => {
+    if (!token) return { type: 'space', text: token };
+    if (/^\s+$/.test(token)) return { type: 'space', text: token };
+
+    const imgMatch = token.match(/^\[img:(\d+)\]$/);
+    if (imgMatch) {
+      const id = parseInt(imgMatch[1]);
+      const imgData = state.images.find(i => i.id === id);
+      if (imgData) return { type: 'image', ...imgData };
+    }
+
+    const match = token.match(/^([^\w]*)([\w']+)([^\w]*)$/);
+    if (!match) {
+      return { type: 'word', en: token, bn: transliterateWord(token), prefix: '', suffix: '', idx };
+    }
+    const [, prefix, word, suffix] = match;
     const lower = word.toLowerCase();
-    if (dictionary[lower]) { variants.push(dictionary[lower]); seen.add(dictionary[lower]); }
-
-    const def = transliterateWord(word);
-    if (!seen.has(def)) { seen.add(def); variants.push(def); }
-
-    const longA = word.replace(/a(?!a)/g, 'aa');
-    if (longA !== word) add(transliterateWord(longA));
-
-    const tSwap = word.replace(/t/g, 'T').replace(/T/g, 't');
-    if (tSwap !== word) add(transliterateWord(tSwap));
-
-    const dSwap = word.replace(/d/g, 'D').replace(/D/g, 'd');
-    if (dSwap !== word) add(transliterateWord(dSwap));
-
-    const nSwap = word.replace(/n/g, 'N').replace(/N/g, 'n');
-    if (nSwap !== word) add(transliterateWord(nSwap));
-
-    const sToSh = word.replace(/s/g, 'sh');
-    if (sToSh !== word) add(transliterateWord(sToSh));
-    const shToS = word.replace(/sh/g, 's').replace(/Sh/g, 'S');
-    if (shToS !== word) add(transliterateWord(shToS));
-    const shToSh = word.replace(/sh/g, 'Sh');
-    if (shToSh !== word) add(transliterateWord(shToSh));
-
-    const bvSwap = word.replace(/b/g, 'v').replace(/v/g, 'b');
-    if (bvSwap !== word) add(transliterateWord(bvSwap));
-
-    const ySwap = word.replace(/y/g, 'Y').replace(/Y/g, 'y');
-    if (ySwap !== word) add(transliterateWord(ySwap));
-
-    const eToI = word.replace(/e/g, 'i');
-    if (eToI !== word) add(transliterateWord(eToI));
-
-    return variants.slice(0, 6);
-  }
-
-  const state = {
-    inputText: '',
-    appliedVariants: {},
-    appliedColors: {},
-    currentWord: '',
-    activeWord: null,
-    images: [],
-    imageIdCounter: 1,
-  };
-
-  function processInput(text) {
-    const tokens = text.split(/(\s+|\[img:\d+\])/);
-    return tokens.map((token, idx) => {
-      if ((/^\s+$/.test(token) || !token)) return { type: 'space', text: token };
-      
-      const imgMatch = token.match(/^\[img:(\d+)\]$/);
-      if (imgMatch) {
-        const id = parseInt(imgMatch[1]);
-        const imgData = state.images.find(i => i.id === id);
-        if (imgData) return { type: 'image', ...imgData };
-      }
-
-      const match = token.match(/^([^\w]*)([\w']+)([^\w]*)$/);
-      if (!match) {
-        return { type: 'word', en: token, bn: transliterateWord(token), prefix: '', suffix: '', idx };
-      }
-      const [, prefix, word, suffix] = match;
-      const lower = word.toLowerCase();
-      const bnWord = state.appliedVariants[lower] || (dictionary[lower] || transliterateWord(word));
-      return { type: 'word', en: word, bn: bnWord, prefix, suffix, idx };
-    });
-  }
-
-  function getCurrentWordAtCaret(text, caretPos) {
-    const before = text.substring(0, caretPos);
-    const match = before.match(/(\w+)$/);
-    return match ? match[1] : '';
-  }
-
-  function renderOutput() {
-    const processed = processInput(state.inputText);
-    const output = document.getElementById('bnOutput');
-    output.innerHTML = '';
-
-    if (!state.inputText.trim()) {
-      output.innerHTML = '<span style="color: var(--text-dim); font-style: italic; font-size: 16px;">আপনার লেখা এখানে দেখা যাবে...<br><span style="font-size:13px">(Your Bengali text will appear here)</span></span>';
-      return;
-    }
-
-    processed.forEach(item => {
-      if (item.type === 'space') {
-        output.appendChild(document.createTextNode(item.text));
-        return;
-      }
-      if (item.type === 'image') {
-        const img = document.createElement('img');
-        img.src = item.url;
-        img.style.height = item.size + 'px';
-        img.style.verticalAlign = 'middle';
-        img.style.margin = '0 4px';
-        img.style.display = 'inline-block';
-        output.appendChild(img);
-        return;
-      }
-      
-      const span = document.createElement('span');
-      span.className = 'word';
-      if (state.activeWord && state.activeWord === item.en.toLowerCase()) {
-        span.classList.add('active');
-      }
-      span.dataset.en = item.en;
-      if (item.prefix) output.appendChild(document.createTextNode(item.prefix));
-      
-      const bnSpan = document.createElement('span');
-      bnSpan.className = 'bn';
-      bnSpan.textContent = item.bn;
-      
-      const lower = item.en.toLowerCase();
-      if (state.appliedColors[lower]) {
-        bnSpan.style.color = state.appliedColors[lower];
-      }
-      
-      span.appendChild(bnSpan);
-      if (item.suffix) output.appendChild(document.createTextNode(item.suffix));
-
-      span.addEventListener('click', (e) => {
-        if (window.getSelection().toString().length > 0) return;
-        state.activeWord = item.en.toLowerCase();
-        showSuggestionsForWord(item.en);
-        renderOutput();
-      });
-
-      output.appendChild(span);
-    });
-  }
-
-  function renderSuggestions(suggestions, word) {
-    const container = document.getElementById('suggestions');
-    container.innerHTML = '';
-
-    if (!suggestions.length) {
-      container.innerHTML = '<div class="text-sm" style="color: var(--text-dim);">No alternatives</div>';
-      return;
-    }
-
-    const currentApplied = state.appliedVariants[word.toLowerCase()] || suggestions[0];
-
-    suggestions.forEach((s, i) => {
-      const chip = document.createElement('button');
-      chip.className = 'chip';
-      if (s === currentApplied) chip.classList.add('active');
-      chip.innerHTML = `<span>${s}</span><span class="chip-key">${i + 1}</span>`;
-      chip.addEventListener('click', () => {
-        state.appliedVariants[word.toLowerCase()] = s;
-        renderOutput();
-        renderSuggestions(suggestions, word);
-      });
-      container.appendChild(chip);
-    });
-
-    document.getElementById('currentWordDisplay').textContent = word;
-  }
-
-  function showSuggestionsForWord(word) {
-    state.currentWord = word;
-    const suggestions = generateVariants(word);
-    const bar = document.getElementById('suggestionBar');
-    bar.classList.remove('hidden');
-    renderSuggestions(suggestions, word);
-
-    const lower = word.toLowerCase();
-    const colorPicker = document.getElementById('wordColorPicker');
-    if (state.appliedColors[lower]) {
-      colorPicker.value = state.appliedColors[lower];
-    } else {
-      const textColor = getComputedStyle(document.body).getPropertyValue('--text').trim();
-      colorPicker.value = rgbToHex(textColor);
-    }
-  }
-
-  function hideSuggestions() {
-    document.getElementById('suggestionBar').classList.add('hidden');
-    state.activeWord = null;
-  }
-
-  function rgbToHex(rgb) {
-    if (rgb.startsWith('#')) return rgb;
-    const match = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
-    if (!match) return '#1a1410';
-    return "#" + ((1 << 24) + (parseInt(match[1]) << 16) + (parseInt(match[2]) << 8) + parseInt(match[3])).toString(16).slice(1);
-  }
-
-  function updateStats() {
-    const words = state.inputText.trim().split(/\s+/).filter(w => w && !w.match(/^\[img:\d+\]$/));
-    document.getElementById('enWordCount').textContent = `${words.length} words`;
-    document.getElementById('totalWords').textContent = words.length;
-    document.getElementById('totalChars').textContent = state.inputText.length;
-  }
-
-  const enInput = document.getElementById('enInput');
-
-  enInput.addEventListener('input', (e) => {
-    state.inputText = e.target.value;
-    const caretPos = e.target.selectionStart;
-    const currentWord = getCurrentWordAtCaret(state.inputText, caretPos);
-
-    if (currentWord && currentWord !== state.currentWord) {
-      state.currentWord = currentWord;
-      state.activeWord = null;
-      showSuggestionsForWord(currentWord);
-    } else if (currentWord === state.currentWord && currentWord) {
-      const suggestions = generateVariants(currentWord);
-      if (!document.getElementById('suggestionBar').classList.contains('hidden')) {
-        renderSuggestions(suggestions, currentWord);
-      } else {
-        showSuggestionsForWord(currentWord);
-      }
-    } else if (!currentWord) {
-      hideSuggestions();
-      state.currentWord = '';
-    }
-
-    renderOutput();
-    updateStats();
+    const bnWord = state.appliedVariants[lower] || (dictionary[lower] || transliterateWord(word));
+    return { type: 'word', en: word, bn: bnWord, prefix, suffix, idx };
   });
+}
 
-  enInput.addEventListener('keydown', (e) => {
-    if (e.key >= '1' && e.key <= '6' && !document.getElementById('suggestionBar').classList.contains('hidden')) {
-      const chips = document.querySelectorAll('#suggestions .chip');
-      const idx = parseInt(e.key) - 1;
-      if (chips[idx]) {
-        e.preventDefault();
-        chips[idx].click();
-      }
+function getCurrentWordAtCaret(text, caretPos) {
+  const before = text.substring(0, caretPos);
+  const match = before.match(/(\w+)$/);
+  return match ? match[1] : '';
+}
+
+function renderOutput() {
+  const processed = processInput(state.inputText);
+  const output = document.getElementById('bnOutput');
+  output.innerHTML = '';
+
+  if (!state.inputText.trim()) {
+    output.innerHTML = '<span style="color: var(--text-dim); font-style: italic; font-size: 16px;">বাংলা লেখা এখানে দেখা যাবে...<br><span style="font-size:13px">(Your Bengali text will appear here)</span></span>';
+    return;
+  }
+
+  processed.forEach(item => {
+    if (item.type === 'space') {
+      output.appendChild(document.createTextNode(item.text));
+      return;
     }
-    if (e.key === 'Escape') {
-      hideSuggestions();
+    if (item.type === 'image') {
+      const img = document.createElement('img');
+      img.src = item.url;
+      img.style.height = item.size + 'px';
+      img.style.verticalAlign = 'middle';
+      img.style.margin = '0 4px';
+      img.style.display = 'inline-block';
+      output.appendChild(img);
+      return;
+    }
+
+    if (item.prefix) output.appendChild(document.createTextNode(item.prefix));
+
+    const span = document.createElement('span');
+    span.className = 'word';
+    if (state.activeWord && state.activeWord === item.en.toLowerCase()) span.classList.add('active');
+    span.dataset.en = item.en;
+
+    const bnSpan = document.createElement('span');
+    bnSpan.className = 'bn';
+    bnSpan.textContent = item.bn;
+
+    const lower = item.en.toLowerCase();
+    if (state.appliedColors[lower]) bnSpan.style.color = state.appliedColors[lower];
+
+    span.appendChild(bnSpan);
+    if (item.suffix) output.appendChild(document.createTextNode(item.suffix));
+
+    span.addEventListener('click', (e) => {
+      if (window.getSelection().toString().length > 0) return;
+      state.activeWord = item.en.toLowerCase();
+      showSuggestionsForWord(item.en);
       renderOutput();
-      document.getElementById('helpModal').classList.remove('active');
-      document.getElementById('imageModal').classList.remove('active');
-    }
+    });
+
+    output.appendChild(span);
+  });
+}
+
+function renderSuggestions(suggestions, word) {
+  const container = document.getElementById('suggestions');
+  container.innerHTML = '';
+
+  if (!suggestions.length) {
+    container.innerHTML = '<div class="text-sm" style="color: var(--text-dim);">No alternatives</div>';
+    return;
+  }
+
+  const currentApplied = state.appliedVariants[word.toLowerCase()] || suggestions[0];
+
+  suggestions.forEach((s, i) => {
+    const chip = document.createElement('button');
+    chip.className = 'chip';
+    if (s === currentApplied) chip.classList.add('active');
+    chip.innerHTML = `<span>${s}</span><span class="chip-key">${i + 1}</span>`;
+    chip.addEventListener('click', () => {
+      state.appliedVariants[word.toLowerCase()] = s;
+      renderOutput();
+      renderSuggestions(suggestions, word);
+    });
+    container.appendChild(chip);
   });
 
-  document.addEventListener('click', (e) => {
-    if (!e.target.closest('#bnOutput') && !e.target.closest('#suggestionBar') && !e.target.closest('#enInput') && !e.target.closest('#imageModal')) {
-      if (state.activeWord) {
-        state.activeWord = null;
-        renderOutput();
-      }
-    }
-  });
+  document.getElementById('currentWordDisplay').textContent = word;
+}
 
-  // ============ Feature: Word Color Picker ============
+function showSuggestionsForWord(word) {
+  state.currentWord = word;
+  const suggestions = generateVariants(word);
+  document.getElementById('suggestionBar').classList.remove('hidden');
+  renderSuggestions(suggestions, word);
+
+  const lower = word.toLowerCase();
   const colorPicker = document.getElementById('wordColorPicker');
-  colorPicker.addEventListener('input', (e) => {
-    if (state.activeWord) {
-      state.appliedColors[state.activeWord] = e.target.value;
-      renderOutput();
-    }
-  });
-
-  document.getElementById('resetColorBtn').addEventListener('click', () => {
-    if (state.activeWord) {
-      delete state.appliedColors[state.activeWord];
-      renderOutput();
-      const textColor = getComputedStyle(document.body).getPropertyValue('--text').trim();
-      colorPicker.value = rgbToHex(textColor);
-    }
-  });
-
-  // ============ Feature: Image Upload ============
-  const uploadBtn = document.getElementById('uploadBtn');
-  const imageInput = document.getElementById('imageInput');
-  const imageModal = document.getElementById('imageModal');
-  const imagePreview = document.getElementById('imagePreview');
-  const imageSizeInput = document.getElementById('imageSizeInput');
-  let pendingImageUrl = null;
-
-  uploadBtn.addEventListener('click', () => imageInput.click());
-
-  imageInput.addEventListener('change', (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      pendingImageUrl = event.target.result;
-      imagePreview.src = pendingImageUrl;
-      imageModal.classList.add('active');
-    };
-    reader.readAsDataURL(file);
-    imageInput.value = '';
-  });
-
-  document.getElementById('closeImageModalBtn').addEventListener('click', () => {
-    imageModal.classList.remove('active');
-  });
-
-  document.getElementById('insertImageBtn').addEventListener('click', () => {
-    if (!pendingImageUrl) return;
-    const size = parseInt(imageSizeInput.value) || 80;
-    const id = state.imageIdCounter++;
-    state.images.push({ id, url: pendingImageUrl, size });
-
-    const caretPos = enInput.selectionStart;
-    const textBefore = state.inputText.substring(0, caretPos);
-    const textAfter = state.inputText.substring(caretPos);
-    const imgTag = `[img:${id}] `;
-    
-    state.inputText = textBefore + imgTag + textAfter;
-    enInput.value = state.inputText;
-    
-    const newPos = caretPos + imgTag.length;
-    enInput.focus();
-    enInput.setSelectionRange(newPos, newPos);
-
-    imageModal.classList.remove('active');
-    pendingImageUrl = null;
-    renderOutput();
-    updateStats();
-  });
-
-  // ============ Feature: Copy Text ============
-  document.getElementById('copyBtn').addEventListener('click', () => {
-    const text = document.getElementById('bnOutput').innerText;
-    if (!text.trim() || text.startsWith('আপনার লেখা')) {
-      showToast('Nothing to copy yet');
-      return;
-    }
-    navigator.clipboard.writeText(text).then(() => {
-      showToast('Copied to clipboard');
-    }).catch(() => {
-      const ta = document.createElement('textarea');
-      ta.value = text;
-      document.body.appendChild(ta);
-      ta.select();
-      try { document.execCommand('copy'); showToast('Copied to clipboard'); } catch (e) { showToast('Copy failed'); }
-      document.body.removeChild(ta);
-    });
-  });
-
-  // ============ Feature: Font Selection ============
-  const fontSelect = document.getElementById('fontSelect');
-  const bnOutput = document.getElementById('bnOutput');
-  
-  if (localStorage.getItem('bnFont')) {
-    const savedFont = localStorage.getItem('bnFont');
-    fontSelect.value = savedFont;
-    bnOutput.style.fontFamily = savedFont;
+  if (state.appliedColors[lower]) {
+    colorPicker.value = state.appliedColors[lower];
+  } else {
+    const textColor = getComputedStyle(document.body).getPropertyValue('--text').trim();
+    colorPicker.value = rgbToHex(textColor);
   }
+}
 
-  fontSelect.addEventListener('change', (e) => {
-    const font = e.target.value;
-    bnOutput.style.fontFamily = font;
-    localStorage.setItem('bnFont', font);
-  });
+function hideSuggestions() {
+  document.getElementById('suggestionBar').classList.add('hidden');
+  state.activeWord = null;
+}
 
-  // ============ Feature: Font Size ============
-  let fontSize = 22;
-  const fontSizeVal = document.getElementById('fontSizeVal');
-  
-  if (localStorage.getItem('bnFontSize')) {
-    fontSize = parseInt(localStorage.getItem('bnFontSize'));
-    updateFontSize();
-  }
+function rgbToHex(rgb) {
+  if (rgb.startsWith('#')) return rgb;
+  const m = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+  if (!m) return '#1a1410';
+  return '#' + ((1 << 24) + (parseInt(m[1]) << 16) + (parseInt(m[2]) << 8) + parseInt(m[3])).toString(16).slice(1);
+}
 
-  function updateFontSize() {
-    bnOutput.style.fontSize = fontSize + 'px';
-    fontSizeVal.textContent = fontSize;
-    localStorage.setItem('bnFontSize', fontSize);
-  }
+function updateStats() {
+  const words = state.inputText.trim().split(/\s+/).filter(w => w && !w.match(/^\[img:\d+\]$/));
+  document.getElementById('enWordCount').textContent = words.length + ' words';
+  document.getElementById('totalWords').textContent = words.length;
+  document.getElementById('totalChars').textContent = state.inputText.length;
+}
 
-  document.getElementById('fontInc').addEventListener('click', () => {
-    fontSize += 2;
-    if (fontSize > 48) fontSize = 48;
-    updateFontSize();
-  });
+// ============ Input handling ============
+const enInput = document.getElementById('enInput');
 
-  document.getElementById('fontDec').addEventListener('click', () => {
-    fontSize -= 2;
-    if (fontSize < 14) fontSize = 14;
-    updateFontSize();
-  });
+enInput.addEventListener('input', (e) => {
+  state.inputText = e.target.value;
+  const caretPos = e.target.selectionStart;
+  const currentWord = getCurrentWordAtCaret(state.inputText, caretPos);
 
-  // ============ Feature: Dark Mode ============
-  const darkModeBtn = document.getElementById('darkModeBtn');
-  const moonIcon = document.getElementById('moonIcon');
-  const sunIcon = document.getElementById('sunIcon');
-
-  if (localStorage.getItem('theme') === 'dark') {
-    document.body.classList.add('dark');
-    moonIcon.classList.add('hidden');
-    sunIcon.classList.remove('hidden');
-  }
-
-  darkModeBtn.addEventListener('click', () => {
-    document.body.classList.toggle('dark');
-    const isDark = document.body.classList.contains('dark');
-    localStorage.setItem('theme', isDark ? 'dark' : 'light');
-    moonIcon.classList.toggle('hidden', isDark);
-    sunIcon.classList.toggle('hidden', !isDark);
-  });
-
-  // ============ Clear & Sample Buttons ============
-  document.getElementById('clearBtn').addEventListener('click', () => {
-    enInput.value = '';
-    state.inputText = '';
-    state.appliedVariants = {};
-    state.appliedColors = {};
-    state.images = [];
-    state.currentWord = '';
+  if (currentWord && currentWord !== state.currentWord) {
+    state.currentWord = currentWord;
     state.activeWord = null;
+    showSuggestionsForWord(currentWord);
+  } else if (currentWord === state.currentWord && currentWord) {
+    if (!document.getElementById('suggestionBar').classList.contains('hidden')) {
+      renderSuggestions(generateVariants(currentWord), currentWord);
+    } else {
+      showSuggestionsForWord(currentWord);
+    }
+  } else if (!currentWord) {
     hideSuggestions();
-    renderOutput();
-    updateStats();
-    enInput.focus();
-  });
-
-  const samples = [
-    "ami bangla bhasha shikhi. tumi kemon acho? khub bhalo. amra sobai mile ekta sundor shongbad gori.",
-    "aj ke shokal theke brishti hochhe. amra bazar e gelam. kintu rasta khub-i kharap chilo.",
-    "tomar nam ki? amar nam rahim. apni kemon achen? ami ekhon khub bhalo achi. dhonnobad.",
-  ];
-  let sampleIdx = 0;
-  document.getElementById('sampleBtn').addEventListener('click', () => {
-    const sample = samples[sampleIdx % samples.length];
-    sampleIdx++;
-    enInput.value = sample;
-    state.inputText = sample;
-    state.appliedVariants = {};
-    state.images = [];
-    state.activeWord = null;
-    renderOutput();
-    updateStats();
-    enInput.focus();
-    enInput.setSelectionRange(sample.length, sample.length);
-    const lastWord = sample.trim().split(/\s+/).pop().replace(/[^\w]/g, '');
-    if (lastWord) {
-      state.currentWord = lastWord;
-      showSuggestionsForWord(lastWord);
-    }
-  });
-
-  // ============ Help Modal Logic ============
-  const helpModal = document.getElementById('helpModal');
-  document.getElementById('helpBtn').addEventListener('click', () => {
-    helpModal.classList.add('active');
-  });
-  document.getElementById('closeModalBtn').addEventListener('click', () => {
-    helpModal.classList.remove('active');
-  });
-  helpModal.addEventListener('click', (e) => {
-    if (e.target === helpModal) {
-      helpModal.classList.remove('active');
-    }
-  });
-
-  // ============ Common Phrases ============
-  const phrases = [
-    { en: 'ami bangla shikhi', bn: 'আমি বাংলা শিখি', enTrans: 'I learn Bengali' },
-    { en: 'tomar nam ki', bn: 'তোমার নাম কী', enTrans: 'What is your name' },
-    { en: 'apni kemon achen', bn: 'আপনি কেমন আছেন', enTrans: 'How are you (formal)' },
-    { en: 'khub bhalo', bn: 'খুব ভালো', enTrans: 'Very good' },
-    { en: 'dhonnobad', bn: 'ধন্যবাদ', enTrans: 'Thank you' },
-    { en: 'ami tomake bhalobashi', bn: 'আমি তোমাকে ভালোবাসি', enTrans: 'I love you' },
-    { en: 'shuvo shokal', bn: 'শুভ সকাল', enTrans: 'Good morning' },
-    { en: 'shuvo ratri', bn: 'শুভ রাত্রি', enTrans: 'Good night' },
-    { en: 'ekhon ki korbe', bn: 'এখন কী করবে', enTrans: 'What will you do now' },
-  ];
-
-  function renderPhrases() {
-    const grid = document.getElementById('phraseGrid');
-    grid.innerHTML = '';
-    phrases.forEach(p => {
-      const card = document.createElement('div');
-      card.className = 'phrase-card';
-      card.innerHTML = `
-        <div class="text-xs mb-1.5 font-medium" style="color: var(--text-muted);">${p.en}</div>
-        <div class="bn text-lg font-medium" style="color: var(--text);">${p.bn}</div>
-        <div class="text-[11px] mt-2" style="color: var(--text-dim);">${p.enTrans}</div>
-      `;
-      card.addEventListener('click', () => {
-        enInput.value = p.en;
-        state.inputText = p.en;
-        state.appliedVariants = {};
-        state.images = [];
-        state.activeWord = null;
-        renderOutput();
-        updateStats();
-        const lastWord = p.en.trim().split(/\s+/).pop().replace(/[^\w]/g, '');
-        if (lastWord) {
-          state.currentWord = lastWord;
-          showSuggestionsForWord(lastWord);
-        }
-        enInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        enInput.focus();
-        enInput.setSelectionRange(p.en.length, p.en.length);
-      });
-      grid.appendChild(card);
-    });
+    state.currentWord = '';
   }
 
-  // ============ Toast Notification ============
-  let toastTimer = null;
-  function showToast(message) {
-    const toast = document.getElementById('toast');
-    toast.textContent = message;
-    toast.style.opacity = '1';
-    if (toastTimer) clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => {
-      toast.style.opacity = '0';
-    }, 1800);
-  }
-
-  // ============ Init ============
-  renderPhrases();
   renderOutput();
   updateStats();
-  setTimeout(() => enInput.focus(), 100);
+});
+
+enInput.addEventListener('keydown', (e) => {
+  if (e.key >= '1' && e.key <= '6' && !document.getElementById('suggestionBar').classList.contains('hidden')) {
+    const chips = document.querySelectorAll('#suggestions .chip');
+    const idx = parseInt(e.key) - 1;
+    if (chips[idx]) { e.preventDefault(); chips[idx].click(); }
+  }
+  if (e.key === 'Escape') {
+    hideSuggestions();
+    renderOutput();
+    document.getElementById('helpModal').classList.remove('active');
+    document.getElementById('imageModal').classList.remove('active');
+  }
+});
+
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('#bnOutput') && !e.target.closest('#suggestionBar') && !e.target.closest('#enInput') && !e.target.closest('#imageModal')) {
+    if (state.activeWord) { state.activeWord = null; renderOutput(); }
+  }
+});
+
+// Diacritic helper buttons
+document.querySelectorAll('.dia-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const ins = btn.dataset.ins;
+    const start = enInput.selectionStart;
+    const end = enInput.selectionEnd;
+    const v = enInput.value;
+    enInput.value = v.substring(0, start) + ins + v.substring(end);
+    state.inputText = enInput.value;
+    enInput.focus();
+    enInput.setSelectionRange(start + ins.length, start + ins.length);
+    renderOutput();
+    updateStats();
+  });
+});
+
+// ============ Color picker ============
+document.getElementById('wordColorPicker').addEventListener('input', (e) => {
+  if (state.activeWord) {
+    state.appliedColors[state.activeWord] = e.target.value;
+    renderOutput();
+  }
+});
+
+document.getElementById('resetColorBtn').addEventListener('click', () => {
+  if (state.activeWord) {
+    delete state.appliedColors[state.activeWord];
+    renderOutput();
+    const textColor = getComputedStyle(document.body).getPropertyValue('--text').trim();
+    document.getElementById('wordColorPicker').value = rgbToHex(textColor);
+  }
+});
+
+// ============ Image upload ============
+const uploadBtn = document.getElementById('uploadBtn');
+const imageInput = document.getElementById('imageInput');
+const imageModal = document.getElementById('imageModal');
+const imagePreview = document.getElementById('imagePreview');
+const imageSizeInput = document.getElementById('imageSizeInput');
+let pendingImageUrl = null;
+
+uploadBtn.addEventListener('click', () => imageInput.click());
+
+imageInput.addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (event) => {
+    pendingImageUrl = event.target.result;
+    imagePreview.src = pendingImageUrl;
+    imageModal.classList.add('active');
+  };
+  reader.readAsDataURL(file);
+  imageInput.value = '';
+});
+
+document.getElementById('closeImageModalBtn').addEventListener('click', () => imageModal.classList.remove('active'));
+
+document.getElementById('insertImageBtn').addEventListener('click', () => {
+  if (!pendingImageUrl) return;
+  const size = parseInt(imageSizeInput.value) || 80;
+  const id = state.imageIdCounter++;
+  state.images.push({ id, url: pendingImageUrl, size });
+
+  const caretPos = enInput.selectionStart;
+  const textBefore = state.inputText.substring(0, caretPos);
+  const textAfter = state.inputText.substring(caretPos);
+  const imgTag = `[img:${id}] `;
+
+  state.inputText = textBefore + imgTag + textAfter;
+  enInput.value = state.inputText;
+
+  const newPos = caretPos + imgTag.length;
+  enInput.focus();
+  enInput.setSelectionRange(newPos, newPos);
+
+  imageModal.classList.remove('active');
+  pendingImageUrl = null;
+  renderOutput();
+  updateStats();
+});
+
+// ============ Copy ============
+document.getElementById('copyBtn').addEventListener('click', () => {
+  const text = document.getElementById('bnOutput').innerText;
+  if (!text.trim() || text.startsWith('বাংলা')) { showToast('Nothing to copy yet'); return; }
+  navigator.clipboard.writeText(text).then(() => showToast('Copied to clipboard')).catch(() => {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); showToast('Copied to clipboard'); } catch (e) { showToast('Copy failed'); }
+    document.body.removeChild(ta);
+  });
+});
+
+// ============ Font ============
+const fontSelect = document.getElementById('fontSelect');
+const bnOutput = document.getElementById('bnOutput');
+
+if (localStorage.getItem('bnFont')) {
+  const saved = localStorage.getItem('bnFont');
+  fontSelect.value = saved;
+  bnOutput.style.fontFamily = saved;
+}
+
+fontSelect.addEventListener('change', (e) => {
+  bnOutput.style.fontFamily = e.target.value;
+  localStorage.setItem('bnFont', e.target.value);
+});
+
+// ============ Font size ============
+let fontSize = 22;
+if (localStorage.getItem('bnFontSize')) fontSize = parseInt(localStorage.getItem('bnFontSize'));
+function updateFontSize() {
+  bnOutput.style.fontSize = fontSize + 'px';
+  document.getElementById('fontSizeVal').textContent = fontSize;
+  localStorage.setItem('bnFontSize', fontSize);
+}
+updateFontSize();
+document.getElementById('fontInc').addEventListener('click', () => { fontSize = Math.min(48, fontSize + 2); updateFontSize(); });
+document.getElementById('fontDec').addEventListener('click', () => { fontSize = Math.max(14, fontSize - 2); updateFontSize(); });
+
+// ============ Dark mode ============
+const darkModeBtn = document.getElementById('darkModeBtn');
+const moonIcon = document.getElementById('moonIcon');
+const sunIcon = document.getElementById('sunIcon');
+
+if (localStorage.getItem('theme') === 'dark') {
+  document.body.classList.add('dark');
+  moonIcon.classList.add('hidden');
+  sunIcon.classList.remove('hidden');
+}
+darkModeBtn.addEventListener('click', () => {
+  document.body.classList.toggle('dark');
+  const isDark = document.body.classList.contains('dark');
+  localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  moonIcon.classList.toggle('hidden', isDark);
+  sunIcon.classList.toggle('hidden', !isDark);
+});
+
+// ============ Clear & Sample ============
+document.getElementById('clearBtn').addEventListener('click', () => {
+  enInput.value = '';
+  state.inputText = '';
+  state.appliedVariants = {};
+  state.appliedColors = {};
+  state.images = [];
+  state.currentWord = '';
+  state.activeWord = null;
+  hideSuggestions();
+  renderOutput();
+  updateStats();
+  enInput.focus();
+});
+
+const samples = [
+  "ami bangla bhasha shikhi. tumi kemon acho? khub bhalo. amra sobai mile ekta sundor shongbad gori.",
+  "aj ke shokal theke brishti hochhe. amra bazar e gelam. kintu rasta khub-i kharap chilo.",
+  "tomar nam ki? amar nam rahim. apni kemon achen? ami ekhon khub bhalo achi. dhonnobad.",
+  "chaa~d uthechhe. raat er akash khub sundor. kintu aj dukkho: kichu mone pore gelo.",
+];
+let sampleIdx = 0;
+document.getElementById('sampleBtn').addEventListener('click', () => {
+  const sample = samples[sampleIdx % samples.length];
+  sampleIdx++;
+  enInput.value = sample;
+  state.inputText = sample;
+  state.appliedVariants = {};
+  state.images = [];
+  state.activeWord = null;
+  renderOutput();
+  updateStats();
+  enInput.focus();
+  enInput.setSelectionRange(sample.length, sample.length);
+  const lastWord = sample.trim().split(/\s+/).pop().replace(/[^\w]/g, '');
+  if (lastWord) { state.currentWord = lastWord; showSuggestionsForWord(lastWord); }
+});
+
+// ============ Help modal ============
+const helpModal = document.getElementById('helpModal');
+document.getElementById('helpBtn').addEventListener('click', () => helpModal.classList.add('active'));
+document.getElementById('closeModalBtn').addEventListener('click', () => helpModal.classList.remove('active'));
+helpModal.addEventListener('click', (e) => { if (e.target === helpModal) helpModal.classList.remove('active'); });
+
+// ============ Phrases ============
+const phrases = [
+  { en: 'ami bangla shikhi', bn: 'আমি বাংলা শিখি', enTrans: 'I learn Bengali' },
+  { en: 'tomar nam ki', bn: 'তোমার নাম কি', enTrans: 'What is your name' },
+  { en: 'apni kemon achen', bn: 'আপনি কেমন আছেন', enTrans: 'How are you (formal)' },
+  { en: 'khub bhalo', bn: 'খুব ভালো', enTrans: 'Very good' },
+  { en: 'dhonnobad', bn: 'ধন্যবাদ', enTrans: 'Thank you' },
+  { en: 'ami tomake bhalobashi', bn: 'আমি তোমাকে ভালোবাসি', enTrans: 'I love you' },
+  { en: 'shuvo shokal', bn: 'শুভ সকাল', enTrans: 'Good morning' },
+  { en: 'shuvo ratri', bn: 'শুভ রাত্রি', enTrans: 'Good night' },
+  { en: 'chaa~d', bn: 'চাঁদ', enTrans: 'Moon' },
+  { en: 'rong', bn: 'রং', enTrans: 'Color' },
+  { en: 'dukkho:', bn: 'দুঃখ', enTrans: 'Sorrow (with visarga)' },
+  { en: 'karma', bn: 'কর্ম', enTrans: 'Karma (with reph)' },
+];
+
+function renderPhrases() {
+  const grid = document.getElementById('phraseGrid');
+  grid.innerHTML = '';
+  phrases.forEach(p => {
+    const card = document.createElement('div');
+    card.className = 'phrase-card';
+    card.innerHTML = `
+      <div class="text-xs mb-1.5 font-medium" style="color: var(--text-muted);">${p.en}</div>
+      <div class="bn text-lg font-medium" style="color: var(--text);">${p.bn}</div>
+      <div class="text-[11px] mt-2" style="color: var(--text-dim);">${p.enTrans}</div>
+    `;
+    card.addEventListener('click', () => {
+      enInput.value = p.en;
+      state.inputText = p.en;
+      state.appliedVariants = {};
+      state.images = [];
+      state.activeWord = null;
+      renderOutput();
+      updateStats();
+      const lastWord = p.en.trim().split(/\s+/).pop().replace(/[^\w]/g, '');
+      if (lastWord) { state.currentWord = lastWord; showSuggestionsForWord(lastWord); }
+      enInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      enInput.focus();
+      enInput.setSelectionRange(p.en.length, p.en.length);
+    });
+    grid.appendChild(card);
+  });
+}
+
+// ============ Toast ============
+let toastTimer = null;
+function showToast(message) {
+  const toast = document.getElementById('toast');
+  toast.textContent = message;
+  toast.style.opacity = '1';
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { toast.style.opacity = '0'; }, 1800);
+}
+
+// ============ Init ============
+renderPhrases();
+renderOutput();
+updateStats();
+setTimeout(() => enInput.focus(), 100);
 </script>
 </body>
 </html>
