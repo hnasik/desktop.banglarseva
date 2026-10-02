@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Golden — CV studio</title>
+<title>golden — CV studio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Space+Grotesk:wght@400..700&family=IBM+Plex+Mono:wght@400;500&family=Caveat:wght@400..700&display=swap" rel="stylesheet">
@@ -1342,7 +1342,11 @@ els.secnav.innerHTML=SECTIONS.map(s=>`<button class="chip" data-nav="${s.id}"><i
 els.secnav.addEventListener('click',e=>{
  const c=e.target.closest('.chip');if(!c)return;
  const sec=document.getElementById('sec-'+c.dataset.nav);
- if(sec)sec.scrollIntoView({behavior:'smooth',block:'start'});
+ if(!sec)return;
+ // Scroll only the editor column so the outer page/topbar never moves.
+ const navH=els.secnav.offsetHeight;
+ const top=sec.offsetTop-navH;
+ els.editorCol.scrollTo({top:Math.max(0,top),behavior:'smooth'});
 });
 
 /* ================= boot ================= */
