@@ -253,7 +253,7 @@
   .month-sub{font-size:11.5px;color:var(--muted);margin-top:2px}
 
   /* ══════════════════════════════════════════════════════════
-     COMPACT SALES CALENDAR
+     COMPACT SALES CALENDAR (GREEN HIGHLIGHT)
      ══════════════════════════════════════════════════════════ */
   .cal-nav{display:flex;align-items:center;gap:2px}
   .cal-nav > span{
@@ -286,13 +286,13 @@
   .cal-cell.today{border-color:#818cf8;box-shadow:0 0 0 1.5px rgba(99,102,241,.25)}
   .cal-cell.has-sale{
     cursor:pointer;
-    background:linear-gradient(180deg,rgba(99,102,241,.22),rgba(99,102,241,.06));
-    border-color:rgba(129,140,248,.42);
+    background:linear-gradient(180deg,rgba(52,211,153,.22),rgba(52,211,153,.06));
+    border-color:rgba(52,211,153,.42);
     color:#eef1f9;
   }
-  .cal-cell.has-sale:hover{transform:translateY(-1px);box-shadow:0 4px 10px -6px rgba(99,102,241,.7)}
-  .cal-cell.selected{outline:2px solid #a5b4fc;outline-offset:1px}
-  .cal-count{font-size:8px;font-weight:800;color:#c7d2fe;line-height:1;margin-top:1px}
+  .cal-cell.has-sale:hover{transform:translateY(-1px);box-shadow:0 4px 10px -6px rgba(52,211,153,.7)}
+  .cal-cell.selected{outline:2px solid #34d399;outline-offset:1px}
+  .cal-count{font-size:8px;font-weight:800;color:#a7f3d0;line-height:1;margin-top:1px}
   .cal-legend{
     display:flex;align-items:center;gap:12px;margin-top:10px;font-size:10.5px;color:var(--muted);
   }
@@ -565,7 +565,7 @@
         <div class="card-body" style="padding:12px 14px 14px">
           <div class="cal-grid" id="calGrid"></div>
           <div class="cal-legend">
-            <span><i style="background:linear-gradient(180deg,rgba(99,102,241,.55),rgba(99,102,241,.15));border:1px solid rgba(129,140,248,.5)"></i>Sales day</span>
+            <span><i style="background:linear-gradient(180deg,rgba(52,211,153,.55),rgba(52,211,153,.15));border:1px solid rgba(52,211,153,.5)"></i>Sales day</span>
             <span><i style="background:transparent;border:2px solid #818cf8"></i>Today</span>
           </div>
           <div id="calDayDetail" class="hidden"></div>
