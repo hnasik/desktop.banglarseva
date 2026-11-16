@@ -90,6 +90,17 @@
   .field small{font-size:12px;color:var(--muted)}
   .row-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 
+  /* ══ GREEN HIGHLIGHT for Sale date ══ */
+  #sDate{
+    accent-color: #34d399;
+    color-scheme: dark;
+  }
+  #sDate:focus{
+    border-color: var(--green);
+    background: #10182b;
+    box-shadow: 0 0 0 4px rgba(52, 211, 153, .28);
+  }
+
   .error{
     background:var(--red-bg);color:var(--red);padding:11px 14px;border-radius:12px;
     font-size:13px;font-weight:600;margin:12px 0 0;border:1px solid rgba(251,113,133,.25);
@@ -241,6 +252,59 @@
   .month-count{font-size:16px;font-weight:800;letter-spacing:-.3px;color:#f1f4fb}
   .month-sub{font-size:11.5px;color:var(--muted);margin-top:2px}
 
+  /* ══════════════════════════════════════════════════════════
+     COMPACT SALES CALENDAR
+     ══════════════════════════════════════════════════════════ */
+  .cal-nav{display:flex;align-items:center;gap:2px}
+  .cal-nav > span{
+    font-size:12px;font-weight:700;color:#eef1f9;min-width:88px;text-align:center;
+    letter-spacing:-.2px;
+  }
+  .cal-nav .icon-btn{padding:3px 7px;font-size:15px;border-radius:8px}
+  .cal-nav .btn-today{
+    padding:4px 9px;font-size:11px;font-weight:700;margin-left:5px;
+    background:rgba(99,102,241,.15);border:1px solid rgba(99,102,241,.35);
+    color:#c7d2fe;border-radius:8px;cursor:pointer;font-family:inherit;
+    transition:all .15s ease;
+  }
+  .cal-nav .btn-today:hover{background:rgba(99,102,241,.3);color:#fff}
+
+  .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+  .cal-dow{
+    font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.3px;
+    color:var(--muted);text-align:center;padding:0 0 3px;
+  }
+  .cal-cell{
+    height:30px;border-radius:7px;border:1px solid var(--border);
+    background:var(--surface);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    font-size:11px;font-weight:600;color:var(--text);gap:0;
+    position:relative;transition:all .15s ease;user-select:none;padding:0;
+    line-height:1;
+  }
+  .cal-cell.blank{background:transparent;border-color:transparent}
+  .cal-cell.today{border-color:#818cf8;box-shadow:0 0 0 1.5px rgba(99,102,241,.25)}
+  .cal-cell.has-sale{
+    cursor:pointer;
+    background:linear-gradient(180deg,rgba(99,102,241,.22),rgba(99,102,241,.06));
+    border-color:rgba(129,140,248,.42);
+    color:#eef1f9;
+  }
+  .cal-cell.has-sale:hover{transform:translateY(-1px);box-shadow:0 4px 10px -6px rgba(99,102,241,.7)}
+  .cal-cell.selected{outline:2px solid #a5b4fc;outline-offset:1px}
+  .cal-count{font-size:8px;font-weight:800;color:#c7d2fe;line-height:1;margin-top:1px}
+  .cal-legend{
+    display:flex;align-items:center;gap:12px;margin-top:10px;font-size:10.5px;color:var(--muted);
+  }
+  .cal-legend i{
+    width:9px;height:9px;border-radius:3px;display:inline-block;margin-right:4px;vertical-align:-1px;
+  }
+  .cal-day-head{
+    display:flex;justify-content:space-between;align-items:center;margin:12px 0 6px;
+    font-size:12.5px;font-weight:700;color:#eef1f9;
+  }
+  .cal-day-head .tot{font-size:11.5px;color:var(--muted);font-weight:600}
+
   /* ── Sale Detail ── */
   .detail-head{
     background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
@@ -372,6 +436,11 @@
     .row-2{grid-template-columns:1fr}
     .emi-breakdown{grid-template-columns:1fr}
     .user-menu span{max-width:120px}
+    .cal-nav > span{min-width:76px;font-size:11px}
+    .cal-cell{height:27px;font-size:10px;border-radius:6px}
+    .cal-count{font-size:7px}
+    .cal-dow{font-size:8px}
+    .cal-grid{gap:2px}
   }
 </style>
 </head>
@@ -482,6 +551,28 @@
         </div>
       </div>
 
+      <!-- ══ COMPACT SALES CALENDAR ══ -->
+      <div class="card">
+        <div class="card-head">
+          <h3>Sales calendar</h3>
+          <div class="cal-nav">
+            <button class="icon-btn" id="calPrev" type="button" aria-label="Previous month">‹</button>
+            <span id="calMonthLabel">—</span>
+            <button class="icon-btn" id="calNext" type="button" aria-label="Next month">›</button>
+            <button class="btn-today" id="calToday" type="button">Today</button>
+          </div>
+        </div>
+        <div class="card-body" style="padding:12px 14px 14px">
+          <div class="cal-grid" id="calGrid"></div>
+          <div class="cal-legend">
+            <span><i style="background:linear-gradient(180deg,rgba(99,102,241,.55),rgba(99,102,241,.15));border:1px solid rgba(129,140,248,.5)"></i>Sales day</span>
+            <span><i style="background:transparent;border:2px solid #818cf8"></i>Today</span>
+          </div>
+          <div id="calDayDetail" class="hidden"></div>
+        </div>
+      </div>
+      <!-- ══ END CALENDAR ══ -->
+
       <div class="card">
         <div class="card-head"><h3>Month-wise sales</h3></div>
         <ul class="list" id="monthList"></ul>
@@ -489,7 +580,7 @@
 
       <div class="card">
         <div class="card-head">
-          <h3>Recent sales</h3>
+          <h3 id="recentSalesTitle">Recent sales</h3>
           <button class="btn ghost sm" data-goto-sales type="button">View all</button>
         </div>
         <ul class="list" id="recentList"></ul>
@@ -512,7 +603,7 @@
 
       <div class="detail-head">
         <div class="detail-top">
-          <div class="avatar" id="detailAvatar">?</div>
+          <div class="avatar" id="detailAvatar">👤</div>
           <div>
             <div class="detail-name" id="detailName">—</div>
             <div class="detail-sub" id="detailSub">—</div>
@@ -636,6 +727,19 @@
         <input id="sAddress" maxlength="200" placeholder="Customer address (optional)" autocomplete="off" />
       </div>
 
+      <!-- ══ Voter card no. & Aadhar card no. ══ -->
+      <div class="row-2">
+        <div class="field">
+          <label>Voter card no.</label>
+          <input id="sVoterNo" maxlength="20" placeholder="e.g. ABC1234567" autocomplete="off" />
+        </div>
+        <div class="field">
+          <label>Aadhar card no.</label>
+          <input id="sAadharNo" maxlength="20" placeholder="e.g. 1234 5678 9012" autocomplete="off" />
+        </div>
+      </div>
+      <!-- ══ END ══ -->
+
       <div class="field">
         <label>GIVE ID <span class="muted" style="font-weight:500">(unique, optional)</span></label>
         <input id="sCustomId" maxlength="30" placeholder="e.g. CUST001" autocomplete="off" />
@@ -718,7 +822,7 @@
   </div>
 
   <div class="drawer-profile">
-    <div class="drawer-avatar" id="drawerAvatar">?</div>
+    <div class="drawer-avatar" id="drawerAvatar">👤</div>
     <div class="drawer-name" id="drawerName">—</div>
     <div class="drawer-shop" id="drawerShop">—</div>
   </div>
@@ -738,7 +842,6 @@
 </aside>
 
 <div id="toast"></div>
-
 <!-- ══════════════ SCRIPT ══════════════ -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -775,6 +878,9 @@ const hide = el => el.classList.add('hidden');
 const esc = (s = '') => String(s).replace(/[&<>"']/g, c =>
   ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
 const money = n => '₹' + Number(n || 0).toLocaleString('en-IN', { maximumFractionDigits: 2 });
+
+/* Default icon when a name is missing */
+const USER_ICON = '👤';
 
 function toDate(ts) {
   if (!ts) return null;
@@ -815,6 +921,12 @@ let editingSaleId = null;
 let authMode = 'login';
 let unsubSales = null;
 let cachedBizData = null; // Cache admin settings for invoice
+
+/* Calendar state */
+const _now = new Date();
+let calYear = _now.getFullYear();
+let calMonth = _now.getMonth(); // 0-11
+let calSelectedDay = null;
 
 /* ═══════════════ AUTH UI ═══════════════ */
 $$('.tab').forEach(tab => tab.addEventListener('click', () => {
@@ -976,6 +1088,7 @@ function teardown() {
   sales = [];
   activeSaleId = null;
   editingSaleId = null;
+  calSelectedDay = null;
   closeDrawer();
 }
 
@@ -1065,14 +1178,160 @@ function renderDashboard() {
     }).join('');
   }
 
-  const recent = sales.slice(0, 6);
-  const recentList = $('#recentList');
-  if (!recent.length) {
-    recentList.innerHTML = `<li class="empty">No sales recorded yet.</li>`;
+  /* Calendar + month-filtered sales list */
+  renderCalendar();
+}
+
+/* ═══════════════ RENDER: SALES CALENDAR (compact) ═══════════════ */
+function salesByDayFor(y, m) {
+  const map = {};
+  sales.forEach(s => {
+    const d = toDate(s.saleDate) || toDate(s.createdAt);
+    if (!d) return;
+    if (d.getFullYear() === y && d.getMonth() === m) {
+      const day = d.getDate();
+      (map[day] ||= []).push(s);
+    }
+  });
+  return map;
+}
+
+function renderCalendar() {
+  const grid = $('#calGrid');
+  if (!grid) return;
+
+  const label = new Date(calYear, calMonth, 1)
+    .toLocaleDateString('en-IN', { month: 'long', year: 'numeric' });
+  $('#calMonthLabel').textContent = label;
+
+  const map = salesByDayFor(calYear, calMonth);
+  const firstDow = new Date(calYear, calMonth, 1).getDay(); // 0 = Sunday
+  const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
+
+  const today = new Date();
+  const isThisMonth = today.getFullYear() === calYear && today.getMonth() === calMonth;
+
+  const dows = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
+  let html = dows.map(d => `<div class="cal-dow">${d}</div>`).join('');
+
+  for (let i = 0; i < firstDow; i++) {
+    html += `<div class="cal-cell blank"></div>`;
+  }
+
+  for (let day = 1; day <= daysInMonth; day++) {
+    const list = map[day];
+    const cls = ['cal-cell'];
+    if (isThisMonth && day === today.getDate()) cls.push('today');
+    if (list && list.length) cls.push('has-sale');
+    if (calSelectedDay === day) cls.push('selected');
+
+    const countBadge = (list && list.length)
+      ? `<div class="cal-count">${list.length}</div>`
+      : '';
+
+    html += `<div class="${cls.join(' ')}" data-day="${day}">${day}${countBadge}</div>`;
+  }
+
+  grid.innerHTML = html;
+
+  /* Selected day detail list */
+  const detail = $('#calDayDetail');
+  const list = calSelectedDay ? map[calSelectedDay] : null;
+
+  if (list && list.length) {
+    const totalVal = list.reduce(
+      (a, s) => a + Number(s.advanceAmount || 0) + Number(s.restAmount || 0), 0
+    );
+    const monthShort = new Date(calYear, calMonth, 1)
+      .toLocaleDateString('en-IN', { month: 'short' });
+
+    detail.innerHTML = `
+      <div class="cal-day-head">
+        <span>${calSelectedDay} ${monthShort} · ${list.length} sale${list.length > 1 ? 's' : ''}</span>
+        <span class="tot">${money(totalVal)}</span>
+      </div>
+      <ul class="list" style="border:1px solid var(--border);border-radius:12px;overflow:hidden;background:var(--surface)">
+        ${list.map(s => saleRow(s, false)).join('')}
+      </ul>`;
+    show(detail);
   } else {
-    recentList.innerHTML = recent.map(s => saleRow(s, true)).join('');
+    detail.innerHTML = '';
+    hide(detail);
+  }
+
+  /* Month-filtered sales list below the calendar */
+  renderMonthSales();
+}
+
+/* Renders "Sales in [Month]" list filtering by selected calendar month */
+function renderMonthSales() {
+  const label = new Date(calYear, calMonth, 1)
+    .toLocaleDateString('en-IN', { month: 'long', year: 'numeric' });
+
+  const monthSales = sales.filter(s => {
+    const d = toDate(s.saleDate) || toDate(s.createdAt);
+    return d && d.getFullYear() === calYear && d.getMonth() === calMonth;
+  });
+
+  const titleEl = $('#recentSalesTitle');
+  if (titleEl) titleEl.textContent = `Sales in ${label}`;
+
+  const recentList = $('#recentList');
+  if (!recentList) return;
+
+  if (!monthSales.length) {
+    recentList.innerHTML = `<li class="empty">No sales in ${label}.</li>`;
+  } else {
+    recentList.innerHTML = monthSales.map(s => saleRow(s, true)).join('');
   }
 }
+
+/* Calendar navigation */
+$('#calPrev').addEventListener('click', () => {
+  calMonth--;
+  if (calMonth < 0) { calMonth = 11; calYear--; }
+  calSelectedDay = null;
+  renderCalendar();
+});
+
+$('#calNext').addEventListener('click', () => {
+  calMonth++;
+  if (calMonth > 11) { calMonth = 0; calYear++; }
+  calSelectedDay = null;
+  renderCalendar();
+});
+
+$('#calToday').addEventListener('click', () => {
+  const t = new Date();
+  calYear  = t.getFullYear();
+  calMonth = t.getMonth();
+  calSelectedDay = null;
+  renderCalendar();
+});
+
+/* Click a day cell */
+$('#calGrid').addEventListener('click', e => {
+  const cell = e.target.closest('.cal-cell[data-day]');
+  if (!cell) return;
+
+  const day = Number(cell.dataset.day);
+  const map = salesByDayFor(calYear, calMonth);
+
+  if (!map[day] || !map[day].length) {
+    calSelectedDay = null;
+    renderCalendar();
+    return;
+  }
+
+  calSelectedDay = (calSelectedDay === day) ? null : day;
+  renderCalendar();
+});
+
+/* Click a sale inside the calendar day detail */
+$('#calDayDetail').addEventListener('click', e => {
+  const li = e.target.closest('.sale');
+  if (li) openSale(li.dataset.id);
+});
 
 /* ═══════════════ RENDER: SALES LIST ═══════════════ */
 function saleRow(s, withDate = false) {
@@ -1086,15 +1345,19 @@ function saleRow(s, withDate = false) {
   if (withDate) subParts.push(fmtDate(s.saleDate));
   else if (s.customerPhone) subParts.push(esc(s.customerPhone));
 
+  /* 👤 Icon fallback if no customer name */
+  const avatarText = s.customerName
+    ? esc(s.customerName.charAt(0).toUpperCase())
+    : USER_ICON;
+
   return `
     <li class="sale" data-id="${s.id}">
-      <div class="avatar">${esc((s.customerName || '?').charAt(0).toUpperCase())}</div>
+      <div class="avatar">${avatarText}</div>
       <div class="sale-info">
         <div class="sale-name">${esc(s.customerName || 'Unnamed')}</div>
         <div class="sale-sub">${subParts.join(' · ') || '—'}</div>
       </div>
       
-      <!-- Invoice Button in the middle -->
       <div class="sale-action">
         <button class="btn-invoice" onclick="event.stopPropagation(); window.openInvoice('${s.id}')" title="View Invoice">📄</button>
         ${due}
@@ -1153,7 +1416,11 @@ function renderSaleDetail() {
   const rest    = Number(s.restAmount) || 0;
   const total   = advance + rest;
 
-  $('#detailAvatar').textContent = (s.customerName || '?').charAt(0).toUpperCase();
+  /* 👤 Icon fallback if no customer name */
+  $('#detailAvatar').textContent = s.customerName
+    ? s.customerName.charAt(0).toUpperCase()
+    : USER_ICON;
+
   $('#detailName').textContent   = s.customerName || 'Unnamed';
   $('#detailSub').textContent    = [s.phoneModel, s.customerPhone].filter(Boolean).join(' · ') || '—';
 
@@ -1174,6 +1441,8 @@ function renderSaleDetail() {
     <div class="kv"><span class="k">GIVE ID</span><span class="v">${esc(s.customId || '—')}</span></div>
     <div class="kv"><span class="k">Customer phone</span><span class="v">${esc(s.customerPhone || '—')}</span></div>
     <div class="kv"><span class="k">Customer address</span><span class="v">${esc(s.customerAddress || '—')}</span></div>
+    <div class="kv"><span class="k">Voter card no.</span><span class="v">${esc(s.voterCardNo || '—')}</span></div>
+    <div class="kv"><span class="k">Aadhar card no.</span><span class="v">${esc(s.aadharCardNo || '—')}</span></div>
     <div class="kv"><span class="k">Phone model</span><span class="v">${esc(s.phoneModel || '—')}</span></div>
     
     <div class="kv"><span class="k">Product Name</span><span class="v">${prodName}</span></div>
@@ -1332,7 +1601,10 @@ function renderDrawer() {
   const address    = p.sellerAddress || '';
   const phone      = p.sellerPhone || '';
   const role       = p.role || 'user';
-  const initial    = (sellerName || shopName || email || '?').charAt(0).toUpperCase();
+
+  /* 👤 Icon fallback if no name */
+  const nameForAvatar = sellerName || shopName || email;
+  const initial = nameForAvatar ? nameForAvatar.charAt(0).toUpperCase() : USER_ICON;
 
   $('#drawerAvatar').textContent     = initial;
   $('#drawerName').textContent       = sellerName || shopName || 'Seller';
@@ -1401,6 +1673,8 @@ $('#addSaleBtn').addEventListener('click', () => {
   $('#sInstallment').value = 0;
   $('#sQuantity').value = 1;
   $('#sPrice').value = 0;
+  $('#sVoterNo').value = '';
+  $('#sAadharNo').value = '';
   $('#sDate').value = todayStr();
   openModal('saleModal');
   setTimeout(() => $('#sName').focus(), 60);
@@ -1415,6 +1689,8 @@ $('#editSaleBtn').addEventListener('click', () => {
   $('#sName').value     = s.customerName || '';
   $('#sPhone').value    = s.customerPhone || '';
   $('#sAddress').value  = s.customerAddress || '';
+  $('#sVoterNo').value  = s.voterCardNo || '';
+  $('#sAadharNo').value = s.aadharCardNo || '';
   $('#sCustomId').value = s.customId || '';
   $('#sModel').value    = s.phoneModel || '';
   
@@ -1443,6 +1719,8 @@ $('#saleForm').addEventListener('submit', async e => {
   const customerName    = $('#sName').value.trim();
   const customerPhone   = $('#sPhone').value.trim();
   const customerAddress = $('#sAddress').value.trim();
+  const voterCardNo     = $('#sVoterNo').value.trim();
+  const aadharCardNo    = $('#sAadharNo').value.trim();
   const customId        = $('#sCustomId').value.trim();
   const phoneModel      = $('#sModel').value.trim();
   
@@ -1473,6 +1751,8 @@ $('#saleForm').addEventListener('submit', async e => {
     customerName,
     customerPhone,
     customerAddress,
+    voterCardNo,
+    aadharCardNo,
     customId,
     phoneModel,
     productName,
