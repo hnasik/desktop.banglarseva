@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>EasySlice</title>
 <style>
-  /* ══════════════════════════════════════════════════════════
+  /* ----------------------------------------------------------
      EasySlice · Modern Dark UI Theme ("Midnight Indigo")
-     ══════════════════════════════════════════════════════════ */
+     ---------------------------------------------------------- */
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 
   :root{
@@ -15,6 +15,7 @@
     --border:#232b42; --brand:#6366f1; --brand-d:#a5b4fc;
     --green:#34d399; --green-bg:rgba(16,185,129,.13);
     --red:#fb7185; --red-bg:rgba(244,63,94,.13);
+    --amber:#fbbf24; --amber-bg:rgba(245,158,11,.13);
     --radius:16px;
     --shadow:0 1px 2px rgba(0,0,0,.35), 0 14px 34px -16px rgba(0,0,0,.6);
     --shadow-lg:0 30px 80px -24px rgba(0,0,0,.75);
@@ -44,7 +45,7 @@
   .green{color:var(--green)} .red{color:var(--red)}
   .center-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
 
-  /* ── Buttons ── */
+  /* -- Buttons -- */
   .btn{
     border:1px solid var(--border);background:#1a2136;color:var(--text);
     padding:10px 18px;border-radius:12px;font-size:14px;font-weight:600;
@@ -73,7 +74,7 @@
   }
   .link-btn:hover{color:#c7d2fe;text-decoration:underline}
 
-  /* ── Form Fields ── */
+  /* -- Form Fields -- */
   .field{display:flex;flex-direction:column;gap:7px;margin-bottom:16px}
   .field label{font-size:12.5px;font-weight:700;color:#aeb6cd;letter-spacing:.2px}
   .field input,.field textarea,.field select{
@@ -90,7 +91,7 @@
   .field small{font-size:12px;color:var(--muted)}
   .row-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 
-  /* ══ GREEN HIGHLIGHT for Sale date ══ */
+  /* -- GREEN HIGHLIGHT for Sale date -- */
   #sDate{
     accent-color: #34d399;
     color-scheme: dark;
@@ -106,7 +107,7 @@
     font-size:13px;font-weight:600;margin:12px 0 0;border:1px solid rgba(251,113,133,.25);
   }
 
-  /* ── Auth / Login ── */
+  /* -- Auth / Login -- */
   .auth-card{
     width:100%;max-width:400px;background:rgba(18,24,40,.82);
     backdrop-filter:blur(22px) saturate(1.4);-webkit-backdrop-filter:blur(22px) saturate(1.4);
@@ -125,7 +126,7 @@
   }
   .logo.sm{width:34px;height:34px;border-radius:11px;font-size:15px;margin:0;box-shadow:0 6px 14px -6px rgba(99,102,241,.6)}
 
-  /* ── Auth Tabs (Login / Sign up) ── */
+  /* -- Auth Tabs (Login / Sign up) -- */
   .tabs{
     display:flex;background:var(--surface);
     border:1px solid var(--border);
@@ -143,7 +144,7 @@
   .divider{display:flex;align-items:center;gap:12px;margin:18px 0;color:var(--muted);font-size:12px}
   .divider::before,.divider::after{content:"";flex:1;height:1px;background:var(--border)}
 
-  /* ── App Shell ── */
+  /* -- App Shell -- */
   .topbar{
     background:rgba(11,15,26,.72);
     backdrop-filter:blur(16px) saturate(1.4);-webkit-backdrop-filter:blur(16px) saturate(1.4);
@@ -175,7 +176,7 @@
   main{max-width:920px;margin:0 auto;padding:20px;padding-bottom:60px}
   .view h2{font-size:22px;margin:0 0 18px;letter-spacing:-.5px;font-weight:800;color:#f4f6fc}
 
-  /* ── Stat Cards ── */
+  /* -- Stat Cards -- */
   .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
   .stat{
     background:linear-gradient(180deg,#141b2e,#111726);border:1px solid var(--border);border-radius:var(--radius);
@@ -192,7 +193,7 @@
   .stat-label{font-size:11px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.6px}
   .stat-value{font-size:20px;font-weight:800;letter-spacing:-.4px}
 
-  /* ── Cards ── */
+  /* -- Cards -- */
   .card{
     background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
     overflow:hidden;margin-bottom:18px;box-shadow:var(--shadow);
@@ -208,7 +209,7 @@
   ul.list{list-style:none;margin:0;padding:0}
   ul.list li.empty{padding:40px 16px;text-align:center;color:var(--muted);font-size:14px}
 
-  /* ── Sale Rows ── */
+  /* -- Sale Rows -- */
   .sale{
     display:flex;align-items:center;gap:13px;padding:14px 18px;
     border-bottom:1px solid #1c2438;cursor:pointer;transition:background .14s ease;
@@ -226,7 +227,7 @@
   .sale-name{font-weight:600;font-size:14.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#eef1f9}
   .sale-sub{font-size:12.5px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   
-  .sale-action { display: flex; align-items: center; gap: 8px; }
+  .sale-action { display:flex; align-items:center; gap:8px; }
   .sale-due{font-weight:700;font-size:13.5px;white-space:nowrap}
   
   /* Invoice Button in Row */
@@ -237,7 +238,7 @@
   }
   .btn-invoice:hover { background: rgba(99,102,241,0.3); color: #fff; transform: scale(1.05); }
 
-  /* ── Month-wise Rows ── */
+  /* -- Month-wise Rows -- */
   .month-row{display:flex;align-items:center;gap:14px;padding:13px 18px;border-bottom:1px solid #1c2438}
   .month-row:last-child{border-bottom:none}
   .month-main{flex:1;min-width:0}
@@ -252,9 +253,7 @@
   .month-count{font-size:16px;font-weight:800;letter-spacing:-.3px;color:#f1f4fb}
   .month-sub{font-size:11.5px;color:var(--muted);margin-top:2px}
 
-  /* ══════════════════════════════════════════════════════════
-     COMPACT SALES CALENDAR (GREEN HIGHLIGHT)
-     ══════════════════════════════════════════════════════════ */
+  /* -- COMPACT SALES CALENDAR -- */
   .cal-nav{display:flex;align-items:center;gap:2px}
   .cal-nav > span{
     font-size:12px;font-weight:700;color:#eef1f9;min-width:88px;text-align:center;
@@ -305,7 +304,7 @@
   }
   .cal-day-head .tot{font-size:11.5px;color:var(--muted);font-weight:600}
 
-  /* ── Sale Detail ── */
+  /* -- Sale Detail -- */
   .detail-head{
     background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
     padding:22px;margin-bottom:16px;box-shadow:var(--shadow);
@@ -325,7 +324,7 @@
   .kv .k{color:var(--muted);font-weight:500}
   .kv .v{font-weight:600;text-align:right;word-break:break-word}
 
-  /* ── Search ── */
+  /* -- Search -- */
   .searchbar{display:flex;gap:10px;margin-bottom:16px}
   .searchbar input{
     flex:1;padding:12px 15px;border:1.5px solid var(--border);border-radius:12px;
@@ -336,7 +335,7 @@
   .searchbar input:hover{border-color:#313c60}
   .searchbar input:focus{border-color:var(--brand);box-shadow:var(--ring)}
 
-  /* ── EMI Highlight ── */
+  /* -- EMI Highlight -- */
   .emi-highlight{
     background:linear-gradient(135deg,rgba(99,102,241,.17),rgba(139,92,246,.10));
     border:1px solid rgba(129,140,248,.35);border-radius:16px;padding:20px;margin-top:18px;
@@ -348,7 +347,7 @@
   .emi-highlight .sub{font-size:12.5px;color:var(--muted)}
   .emi-breakdown{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
 
-  /* ── Modal (bottom sheet) ── */
+  /* -- Modal (bottom sheet) -- */
   .modal{
     position:fixed;inset:0;background:rgba(3,6,15,.68);
     backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
@@ -369,7 +368,7 @@
   .modal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
   .modal-head h3{margin:0;font-size:18px;font-weight:800;letter-spacing:-.4px;color:#f4f6fc}
 
-  /* ── Drawer ── */
+  /* -- Drawer -- */
   .drawer-overlay{
     position:fixed;inset:0;background:rgba(3,6,15,.68);
     backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
@@ -411,7 +410,7 @@
   .drawer-body{padding:10px 16px;flex:1;overflow:auto}
   .drawer-footer{padding:16px;border-top:1px solid var(--border)}
 
-  /* ── Toast ── */
+  /* -- Toast -- */
   #toast{
     position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(18px);
     background:var(--grad);color:#fff;padding:12px 22px;border-radius:999px;
@@ -421,11 +420,20 @@
   }
   #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-  /* ── Loading pulse ── */
+  /* -- Loading pulse -- */
   #loading .logo{animation:logoPulse 1.4s ease-in-out infinite}
   @keyframes logoPulse{0%,100%{transform:scale(1);box-shadow:0 12px 28px -8px rgba(99,102,241,.65)}50%{transform:scale(1.1);box-shadow:0 18px 36px -8px rgba(99,102,241,.85)}}
 
-  /* ── Responsive ── */
+  /* -- Payment Badge -- */
+  .payment-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 12px; border-radius: 999px; font-size: 13px; font-weight: 700;
+    margin-top: 10px; border: 1px solid transparent;
+  }
+  .payment-badge.paid { background: var(--green-bg); color: var(--green); border-color: rgba(52,211,153,.3); }
+  .payment-badge.due { background: var(--red-bg); color: var(--red); border-color: rgba(251,113,133,.3); }
+
+  /* -- Responsive -- */
   @media(max-width:640px){
     .stats{grid-template-columns:repeat(2,1fr)}
     .stat-value{font-size:17px}
@@ -446,12 +454,12 @@
 </head>
 <body>
 
-<!-- ══════════════ LOADING ══════════════ -->
+<!-- -------------- LOADING -------------- -->
 <div id="loading" class="center-screen">
   <div class="logo">📱</div>
 </div>
 
-<!-- ══════════════ AUTH ══════════════ -->
+<!-- -------------- AUTH -------------- -->
 <div id="authView" class="center-screen hidden">
   <div class="auth-card">
     <div class="brand">
@@ -502,7 +510,7 @@
   </div>
 </div>
 
-<!-- ══════════════ APP ══════════════ -->
+<!-- -------------- APP -------------- -->
 <div id="appView" class="hidden">
   <header class="topbar">
     <div class="topbar-left">
@@ -525,6 +533,7 @@
     <button class="nav-btn active" data-view="dashboard" type="button">Dashboard</button>
     <button class="nav-btn" data-view="sales" type="button">Sales</button>
     <button class="nav-btn" data-view="emi" type="button">EMI</button>
+    <button class="nav-btn" data-view="payments" type="button">Payments</button>
   </nav>
 
   <main>
@@ -551,7 +560,7 @@
         </div>
       </div>
 
-      <!-- ══ COMPACT SALES CALENDAR ══ -->
+      <!-- -- COMPACT SALES CALENDAR -- -->
       <div class="card">
         <div class="card-head">
           <h3>Sales calendar</h3>
@@ -571,7 +580,7 @@
           <div id="calDayDetail" class="hidden"></div>
         </div>
       </div>
-      <!-- ══ END CALENDAR ══ -->
+      <!-- -- END CALENDAR -- -->
 
       <div class="card">
         <div class="card-head"><h3>Month-wise sales</h3></div>
@@ -603,7 +612,7 @@
 
       <div class="detail-head">
         <div class="detail-top">
-          <div class="avatar" id="detailAvatar">👤</div>
+          <div class="avatar" id="detailAvatar">?</div>
           <div>
             <div class="detail-name" id="detailName">—</div>
             <div class="detail-sub" id="detailSub">—</div>
@@ -701,10 +710,33 @@
         </div>
       </div>
     </section>
+
+    <!-- NEW: PAYMENTS VIEW -->
+    <section id="paymentsView" class="view hidden">
+      <h2>My Subscription Payments</h2>
+      
+      <!-- Current Month Status Card -->
+      <div class="card" style="margin-bottom:20px;">
+        <div class="card-head"><h3>Current Month Status</h3></div>
+        <div class="card-body" style="text-align:center;">
+          <h3 id="currentMonthLabel" style="font-size:24px; font-weight:800; color:#fff; margin-bottom:10px;">—</h3>
+          <div id="currentMonthStatus" style="font-size:32px; font-weight:900; letter-spacing:1px; margin-bottom:10px;">—</div>
+          <p class="muted" style="font-size:13px; margin:0;" id="currentMonthDesc">Checking status...</p>
+        </div>
+      </div>
+
+      <!-- Payment History -->
+      <div class="card">
+        <div class="card-head"><h3>Payment History</h3></div>
+        <ul class="list" id="paymentHistoryList">
+          <!-- JS Populates this -->
+        </ul>
+      </div>
+    </section>
   </main>
 </div>
 
-<!-- ══════════════ MODAL: ADD / EDIT SALE ══════════════ -->
+<!-- -------------- MODAL: ADD / EDIT SALE -------------- -->
 <div class="modal hidden" id="saleModal">
   <div class="modal-box">
     <div class="modal-head">
@@ -727,7 +759,6 @@
         <input id="sAddress" maxlength="200" placeholder="Customer address (optional)" autocomplete="off" />
       </div>
 
-      <!-- ══ Voter card no. & Aadhar card no. ══ -->
       <div class="row-2">
         <div class="field">
           <label>Voter card no.</label>
@@ -738,7 +769,6 @@
           <input id="sAadharNo" maxlength="20" placeholder="e.g. 1234 5678 9012" autocomplete="off" />
         </div>
       </div>
-      <!-- ══ END ══ -->
 
       <div class="field">
         <label>GIVE ID <span class="muted" style="font-weight:500">(unique, optional)</span></label>
@@ -750,7 +780,6 @@
         <input id="sModel" required maxlength="60" placeholder="e.g. Redmi Note 13 Pro" autocomplete="off" />
       </div>
 
-      <!-- NEW FIELDS -->
       <div class="field">
         <label>Product Name</label>
         <input id="sProductName" maxlength="60" placeholder="e.g. Mobile, Charger, Cover" autocomplete="off" />
@@ -766,7 +795,6 @@
           <input id="sPrice" type="number" min="0" step="0.01" value="0" placeholder="0" />
         </div>
       </div>
-      <!-- END NEW FIELDS -->
 
       <div class="field">
         <label>IMEI no. <span class="muted" style="font-weight:500">(optional)</span></label>
@@ -809,7 +837,7 @@
   </div>
 </div>
 
-<!-- ══════════════ DRAWER: SELLER PROFILE ══════════════ -->
+<!-- -------------- DRAWER: SELLER PROFILE -------------- -->
 <div class="drawer-overlay" id="drawerOverlay"></div>
 
 <aside class="drawer" id="profileDrawer" aria-label="Seller profile">
@@ -822,7 +850,7 @@
   </div>
 
   <div class="drawer-profile">
-    <div class="drawer-avatar" id="drawerAvatar">👤</div>
+    <div class="drawer-avatar" id="drawerAvatar">?</div>
     <div class="drawer-name" id="drawerName">—</div>
     <div class="drawer-shop" id="drawerShop">—</div>
   </div>
@@ -842,7 +870,8 @@
 </aside>
 
 <div id="toast"></div>
-<!-- ══════════════ SCRIPT ══════════════ -->
+
+<!-- -------------- SCRIPT -------------- -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
@@ -855,7 +884,7 @@ import {
   onSnapshot, serverTimestamp, updateDoc, Timestamp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-/* ─────────────── CONFIG ─────────────── */
+/* --------------- CONFIG --------------- */
 const firebaseConfig = {
   apiKey: "AIzaSyA9IsIB-QgFSDxxBrMBXn0T1NowZNrY8UY",
   authDomain: "golden-khata.firebaseapp.com",
@@ -870,7 +899,7 @@ const app  = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db   = getFirestore(app);
 
-/* ─────────────── HELPERS ─────────────── */
+/* --------------- HELPERS --------------- */
 const $  = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const show = el => el.classList.remove('hidden');
@@ -898,9 +927,13 @@ function monthKey(ts) {
   return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
 }
 function monthLabel(key) {
+  if(!key) return '—';
   const [y, m] = key.split('-');
   return new Date(Number(y), Number(m) - 1, 1)
-    .toLocaleDateString('en-IN', { month: 'short', year: 'numeric' });
+    .toLocaleDateString('en-IN', { month: 'long', year: 'numeric' });
+}
+function getMonthKey(date) {
+  return date.getFullYear() + '-' + String(date.getMonth() + 1).padStart(2, '0');
 }
 
 let toastTimer;
@@ -912,14 +945,16 @@ function toast(msg) {
   toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
 }
 
-/* ─────────────── STATE ─────────────── */
+/* --------------- STATE --------------- */
 let currentUser = null;
 let userProfile = null;
 let sales = [];
+let allPayments = []; // Store seller payments
 let activeSaleId = null;
 let editingSaleId = null;
 let authMode = 'login';
 let unsubSales = null;
+let unsubPayments = null;
 let cachedBizData = null; // Cache admin settings for invoice
 
 /* Calendar state */
@@ -928,7 +963,7 @@ let calYear = _now.getFullYear();
 let calMonth = _now.getMonth(); // 0-11
 let calSelectedDay = null;
 
-/* ═══════════════ AUTH UI ═══════════════ */
+/* --------------- AUTH UI --------------- */
 $$('.tab').forEach(tab => tab.addEventListener('click', () => {
   authMode = tab.dataset.tab;
   $$('.tab').forEach(t => t.classList.toggle('active', t === tab));
@@ -1029,7 +1064,7 @@ $('#forgotBtn').addEventListener('click', async () => {
   }
 });
 
-/* ═══════════════ AUTH STATE ═══════════════ */
+/* --------------- AUTH STATE --------------- */
 onAuthStateChanged(auth, async user => {
   hide($('#loading'));
 
@@ -1081,11 +1116,14 @@ onAuthStateChanged(auth, async user => {
   switchView('dashboard');
 
   subscribeSales();
+  subscribePayments();
 });
 
 function teardown() {
   unsubSales?.(); unsubSales = null;
+  unsubPayments?.(); unsubPayments = null;
   sales = [];
+  allPayments = [];
   activeSaleId = null;
   editingSaleId = null;
   calSelectedDay = null;
@@ -1097,7 +1135,7 @@ $('#logoutBtn').addEventListener('click', async () => {
   await signOut(auth);
 });
 
-/* ═══════════════ DATA ═══════════════ */
+/* --------------- DATA --------------- */
 function subscribeSales() {
   unsubSales?.();
 
@@ -1121,7 +1159,83 @@ function subscribeSales() {
   });
 }
 
-/* ═══════════════ RENDER: DASHBOARD ═══════════════ */
+function subscribePayments() {
+  unsubPayments?.();
+  
+  const q = query(collection(db, 'seller_payments'), where('sellerId', '==', currentUser.uid));
+  
+  unsubPayments = onSnapshot(q, snap => {
+    allPayments = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    renderPayments();
+  }, err => {
+    console.error(err);
+    toast('Could not load payments: ' + err.code);
+  });
+}
+
+/* --------------- RENDER: PAYMENTS --------------- */
+function renderPayments() {
+  const now = new Date();
+  const curKey = getMonthKey(now);
+  
+  // Update Current Month Status
+  const curPayment = allPayments.find(p => p.month === curKey && p.status === 'paid');
+  const isPaid = !!curPayment;
+  
+  $('#currentMonthLabel').textContent = monthLabel(curKey);
+  
+  const statusEl = $('#currentMonthStatus');
+  const descEl = $('#currentMonthDesc');
+  
+  if (isPaid) {
+    statusEl.textContent = 'PAID';
+    statusEl.className = 'payment-badge paid';
+    statusEl.style.display = 'inline-flex';
+    statusEl.style.fontSize = '28px';
+    statusEl.style.padding = '10px 24px';
+    descEl.textContent = `Payment received on ${fmtDate(curPayment.paidAt)}. Thank you!`;
+    descEl.style.color = 'var(--green)';
+  } else {
+    statusEl.textContent = 'DUE';
+    statusEl.className = 'payment-badge due';
+    statusEl.style.display = 'inline-flex';
+    statusEl.style.fontSize = '28px';
+    statusEl.style.padding = '10px 24px';
+    descEl.textContent = 'Your payment for this month is pending. Please contact admin.';
+    descEl.style.color = 'var(--red)';
+  }
+
+  // Render History List
+  const historyList = $('#paymentHistoryList');
+  const paidRecords = allPayments
+    .filter(p => p.status === 'paid')
+    .sort((a, b) => toDate(b.paidAt) - toDate(a.paidAt)); // newest first
+
+  if (!paidRecords.length) {
+    historyList.innerHTML = `<li class="empty">No payment history found.</li>`;
+  } else {
+    historyList.innerHTML = paidRecords.map(p => {
+      const pDate = toDate(p.paidAt) || new Date();
+      return `
+        <li class="sale" style="cursor:default; display:flex; justify-content:space-between; align-items:center;">
+          <div class="sale-info" style="display:flex; align-items:center; gap:12px;">
+            <div class="avatar" style="background:var(--green-bg); color:var(--green); box-shadow:none;">✓</div>
+            <div>
+              <div class="sale-name" style="color:var(--green)">${monthLabel(p.month)}</div>
+              <div class="sale-sub">Payment Successful</div>
+            </div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-weight:700; font-size:13.5px; color:var(--text)">Paid</div>
+            <div style="font-size:12px; color:var(--muted)">${fmtDate(pDate)}</div>
+          </div>
+        </li>
+      `;
+    }).join('');
+  }
+}
+
+/* --------------- RENDER: DASHBOARD --------------- */
 function renderDashboard() {
   const now = new Date();
   const curKey = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0');
@@ -1182,7 +1296,7 @@ function renderDashboard() {
   renderCalendar();
 }
 
-/* ═══════════════ RENDER: SALES CALENDAR (compact) ═══════════════ */
+/* --------------- RENDER: SALES CALENDAR (compact) --------------- */
 function salesByDayFor(y, m) {
   const map = {};
   sales.forEach(s => {
@@ -1333,7 +1447,7 @@ $('#calDayDetail').addEventListener('click', e => {
   if (li) openSale(li.dataset.id);
 });
 
-/* ═══════════════ RENDER: SALES LIST ═══════════════ */
+/* --------------- RENDER: SALES LIST --------------- */
 function saleRow(s, withDate = false) {
   const rest = Number(s.restAmount) || 0;
   const due = rest > 0
@@ -1345,7 +1459,7 @@ function saleRow(s, withDate = false) {
   if (withDate) subParts.push(fmtDate(s.saleDate));
   else if (s.customerPhone) subParts.push(esc(s.customerPhone));
 
-  /* 👤 Icon fallback if no customer name */
+  /* Icon fallback if no customer name */
   const avatarText = s.customerName
     ? esc(s.customerName.charAt(0).toUpperCase())
     : USER_ICON;
@@ -1401,7 +1515,7 @@ $('#recentList').addEventListener('click', e => {
   if (li) openSale(li.dataset.id);
 });
 
-/* ═══════════════ RENDER: SALE DETAIL ═══════════════ */
+/* --------------- RENDER: SALE DETAIL --------------- */
 function openSale(id) {
   activeSaleId = id;
   switchView('saleDetail');
@@ -1416,7 +1530,6 @@ function renderSaleDetail() {
   const rest    = Number(s.restAmount) || 0;
   const total   = advance + rest;
 
-  /* 👤 Icon fallback if no customer name */
   $('#detailAvatar').textContent = s.customerName
     ? s.customerName.charAt(0).toUpperCase()
     : USER_ICON;
@@ -1468,9 +1581,9 @@ $('#viewInvoiceBtn').addEventListener('click', () => {
   if (activeSaleId) window.openInvoice(activeSaleId);
 });
 
-/* ═══════════════ VIEW SWITCHING ═══════════════ */
+/* --------------- VIEW SWITCHING --------------- */
 function switchView(view) {
-  ['dashboard', 'sales', 'saleDetail', 'emi'].forEach(v => {
+  ['dashboard', 'sales', 'saleDetail', 'emi', 'payments'].forEach(v => {
     $('#' + v + 'View').classList.toggle('hidden', v !== view);
   });
   window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1487,7 +1600,7 @@ $$('[data-goto-sales]').forEach(b => b.addEventListener('click', () => {
   switchView('sales');
 }));
 
-/* ═══════════════ EMI CALCULATOR (FLAT RATE) ═══════════════ */
+/* --------------- EMI CALCULATOR (FLAT RATE) --------------- */
 function calculateEMI(principal, rate, months) {
   const p = Number(principal);
   const n = Number(months);
@@ -1591,7 +1704,7 @@ $('#emiFromLastBtn').addEventListener('click', () => {
   });
 });
 
-/* ═══════════════ DRAWER: SELLER PROFILE ═══════════════ */
+/* --------------- DRAWER: SELLER PROFILE --------------- */
 function renderDrawer() {
   if (!currentUser) return;
   const p = userProfile || {};
@@ -1602,7 +1715,6 @@ function renderDrawer() {
   const phone      = p.sellerPhone || '';
   const role       = p.role || 'user';
 
-  /* 👤 Icon fallback if no name */
   const nameForAvatar = sellerName || shopName || email;
   const initial = nameForAvatar ? nameForAvatar.charAt(0).toUpperCase() : USER_ICON;
 
@@ -1647,7 +1759,7 @@ document.addEventListener('keydown', e => {
   }
 });
 
-/* ═══════════════ MODAL ═══════════════ */
+/* --------------- MODAL --------------- */
 function openModal(id) { show($('#' + id)); }
 function closeModal(id) { hide($('#' + id)); }
 
@@ -1790,7 +1902,7 @@ $('#saleForm').addEventListener('submit', async e => {
   }
 });
 
-/* ═══════════════ INVOICE GENERATOR ═══════════════ */
+/* --------------- INVOICE GENERATOR --------------- */
 window.openInvoice = (saleId) => {
   const sale = sales.find(s => s.id === saleId);
   if (!sale) return toast('Sale data not found.');
